@@ -11,6 +11,7 @@ interface Idea {
   imageUrl: string;
   authorEmail: string;
   createdAt?: string;
+  profilePhoto?: string;
 }
 
 function AllBlogs() {
@@ -217,7 +218,7 @@ function AllBlogs() {
                    </img>
                    <span className="text-gray-600 text-sm mb-4 line-clamp-3 leading-relaxed">
                   
-                    By {stripHtml(idea.author)}
+                    By {stripHtml(idea.authorEmail)}
                   </span> 
                    </div>
                   

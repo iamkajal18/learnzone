@@ -5,7 +5,7 @@ import DOMPurify from "dompurify";
 import { useParams } from "next/navigation";
 import axios from "axios";
 import { format } from "date-fns";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Skeleton } from "@/components/skeleton";
 
 interface BlogDisplayProps {
   blog: {
@@ -94,19 +94,24 @@ const BlogDisplay = () => {
         "href", "target", "rel", "src", "alt", "title", "class", "id", "style",
         "loading", "allowfullscreen", "allow", "width", "height", // Allow iframe attributes
       ],
-      // Custom validation for iframe src
-      ADD_URI_SAFE_FILTER: (uri: string) => {
-        try {
-          const url = new URL(uri);
-          // Only allow YouTube embed URLs
-          return url.hostname === "www.youtube.com" && url.pathname.startsWith("/embed/");
-        } catch {
-          return false;
-        }
-      },
     });
 
-    return sanitized;
+    // Post-process to remove iframes with unsafe src
+    const tempDiv = document.createElement("div");
+    tempDiv.innerHTML = sanitized;
+    tempDiv.querySelectorAll("iframe").forEach((iframe) => {
+      const src = iframe.getAttribute("src") || "";
+      try {
+        const url = new URL(src);
+        if (!(url.hostname === "www.youtube.com" && url.pathname.startsWith("/embed/"))) {
+          iframe.remove();
+        }
+      } catch {
+        iframe.remove();
+      }
+    });
+
+    return tempDiv.innerHTML;
   };
 
   if (loading) {
@@ -159,8 +164,8 @@ const BlogDisplay = () => {
             {blog.author && (
               <div className="mr-3">
                 <img
-                  src={blog.profilePhoto}
-                  alt={blog.author}
+                  src={blog.author.avatar}
+                  alt={blog.author.name}
                   width={40}
                   height={40}
                   className="rounded-full"
@@ -169,7 +174,7 @@ const BlogDisplay = () => {
             )}
             <div>
               <div className="font-medium text-gray-900">
-                {blog.author || "Anonymous"}
+                {blog.author?.name || "Anonymous"}
               </div>
               
             </div>
@@ -211,7 +216,7 @@ const BlogDisplay = () => {
             {blog.author&& (
               <div className="mr-3">
                 <img
-                  src={blog.profilePhoto}
+                  src={blog.author.avatar}
                   alt={blog.author.name}
                   width={40}
                   height={40}
@@ -221,7 +226,7 @@ const BlogDisplay = () => {
             )}
             <div>
               <h3 className="font-bold text-lg">
-                Written by {blog.author || "Anonymous"}
+                Written by {blog.author?.name || "Anonymous"}
               </h3>
               <p className="text-gray-600 dark:text-gray-400">
                 Professional content creator

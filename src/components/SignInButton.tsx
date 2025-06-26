@@ -4,7 +4,7 @@ import { useSession } from "next-auth/react";
 import toast, { Toaster } from 'react-hot-toast';;
 import { useEffect } from "react";
 
-import { Button } from './ui/button';
+import { Button } from '@/components/button' 
 
 const SignInButton = () => {
   const { data: session, status } = useSession();
