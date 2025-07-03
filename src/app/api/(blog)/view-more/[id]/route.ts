@@ -8,6 +8,7 @@ export async function GET(request:NextRequest, {params}:any){
    await connectDB();
    try{
     const idea=await Idea.findById(id);
+    const hagal= idea
     console.log(idea)
     return NextResponse.json({
          message: " Get idea Successfully ",

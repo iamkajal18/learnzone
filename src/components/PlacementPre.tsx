@@ -9,7 +9,7 @@ const guidesData = [
   {
     id: 1,
     title: "Verbal Ability",
-    image: "/Verbal.png",
+    image: "/verbal.jpg",
     alt: "Verbal Ability Guide",
     href: "/verbal",
     progress: 60,
@@ -23,9 +23,9 @@ const guidesData = [
   {
     id: 2,
     title: "Data Structures",
-    image: "/images/DataStructures.png",
+    image: "/Data structure.jpeg",
     alt: "Data Structures Guide",
-    href: "/guides/dsa",
+    href: "/datastructure",
     progress: 25,
     duration: "10h",
     category: "Technical Skills",
@@ -37,9 +37,9 @@ const guidesData = [
   {
     id: 3,
     title: "Resume Building",
-    image: "/images/ResumeBuilding.png",
+    image: "/Resume.jpeg",
     alt: "Resume Guide",
-    href: "/guides/resume",
+    href: "/resume",
     progress: 80,
     duration: "2h",
     category: "Career Development",
@@ -51,9 +51,9 @@ const guidesData = [
   {
     id: 4,
     title: "Communication Skills",
-    image: "/images/SoftSkills.png",
-    alt: "Soft Skills Guide",
-    href: "/guides/communication",
+    image: "/communication.jpeg",
+    alt: "communication.jpeg",
+    href: "/communication",
     progress: 40,
     duration: "3h",
     category: "Soft Skills",
@@ -65,7 +65,7 @@ const guidesData = [
   {
     id: 5,
     title: "Algorithms",
-    image: "Algorithum.png",
+    image: "Algo.png",
     alt: "Algorithms Guide",
     href: "/algorithm",
     progress: 10,
@@ -79,9 +79,9 @@ const guidesData = [
   {
     id: 6,
     title: "Group Discussion",
-    image: "/images/GroupDiscussion.png",
+    image: "/Group.jpeg",
     alt: "Group Discussion Guide",
-    href: "/guides/groupdiscussion",
+    href: "/groupdiscussion",
     progress: 50,
     duration: "2h",
     category: "Placement Prep",
@@ -93,9 +93,9 @@ const guidesData = [
   {
     id: 7,
     title: "Reasoning Ability",
-    image: "/images/Reasoning.png",
+    image: "/Reasoning.png",
     alt: "Reasoning Ability Guide",
-    href: "/guides/reasoning",
+    href: "/reasoning",
     progress: 30,
     duration: "5h",
     category: "Placement Prep",
@@ -107,9 +107,9 @@ const guidesData = [
   {
     id: 8,
     title: "Numerical Ability",
-    image: "/images/NumericalAbility.jpg",
+    image: "/Numerical.jpeg",
     alt: "Numerical Ability Guide",
-    href: "/guides/numerical",
+    href: "/numerical",
     progress: 45,
     duration: "6h",
     category: "Placement Prep",
@@ -140,7 +140,7 @@ const SearchBar = ({ onSearch }: SearchBarProps) => {
         value={query}
         onChange={handleSearch}
         placeholder="Search learning guides..."
-        className="w-full px-5 py-3 text-base bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 rounded-full focus:outline-none focus:ring-2 focus:ring-purple-600 transition-all duration-200"
+        className="w-full px-5 py-3 text-base bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 rounded-full focus:outline-none focus:ring-2 focus:ring-[#0286a3] transition-all duration-200"
       />
       <span className="absolute right-4 top-1/2 transform -translate-y-1/2 text-lg text-gray-500 dark:text-gray-400">
         🔍
@@ -164,8 +164,8 @@ const CategoryFilter = ({ categories, selectedCategory, onSelectCategory }: Cate
           onClick={() => onSelectCategory(category)}
           className={`px-5 py-2 text-sm font-medium rounded-full transition-all duration-200 ${
             selectedCategory === category
-              ? "bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-md"
-              : "bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600"
+              ? "bg-[#0286a3] text-white shadow-lg shadow-[#0286a3]/30"
+              : "bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-300 hover:bg-[#0286a3]/10 dark:hover:bg-[#0286a3]/20"
           }`}
         >
           {category}
@@ -186,7 +186,7 @@ const SortFilter = ({ sortOption, onSortChange }: SortFilterProps) => {
       <select
         value={sortOption}
         onChange={(e) => onSortChange(e.target.value)}
-        className="px-4 py-2 text-sm bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600"
+        className="px-4 py-2 text-sm bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0286a3]"
       >
         <option value="title">Sort by Title</option>
         <option value="progress">Sort by Progress</option>
@@ -204,7 +204,7 @@ interface ProgressTrackerProps {
 }
 const ProgressTracker = ({ overallProgress, completedGuides, totalGuides }: ProgressTrackerProps) => {
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-md p-6 mb-10">
+    <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-[#0286a3]/10 p-6 mb-10">
       <h2 className="text-lg font-bold text-gray-800 dark:text-white mb-4">
         Your Learning Progress
       </h2>
@@ -212,11 +212,11 @@ const ProgressTracker = ({ overallProgress, completedGuides, totalGuides }: Prog
         <span>
           {completedGuides}/{totalGuides} Guides Completed
         </span>
-        <span>{overallProgress}% Complete</span>
+        <span className="text-[#0286a3] font-semibold">{overallProgress}% Complete</span>
       </div>
       <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3">
         <div
-          className="bg-gradient-to-r from-purple-600 to-pink-600 h-3 rounded-full transition-all duration-300"
+          className="bg-gradient-to-r from-[#0286a3] to-[#0891b2] h-3 rounded-full transition-all duration-300 shadow-sm"
           style={{ width: `${overallProgress}%` }}
         ></div>
       </div>
@@ -247,7 +247,7 @@ const CourseCard = ({
   reviews,
 }: CourseCardProps) => {
   return (
-    <div className="group bg-white dark:bg-gray-800 rounded-2xl shadow-md hover:shadow-xl transition-all duration-300">
+    <div className="group bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-xl border border-[#0286a3]/10 hover:border-[#0286a3]/30 transition-all duration-300">
       <Link href={href}>
         <div className="relative w-full h-40 overflow-hidden rounded-t-2xl">
           <img
@@ -256,24 +256,28 @@ const CourseCard = ({
             className="object-cover transition-transform duration-300 group-hover:scale-110 w-full h-full"
             sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
           />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
         </div>
       </Link>
       <div className="p-5 flex flex-col">
         <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-2 line-clamp-1">
           <Link
             href={href}
-            className="hover:text-purple-600 dark:hover:text-purple-400 transition-colors"
+            className="hover:text-[#0286a3] dark:hover:text-[#06b6d4] transition-colors"
           >
             {title}
           </Link>
         </h3>
         <div className="flex justify-between text-sm text-gray-600 dark:text-gray-300 mb-3">
-          <span>{duration}</span>
-          <span>{progress}% Complete</span>
+          <span className="flex items-center gap-1">
+            <span className="text-[#0286a3]">⏱</span>
+            {duration}
+          </span>
+          <span className="text-[#0286a3] font-medium">{progress}% Complete</span>
         </div>
         <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5">
           <div
-            className="bg-gradient-to-r from-purple-600 to-pink-600 h-2.5 rounded-full"
+            className="bg-gradient-to-r from-[#0286a3] to-[#0891b2] h-2.5 rounded-full shadow-sm"
             style={{ width: `${progress}%` }}
           ></div>
         </div>
@@ -284,7 +288,7 @@ const CourseCard = ({
               <span
                 key={i}
                 className={`text-base ${
-                  i < Math.round(rating) ? "text-yellow-400" : "text-gray-300 dark:text-gray-500"
+                  i < Math.round(rating) ? "text-[#f59e0b]" : "text-gray-300 dark:text-gray-500"
                 }`}
               >
                 ★
@@ -309,7 +313,7 @@ interface GuidePreviewProps {
 
 const GuidePreview = ({ title, description, href, lessons }: GuidePreviewProps) => {
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-md p-6 mb-6 hover:shadow-lg transition-all duration-300">
+    <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-[#0286a3]/10 p-6 mb-6 hover:shadow-xl hover:border-[#0286a3]/30 transition-all duration-300">
       <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-2 line-clamp-1">
         {title}
       </h3>
@@ -317,12 +321,13 @@ const GuidePreview = ({ title, description, href, lessons }: GuidePreviewProps) 
         {description}
       </p>
       <div className="flex justify-between items-center">
-        <span className="text-sm text-gray-600 dark:text-gray-300">
+        <span className="text-sm text-[#0286a3] font-medium flex items-center gap-1">
+          <span>📝</span>
           {lessons} Lessons
         </span>
         <Link
           href={href}
-          className="px-5 py-2 text-sm font-medium text-white bg-gradient-to-r from-purple-600 to-pink-600 rounded-full hover:from-purple-700 hover:to-pink-700 transition-all duration-200"
+          className="px-5 py-2 text-sm font-medium text-white bg-[#0286a3] rounded-full hover:bg-[#026a85] shadow-lg shadow-[#0286a3]/30 hover:shadow-[#0286a3]/40 transition-all duration-200"
         >
           Start Learning
         </Link>
@@ -340,7 +345,7 @@ interface QuickLinkProps {
 const QuickLink = ({ title, href }: QuickLinkProps) => (
   <Link
     href={href}
-    className="block px-5 py-2.5 text-sm font-medium text-purple-600 dark:text-purple-400 bg-gray-100 dark:bg-gray-700 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-all duration-200"
+    className="block px-5 py-2.5 text-sm font-medium text-[#0286a3] dark:text-[#06b6d4] bg-[#0286a3]/10 dark:bg-[#0286a3]/20 rounded-lg hover:bg-[#0286a3]/20 dark:hover:bg-[#0286a3]/30 border border-[#0286a3]/20 hover:border-[#0286a3]/40 transition-all duration-200"
   >
     {title}
   </Link>
@@ -389,16 +394,16 @@ const LearningHub = () => {
   const totalGuides = guidesData.length;
 
   return (
-    <section className="pt-16 pb-12 bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-950 min-h-screen">
+    <section className="pt-16 pb-12 bg-gradient-to-br from-gray-50 via-[#0286a3]/5 to-white dark:from-gray-900 dark:via-[#0286a3]/10 dark:to-gray-950 min-h-screen">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <h1 className="text-3xl md:text-3xl font-extrabold mb-4 flex items-center justify-center gap-3">
             <span className="text-4xl">📚</span>
-            <span className="bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-[#0286a3] to-[#0891b2] bg-clip-text text-transparent">
              Placement and Preparation Tips
             </span>
           </h1>
-          <p className="text-lg text-gray-600 dark:text-gray-300 maxixon-w-2xl mx-auto">
+          <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
             Explore curated resources to excel in placement prep, technical skills, and career development.
           </p>
         </div>
@@ -420,7 +425,8 @@ const LearningHub = () => {
 
         {filteredAndSortedGuides.length === 0 ? (
           <div className="text-center text-gray-600 dark:text-gray-300 py-10">
-            No guides found. Try adjusting your search or category.
+            <div className="text-6xl mb-4">🔍</div>
+            <p className="text-lg">No guides found. Try adjusting your search or category.</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
@@ -431,7 +437,8 @@ const LearningHub = () => {
         )}
 
         <div className="mt-12">
-          <h2 className="text-xl font-bold text-center text-gray-800 dark:text-white mb-6">
+          <h2 className="text-xl font-bold text-center text-gray-800 dark:text-white mb-6 flex items-center justify-center gap-2">
+            <span className="text-[#0286a3]">⭐</span>
             Featured Learning Guides
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -442,7 +449,8 @@ const LearningHub = () => {
         </div>
 
         <div className="mt-12">
-          <h2 className="text-xl font-bold text-center text-gray-800 dark:text-white mb-6">
+          <h2 className="text-xl font-bold text-center text-gray-800 dark:text-white mb-6 flex items-center justify-center gap-2">
+            <span className="text-[#0286a3]">🚀</span>
             Quick Access
           </h2>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 justify-center">

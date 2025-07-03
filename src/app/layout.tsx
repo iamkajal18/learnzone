@@ -24,6 +24,7 @@ export default function Layout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
       <body>
+       
         <SessionProvider>
           <ThemeProvider>
             <Navbar />
@@ -32,6 +33,7 @@ export default function Layout({ children }: { children: ReactNode }) {
             <Footer />
           </ThemeProvider>
         </SessionProvider>
+      
       </body>
     </html>
   );

@@ -2,8 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* @import "flowbite"; */
-/* @import "@shadcn/ui/styles"; */
+
 
 @layer base {
   :root {
