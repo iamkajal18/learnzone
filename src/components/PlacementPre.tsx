@@ -35,7 +35,7 @@ const guidesData = [
   {
     id: 3,
     title: "Resume Building",
-    image: "/resume.jpeg",
+    image: "/Resume.jpeg",
     alt: "Resume Guide",
     href: "/resume",
     progress: 80,
@@ -63,7 +63,7 @@ const guidesData = [
   {
     id: 5,
     title: "Algorithms",
-    image: "/algo.png",
+    image: "/Algo.png",
     alt: "Algorithms Guide",
     href: "/algorithm",
     progress: 10,
@@ -77,7 +77,7 @@ const guidesData = [
   {
     id: 6,
     title: "Group Discussion",
-    image: "/group.jpeg",
+    image: "/Group.jpeg",
     alt: "Group Discussion Guide",
     href: "/groupdiscussion",
     progress: 50,
@@ -91,7 +91,7 @@ const guidesData = [
   {
     id: 7,
     title: "Reasoning Ability",
-    image: "/reasoning.png",
+    image: "/Reasoning.png",
     alt: "Reasoning Ability Guide",
     href: "/reasoning",
     progress: 30,
@@ -105,7 +105,7 @@ const guidesData = [
   {
     id: 8,
     title: "Numerical Ability",
-    image: "/numerical.jpeg",
+    image: "/NumericalAbility.jpg",
     alt: "Numerical Ability Guide",
     href: "/numerical",
     progress: 45,
