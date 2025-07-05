@@ -26,8 +26,8 @@ const RoadmapList = () => {
   ];
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-6">
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+    <div className="max-w-7xl mx-auto px-4 py-6 mt-8 mb-12"> {/* Increased mt-5 to mt-8 and added mb-12 */}
+     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6">
         {roadmapItems.map((item, index) => (
           <div
             key={item.slug}

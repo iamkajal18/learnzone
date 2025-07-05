@@ -29,7 +29,7 @@ export default function Layout({ children }: { children: ReactNode }) {
           <ThemeProvider>
             <Navbar />
             <Toaster />
-            <main className="min-h-screen">{children}</main>
+            <main className="min-h-screen py-16">{children}</main>
             <Footer />
           </ThemeProvider>
         </SessionProvider>
