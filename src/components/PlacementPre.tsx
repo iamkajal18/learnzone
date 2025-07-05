@@ -1,10 +1,8 @@
 "use client";
-
 import React, { useState, useMemo } from "react";
 import Link from "next/link";
 import Image from "next/image";
 
-// Sample data for guides
 const guidesData = [
   {
     id: 1,
@@ -37,7 +35,7 @@ const guidesData = [
   {
     id: 3,
     title: "Resume Building",
-    image: "/Resume.jpeg",
+    image: "/resume.jpeg",
     alt: "Resume Guide",
     href: "/resume",
     progress: 80,
@@ -52,7 +50,7 @@ const guidesData = [
     id: 4,
     title: "Communication Skills",
     image: "/communication.jpeg",
-    alt: "communication.jpeg",
+    alt: "Communication Guide",
     href: "/communication",
     progress: 40,
     duration: "3h",
@@ -65,7 +63,7 @@ const guidesData = [
   {
     id: 5,
     title: "Algorithms",
-    image: "Algo.png",
+    image: "/algo.png",
     alt: "Algorithms Guide",
     href: "/algorithm",
     progress: 10,
@@ -79,7 +77,7 @@ const guidesData = [
   {
     id: 6,
     title: "Group Discussion",
-    image: "/Group.jpeg",
+    image: "/group.jpeg",
     alt: "Group Discussion Guide",
     href: "/groupdiscussion",
     progress: 50,
@@ -93,7 +91,7 @@ const guidesData = [
   {
     id: 7,
     title: "Reasoning Ability",
-    image: "/Reasoning.png",
+    image: "/reasoning.png",
     alt: "Reasoning Ability Guide",
     href: "/reasoning",
     progress: 30,
@@ -107,7 +105,7 @@ const guidesData = [
   {
     id: 8,
     title: "Numerical Ability",
-    image: "/Numerical.jpeg",
+    image: "/numerical.jpeg",
     alt: "Numerical Ability Guide",
     href: "/numerical",
     progress: 45,
@@ -120,52 +118,25 @@ const guidesData = [
   },
 ];
 
-// SearchBar Component
-interface SearchBarProps {
-  onSearch: (query: string) => void;
-}
-const SearchBar = ({ onSearch }: SearchBarProps) => {
-  const [query, setQuery] = useState("");
-
-  const handleSearch = (e:any) => {
-    const value = e.target.value;
-    setQuery(value);
-    onSearch(value);
-  };
-
-  return (
-    <div className="relative w-full max-w-md mx-auto mb-8">
-      <input
-        type="text"
-        value={query}
-        onChange={handleSearch}
-        placeholder="Search learning guides..."
-        className="w-full px-5 py-3 text-base bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 rounded-full focus:outline-none focus:ring-2 focus:ring-[#0286a3] transition-all duration-200"
-      />
-      <span className="absolute right-4 top-1/2 transform -translate-y-1/2 text-lg text-gray-500 dark:text-gray-400">
-        🔍
-      </span>
-    </div>
-  );
-};
-
-// CategoryFilter Component
-interface CategoryFilterProps {
+const CategoryFilter = ({ 
+  categories, 
+  selectedCategory, 
+  onSelectCategory 
+}: {
   categories: string[];
   selectedCategory: string;
   onSelectCategory: (category: string) => void;
-}
-const CategoryFilter = ({ categories, selectedCategory, onSelectCategory }: CategoryFilterProps) => {
+}) => {
   return (
-    <div className="flex flex-wrap gap-3 mb-8 justify-center">
+    <div className="flex flex-wrap gap-2 mb-6 justify-center">
       {categories.map((category) => (
         <button
           key={category}
           onClick={() => onSelectCategory(category)}
-          className={`px-5 py-2 text-sm font-medium rounded-full transition-all duration-200 ${
+          className={`px-3 py-1.5 text-xs font-medium rounded-md transition-colors ${
             selectedCategory === category
-              ? "bg-[#0286a3] text-white shadow-lg shadow-[#0286a3]/30"
-              : "bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-300 hover:bg-[#0286a3]/10 dark:hover:bg-[#0286a3]/20"
+              ? "bg-[#0286a3] text-white"
+              : "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700"
           }`}
         >
           {category}
@@ -175,57 +146,16 @@ const CategoryFilter = ({ categories, selectedCategory, onSelectCategory }: Cate
   );
 };
 
-// SortFilter Component
-interface SortFilterProps {
-  sortOption: string;
-  onSortChange: (option: string) => void;
-}
-const SortFilter = ({ sortOption, onSortChange }: SortFilterProps) => {
-  return (
-    <div className="flex justify-end mb-6">
-      <select
-        value={sortOption}
-        onChange={(e) => onSortChange(e.target.value)}
-        className="px-4 py-2 text-sm bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0286a3]"
-      >
-        <option value="title">Sort by Title</option>
-        <option value="progress">Sort by Progress</option>
-        <option value="rating">Sort by Rating</option>
-      </select>
-    </div>
-  );
-};
-
-// ProgressTracker Component
-interface ProgressTrackerProps {
-  overallProgress: number;
-  completedGuides: number;
-  totalGuides: number;
-}
-const ProgressTracker = ({ overallProgress, completedGuides, totalGuides }: ProgressTrackerProps) => {
-  return (
-    <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-[#0286a3]/10 p-6 mb-10">
-      <h2 className="text-lg font-bold text-gray-800 dark:text-white mb-4">
-        Your Learning Progress
-      </h2>
-      <div className="flex items-center justify-between text-sm text-gray-600 dark:text-gray-300 mb-3">
-        <span>
-          {completedGuides}/{totalGuides} Guides Completed
-        </span>
-        <span className="text-[#0286a3] font-semibold">{overallProgress}% Complete</span>
-      </div>
-      <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3">
-        <div
-          className="bg-gradient-to-r from-[#0286a3] to-[#0891b2] h-3 rounded-full transition-all duration-300 shadow-sm"
-          style={{ width: `${overallProgress}%` }}
-        ></div>
-      </div>
-    </div>
-  );
-};
-
-// CourseCard Component
-interface CourseCardProps {
+const CourseCard = ({ 
+  title, 
+  image, 
+  alt, 
+  href, 
+  progress, 
+  duration, 
+  rating, 
+  reviews 
+}: {
   title: string;
   image: string;
   alt: string;
@@ -234,67 +164,43 @@ interface CourseCardProps {
   duration: string;
   rating: number;
   reviews: number;
-}
-
-const CourseCard = ({
-  title,
-  image,
-  alt,
-  href,
-  progress,
-  duration,
-  rating,
-  reviews,
-}: CourseCardProps) => {
+}) => {
   return (
-    <div className="group bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-xl border border-[#0286a3]/10 hover:border-[#0286a3]/30 transition-all duration-300">
-      <Link href={href}>
-        <div className="relative w-full h-40 overflow-hidden rounded-t-2xl">
-          <img
+    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden hover:shadow-md transition-shadow">
+      <Link href={href} className="block">
+        <div className="relative aspect-video">
+          <Image
             src={image}
             alt={alt}
-            className="object-cover transition-transform duration-300 group-hover:scale-110 w-full h-full"
-            sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+            fill
+            className="object-cover"
+            sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 33vw"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
         </div>
       </Link>
-      <div className="p-5 flex flex-col">
-        <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-2 line-clamp-1">
-          <Link
-            href={href}
-            className="hover:text-[#0286a3] dark:hover:text-[#06b6d4] transition-colors"
-          >
+      <div className="p-4">
+        <h3 className="text-sm font-semibold text-gray-800 dark:text-white mb-1.5 line-clamp-2">
+          <Link href={href} className="hover:text-[#0286a3] dark:hover:text-[#06b6d4] transition-colors">
             {title}
           </Link>
         </h3>
-        <div className="flex justify-between text-sm text-gray-600 dark:text-gray-300 mb-3">
-          <span className="flex items-center gap-1">
-            <span className="text-[#0286a3]">⏱</span>
-            {duration}
-          </span>
-          <span className="text-[#0286a3] font-medium">{progress}% Complete</span>
+        <div className="flex justify-between items-center text-xs text-gray-500 dark:text-gray-400 mb-2">
+          <span>{duration}</span>
+          <span className="text-[#0286a3] font-medium">{progress}%</span>
         </div>
-        <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5">
+        <div className="w-full bg-gray-100 dark:bg-gray-700 rounded-full h-1.5 mb-2">
           <div
-            className="bg-gradient-to-r from-[#0286a3] to-[#0891b2] h-2.5 rounded-full shadow-sm"
+            className="bg-gradient-to-r from-[#0286a3] to-[#06b6d4] h-1.5 rounded-full"
             style={{ width: `${progress}%` }}
-          ></div>
+          />
         </div>
-        <div className="flex items-center text-sm text-gray-600 dark:text-gray-300 mt-3">
-          {Array(5)
-            .fill(0)
-            .map((_, i) => (
-              <span
-                key={i}
-                className={`text-base ${
-                  i < Math.round(rating) ? "text-[#f59e0b]" : "text-gray-300 dark:text-gray-500"
-                }`}
-              >
-                ★
-              </span>
+        <div className="flex items-center text-xs">
+          <div className="flex text-amber-400 mr-1">
+            {[...Array(5)].map((_, i) => (
+              <span key={i}>{i < Math.round(rating) ? '★' : '☆'}</span>
             ))}
-          <span className="ml-2">
+          </div>
+          <span className="text-gray-500 dark:text-gray-400">
             {rating.toFixed(1)} ({reviews})
           </span>
         </div>
@@ -303,81 +209,15 @@ const CourseCard = ({
   );
 };
 
-// GuidePreview Component
-interface GuidePreviewProps {
-  title: string;
-  description: string;
-  href: string;
-  lessons: number;
-}
-
-const GuidePreview = ({ title, description, href, lessons }: GuidePreviewProps) => {
-  return (
-    <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-[#0286a3]/10 p-6 mb-6 hover:shadow-xl hover:border-[#0286a3]/30 transition-all duration-300">
-      <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-2 line-clamp-1">
-        {title}
-      </h3>
-      <p className="text-sm text-gray-600 dark:text-gray-300 mb-4 line-clamp-2">
-        {description}
-      </p>
-      <div className="flex justify-between items-center">
-        <span className="text-sm text-[#0286a3] font-medium flex items-center gap-1">
-          <span>📝</span>
-          {lessons} Lessons
-        </span>
-        <Link
-          href={href}
-          className="px-5 py-2 text-sm font-medium text-white bg-[#0286a3] rounded-full hover:bg-[#026a85] shadow-lg shadow-[#0286a3]/30 hover:shadow-[#0286a3]/40 transition-all duration-200"
-        >
-          Start Learning
-        </Link>
-      </div>
-    </div>
-  );
-};
-
-// QuickLink Component
-interface QuickLinkProps {
-  title: string;
-  href: string;
-}
-
-const QuickLink = ({ title, href }: QuickLinkProps) => (
-  <Link
-    href={href}
-    className="block px-5 py-2.5 text-sm font-medium text-[#0286a3] dark:text-[#06b6d4] bg-[#0286a3]/10 dark:bg-[#0286a3]/20 rounded-lg hover:bg-[#0286a3]/20 dark:hover:bg-[#0286a3]/30 border border-[#0286a3]/20 hover:border-[#0286a3]/40 transition-all duration-200"
-  >
-    {title}
-  </Link>
-);
-
-// Main LearningHub Component
 const LearningHub = () => {
   const [selectedCategory, setSelectedCategory] = useState("All");
-  const [searchQuery, setSearchQuery] = useState("");
   const [sortOption, setSortOption] = useState("title");
 
-  const categories = [
-    "All",
-    "Placement Prep",
-    "Technical Skills",
-    "Soft Skills",
-    "Career Development",
-    "Coding",
-  ];
-
-  const quickLinks = [
-    { title: "Practice Quizzes", href: "/quizzes" },
-    { title: "Mock Interviews", href: "/interviews" },
-    { title: "Community Forum", href: "/forum" },
-    { title: "Career Resources", href: "/resources" },
-  ];
+  const categories = ["All", "Placement Prep", "Technical Skills", "Soft Skills", "Career Development", "Coding"];
 
   const filteredAndSortedGuides = useMemo(() => {
     let filtered = guidesData.filter(
-      (guide) =>
-        (selectedCategory === "All" || guide.category === selectedCategory) &&
-        guide.title.toLowerCase().includes(searchQuery.toLowerCase())
+      (guide) => selectedCategory === "All" || guide.category === selectedCategory
     );
 
     return filtered.sort((a, b) => {
@@ -385,82 +225,75 @@ const LearningHub = () => {
       if (sortOption === "rating") return b.rating - a.rating;
       return a.title.localeCompare(b.title);
     });
-  }, [selectedCategory, searchQuery, sortOption]);
-
-  const overallProgress = Math.round(
-    guidesData.reduce((sum, guide) => sum + guide.progress, 0) / guidesData.length
-  );
-  const completedGuides = guidesData.filter((guide) => guide.progress === 100).length;
-  const totalGuides = guidesData.length;
+  }, [selectedCategory, sortOption]);
 
   return (
-    <section className="pt-16 pb-12 bg-gradient-to-br from-gray-50 via-[#0286a3]/5 to-white dark:from-gray-900 dark:via-[#0286a3]/10 dark:to-gray-950 min-h-screen">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12">
-          <h1 className="text-3xl md:text-3xl font-extrabold mb-4 flex items-center justify-center gap-3">
-            <span className="text-4xl">📚</span>
-            <span className="bg-gradient-to-r from-[#0286a3] to-[#0891b2] bg-clip-text text-transparent">
-             Placement and Preparation Tips
-            </span>
+    <div className="bg-gray-50 dark:bg-gray-900 min-h-screen py-8 px-4 sm:px-6">
+      <div className="max-w-7xl mx-auto">
+        <div className="text-center mb-8">
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+            <span className="text-[#0286a3]">Placement and</span>{' '}
+            <span className="text-gray-800 dark:text-gray-200">Preparation Tips</span>
           </h1>
-          <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-            Explore curated resources to excel in placement prep, technical skills, and career development.
+          <p className="text-sm text-gray-600 dark:text-gray-300 max-w-md mx-auto">
+            Curated resources to excel in placements and career development
           </p>
         </div>
 
-        <SearchBar onSearch={setSearchQuery} />
-        <ProgressTracker
-          overallProgress={overallProgress}
-          completedGuides={completedGuides}
-          totalGuides={totalGuides}
-        />
-        <div className="flex justify-between items-center mb-8">
+        <div className="mb-6">
           <CategoryFilter
             categories={categories}
             selectedCategory={selectedCategory}
             onSelectCategory={setSelectedCategory}
           />
-          <SortFilter sortOption={sortOption} onSortChange={setSortOption} />
+          <div className="flex justify-end">
+            <select
+              value={sortOption}
+              onChange={(e) => setSortOption(e.target.value)}
+              className="text-xs bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md px-2 py-1.5"
+            >
+              <option value="title">Sort by Title</option>
+              <option value="progress">Sort by Progress</option>
+              <option value="rating">Sort by Rating</option>
+            </select>
+          </div>
         </div>
 
         {filteredAndSortedGuides.length === 0 ? (
-          <div className="text-center text-gray-600 dark:text-gray-300 py-10">
-            <div className="text-6xl mb-4">🔍</div>
-            <p className="text-lg">No guides found. Try adjusting your search or category.</p>
+          <div className="text-center py-8">
+            <p className="text-gray-500 dark:text-gray-400">No matching guides found</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {filteredAndSortedGuides.map((guide) => (
               <CourseCard key={guide.id} {...guide} />
             ))}
           </div>
         )}
 
-        <div className="mt-12">
-          <h2 className="text-xl font-bold text-center text-gray-800 dark:text-white mb-6 flex items-center justify-center gap-2">
-            <span className="text-[#0286a3]">⭐</span>
-            Featured Learning Guides
+        <div className="mt-10">
+          <h2 className="text-lg font-semibold text-gray-800 dark:text-white mb-4 text-center">
+            Quick Links
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {filteredAndSortedGuides.slice(0, 2).map((guide) => (
-              <GuidePreview key={guide.id} {...guide} />
-            ))}
-          </div>
-        </div>
-
-        <div className="mt-12">
-          <h2 className="text-xl font-bold text-center text-gray-800 dark:text-white mb-6 flex items-center justify-center gap-2">
-            <span className="text-[#0286a3]">🚀</span>
-            Quick Access
-          </h2>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 justify-center">
-            {quickLinks.map((link, index) => (
-              <QuickLink key={index} {...link} />
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-md mx-auto">
+            {[
+              { title: "Quizzes", href: "/quizzes" },
+              { title: "Interviews", href: "/interviews" },
+              { title: "Forum", href: "/forum" },
+              { title: "Resources", href: "/resources" },
+            ].map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="text-xs font-medium text-center text-[#0286a3] dark:text-[#06b6d4] bg-[#0286a3]/10 dark:bg-[#0286a3]/20 rounded-md py-2 px-3 hover:bg-[#0286a3]/20 transition-colors"
+              >
+                {link.title}
+              </Link>
             ))}
           </div>
         </div>
       </div>
-    </section>
+    </div>
   );
 };
 

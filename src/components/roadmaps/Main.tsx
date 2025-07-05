@@ -26,7 +26,7 @@ const RoadmapList = () => {
   ];
 
   return (
-    <div className="max-w-7xl mx-auto px-4">
+    <div className="max-w-7xl mx-auto px-4 py-6">
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
         {roadmapItems.map((item, index) => (
           <div
@@ -39,46 +39,26 @@ const RoadmapList = () => {
           >
             <Link
               href={`/roadmap/${item.slug}`}
-              className="block p-5 bg-white dark:bg-gray-800 rounded-lg shadow-sm hover:shadow-md transition-all duration-300 
-                         border border-gray-100 dark:border-gray-700 hover:border-blue-400 dark:hover:border-blue-500
-                         transform hover:-translate-y-1"
+              className="block p-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100 dark:border-gray-700 hover:border-blue-400 dark:hover:border-blue-500 transform hover:-translate-y-1"
             >
-              {/* Background gradient overlay */}
-              <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-purple-500/5 
-                            opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg"></div>
-              
-              {/* Content */}
-              <div className="relative z-10 flex flex-col items-center text-center gap-3">
-                <div className="w-14 h-14 flex items-center justify-center rounded-lg 
-                              bg-white dark:bg-gray-700 shadow-inner
-                              group-hover:shadow-md transition-all duration-300
-                              border border-gray-100 dark:border-gray-600">
+              <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg"></div>
+              <div className="relative z-10 flex flex-col items-center text-center gap-2">
+                <div className="w-12 h-12 flex items-center justify-center rounded-lg bg-white dark:bg-gray-700 shadow-inner group-hover:shadow-md transition-all duration-300 border border-gray-100 dark:border-gray-600">
                   <Image
                     src={item.icon}
                     alt={`${item.name} icon`}
-                    className="object-contain h-8 w-8 group-hover:scale-105 transition-transform duration-200"
-                    width={32}
-                    height={32}
+                    className="object-contain h-7 w-7 group-hover:scale-105 transition-transform duration-200"
+                    width={28}
+                    height={28}
                     loading={index < 6 ? "eager" : "lazy"}
                   />
                 </div>
-                
-                <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 
-                             group-hover:text-blue-600 dark:group-hover:text-blue-400 
-                             transition-colors duration-200">
+                <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-200">
                   {item.name}
                 </h3>
-                
-                {/* Subtle hover indicator */}
-                <div className="w-6 h-1 bg-blue-500 rounded-full opacity-0 
-                              group-hover:opacity-100 transition-all duration-300
-                              translate-y-1 group-hover:translate-y-0"></div>
+                <div className="w-5 h-1 bg-blue-500 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-1 group-hover:translate-y-0"></div>
               </div>
-              
-              {/* Glow effect */}
-              <div className="absolute inset-0 rounded-lg opacity-0 group-hover:opacity-100 
-                            transition-opacity duration-300 pointer-events-none
-                            shadow-[0_0_15px_-3px_rgba(59,130,246,0.3)] dark:shadow-[0_0_15px_-3px_rgba(96,165,250,0.3)]"></div>
+              <div className="absolute inset-0 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none shadow-[0_0_15px_-3px_rgba(59,130,246,0.3)] dark:shadow-[0_0_15px_-3px_rgba(96,165,250,0.3)]"></div>
             </Link>
           </div>
         ))}
@@ -90,58 +70,37 @@ const RoadmapList = () => {
 function RoadMap() {
   const { theme } = useTheme();
   return (
-    <div 
-      style={{
-        backgroundImage: theme === "dark"
-          ? "url('/image.png')"
-          : "url('/your-light-bg-image.jpg')",
-      }}
-      className="min-h-screen bg-gray-50 dark:bg-gray-900 py-12 px-4 sm:px-6 lg:px-8"
-    >
-      {/* Header Section */}
-      <div className="max-w-3xl mx-auto text-center mb-12">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-3xl mx-auto text-center mb-8">
         <div className="relative inline-block">
-          <h1 className="text-3xl sm:text-4xl font-bold text-gray-800 dark:text-white mb-4">
-            Comprehensive Learning Roadmaps
+          <h1 className="text-2xl sm:text-2xl md:text-3xl font-bold tracking-tight">
+            <span className="text-teal-400 dark:text-teal-300">Comprehensive Learning </span>
+            <span className="text-black dark:text-gray-100">Roadmaps</span>
           </h1>
-          <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-blue-400 to-purple-500 rounded-full"></div>
         </div>
-        
-        <p className="text-gray-600 dark:text-gray-300 text-lg mt-6 mb-8 max-w-2xl mx-auto">
+        <p className="text-gray-600 dark:text-gray-300 text-sm sm:text-base mt-4 mb-6 max-w-2xl mx-auto">
           Structured paths to master various technologies and ace competitive exams
         </p>
-        
-        {/* Stats */}
-        <div className="flex flex-wrap justify-center gap-4 text-sm">
-          <div className="flex items-center px-3 py-1 bg-white dark:bg-gray-800 rounded-full shadow-sm">
-            <span className="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
+        <div className="flex flex-wrap justify-center gap-3 text-xs sm:text-sm">
+          <div className="flex items-center px-2 py-1 bg-white dark:bg-gray-800 rounded-full shadow-sm">
+            <span className="w-2 h-2 bg-green-500 rounded-full mr-1"></span>
             <span className="text-gray-700 dark:text-gray-300">17+ Roadmaps</span>
           </div>
-          <div className="flex items-center px-3 py-1 bg-white dark:bg-gray-800 rounded-full shadow-sm">
-            <span className="w-2 h-2 bg-blue-500 rounded-full mr-2"></span>
+          <div className="flex items-center px-2 py-1 bg-white dark:bg-gray-800 rounded-full shadow-sm">
+            <span className="w-2 h-2 bg-blue-500 rounded-full mr-1"></span>
             <span className="text-gray-700 dark:text-gray-300">Regular Updates</span>
           </div>
-          <div className="flex items-center px-3 py-1 bg-white dark:bg-gray-800 rounded-full shadow-sm">
-            <span className="w-2 h-2 bg-purple-500 rounded-full mr-2"></span>
+          <div className="flex items-center px-2 py-1 bg-white dark:bg-gray-800 rounded-full shadow-sm">
+            <span className="w-2 h-2 bg-purple-500 rounded-full mr-1"></span>
             <span className="text-gray-700 dark:text-gray-300">Free Access</span>
           </div>
         </div>
       </div>
-
-      {/* Roadmap Grid */}
       <RoadmapList />
-      
-      {/* Add CSS animations */}
       <style jsx>{`
         @keyframes fadeInUp {
-          from {
-            opacity: 0;
-            transform: translateY(20px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
+          from { opacity: 0; transform: translateY(20px); }
+          to { opacity: 1; transform: translateY(0); }
         }
       `}</style>
     </div>
