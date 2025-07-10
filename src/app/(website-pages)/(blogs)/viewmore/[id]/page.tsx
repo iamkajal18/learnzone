@@ -13,13 +13,16 @@ interface BlogDisplayProps {
     title: string;
     content: string;
     imageUrl?: string;
-    contentType?: string; // 'html' or 'markdown'
+    contentType?: string;
     createdAt: string;
     updatedAt: string;
     author?: {
       name: string;
       avatar?: string;
     };
+    category: string;
+    tags: string[];
+    authorEmail?: string;
   };
 }
 
@@ -46,57 +49,48 @@ const BlogDisplay = () => {
     fetchDetails();
   }, [id]);
 
-  // Function to process HTML content and enhance images and iframes
   const processHtmlContent = (html: string) => {
     if (!html) return "";
 
-    // Create a DOM parser to manipulate the HTML
     const parser = new DOMParser();
     const doc = parser.parseFromString(html, "text/html");
 
-    // Enhance all images in the content
     const images = doc.querySelectorAll("img");
     images.forEach((img) => {
-      img.classList.add("my-4", "rounded-lg", "shadow-md", "mx-auto");
+      img.classList.add("my-4", "rounded-lg", "shadow-md", "mx-auto", "transition-transform", "hover:scale-105");
       img.setAttribute("loading", "lazy");
       if (!img.alt) {
         img.alt = "Blog content image";
       }
     });
 
-    // Enhance all iframes (for YouTube videos)
     const iframes = doc.querySelectorAll("iframe");
     iframes.forEach((iframe) => {
       const src = iframe.getAttribute("src") || "";
-      // Only process YouTube iframes
       if (src.startsWith("https://www.youtube.com/embed/")) {
-        // Wrap iframe in a div for responsive aspect ratio
         const wrapper = doc.createElement("div");
         wrapper.classList.add("relative", "w-full", "h-0", "pb-[56.25%]", "my-4", "rounded-lg", "overflow-hidden", "shadow-md");
         iframe.classList.add("absolute", "top-0", "left-0", "w-full", "h-full");
         iframe.setAttribute("allowfullscreen", "true");
         iframe.setAttribute("allow", "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture");
         iframe.setAttribute("title", "YouTube video");
-        // Move iframe into wrapper
         iframe.parentNode?.insertBefore(wrapper, iframe);
         wrapper.appendChild(iframe);
       }
     });
 
-    // Configure DOMPurify to allow safe iframes
     const sanitized = DOMPurify.sanitize(doc.body.innerHTML, {
       ALLOWED_TAGS: [
         "p", "br", "strong", "em", "u", "s", "a", "img", "h1", "h2", "h3", "h4", "h5", "h6",
         "ul", "ol", "li", "blockquote", "code", "pre", "table", "thead", "tbody", "tr", "th", "td",
-        "div", "span", "iframe", // Allow iframes
+        "div", "span", "iframe",
       ],
       ALLOWED_ATTR: [
         "href", "target", "rel", "src", "alt", "title", "class", "id", "style",
-        "loading", "allowfullscreen", "allow", "width", "height", // Allow iframe attributes
+        "loading", "allowfullscreen", "allow", "width", "height",
       ],
     });
 
-    // Post-process to remove iframes with unsafe src
     const tempDiv = document.createElement("div");
     tempDiv.innerHTML = sanitized;
     tempDiv.querySelectorAll("iframe").forEach((iframe) => {
@@ -116,15 +110,15 @@ const BlogDisplay = () => {
 
   if (loading) {
     return (
-      <div className="w-full max-w-4xl mx-auto my-8 px-4">
-        <Skeleton className="h-10 w-3/4 mb-6" />
-        <Skeleton className="h-6 w-1/4 mb-8" />
-        <Skeleton className="h-64 w-full mb-6 rounded-lg" />
+      <div className="w-full max-w-5xl mx-auto my-12 px-4 sm:px-6 lg:px-8 animate-pulse">
+        <Skeleton className="h-12 w-3/4 mb-6 rounded-lg" />
+        <Skeleton className="h-6 w-1/3 mb-8 rounded-lg" />
+        <Skeleton className="h-80 w-full mb-8 rounded-xl" />
         <div className="space-y-4">
-          <Skeleton className="h-4 w-full" />
-          <Skeleton className="h-4 w-5/6" />
-          <Skeleton className="h-4 w-4/6" />
-          <Skeleton className="h-4 w-full" />
+          <Skeleton className="h-4 w-full rounded-md" />
+          <Skeleton className="h-4 w-5/6 rounded-md" />
+          <Skeleton className="h-4 w-4/6 rounded-md" />
+          <Skeleton className="h-4 w-2/3 rounded-md" />
         </div>
       </div>
     );
@@ -132,11 +126,12 @@ const BlogDisplay = () => {
 
   if (error) {
     return (
-      <div className="w-full max-w-4xl mx-auto my-8 px-4 text-center py-20">
-        <div className="text-red-500 text-xl">{error}</div>
+      <div className="w-full max-w-5xl mx-auto my-12 px-4 sm:px-6 lg:px-8 text-center py-20 bg-red-50 dark:bg-red-900/20 rounded-xl shadow-lg">
+        <div className="text-red-600 dark:text-red-400 text-2xl font-semibold mb-4">{error}</div>
         <button
           onClick={fetchDetails}
-          className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+          className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-300"
+          aria-label="Retry loading blog post"
         >
           Retry
         </button>
@@ -146,59 +141,89 @@ const BlogDisplay = () => {
 
   if (!blog) {
     return (
-      <div className="w-full max-w-4xl mx-auto my-8 px-4 text-center py-20">
-        Blog not found
+      <div className="w-full max-w-5xl mx-auto my-12 px-4 sm:px-6 lg:px-8 text-center py-20 bg-gray-100 dark:bg-gray-800 rounded-xl shadow-lg">
+        <div className="text-gray-700 dark:text-gray-300 text-2xl font-semibold">Blog post not found</div>
       </div>
     );
   }
 
   return (
-    <article className="w-full max-w-4xl mx-auto my-8 px-4">
-      {/* Blog header */}
-      <header className="mb-8">
-        <h1 className="text-3xl md:text-4xl font-bold mb-4">{blog.title}</h1>
+    <article className="w-full max-w-5xl mx-auto my-12 px-4 sm:px-6 lg:px-8">
+      {/* Blog header with gradient background */}
+      <header className="mb-10 bg-gradient-to-r from-blue-100 via-indigo-100 to-purple-100 dark:from-blue-900 dark:via-indigo-900 dark:to-purple-900 rounded-xl p-8 shadow-lg">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
+          <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 dark:text-white leading-tight">
+            {blog.title}
+          </h1>
+          <span className="inline-block mt-4 sm:mt-0 px-4 py-2 bg-blue-600 text-white text-sm font-semibold rounded-full shadow-md">
+            {blog.category}
+          </span>
+        </div>
 
-        {/* Author info */}
-        {blog.author && (
-          <div className="flex items-center mb-4">
-            {blog.author && (
-              <div className="mr-3">
-                <img
-                  src={blog.author.avatar}
-                  alt={blog.author.name}
-                  width={40}
-                  height={40}
-                  className="rounded-full"
-                />
-              </div>
+        {/* Author and meta info */}
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex items-center mb-4 sm:mb-0">
+            {blog.author?.avatar && (
+              <img
+                src={blog.author.avatar}
+                alt={`${blog.author.name}'s avatar`}
+                width={48}
+                height={48}
+                className="rounded-full mr-3 border-2 border-gray-200 dark:border-gray-700"
+              />
             )}
             <div>
-              <div className="font-medium text-gray-900">
+              <div className="font-semibold text-gray-900 dark:text-gray-100">
                 {blog.author?.name || "Anonymous"}
               </div>
-              
+              {blog.authorEmail && (
+                <a
+                  href={`mailto:${blog.authorEmail}`}
+                  className="text-sm text-blue-600 dark:text-blue-400 hover:underline"
+                >
+                  {blog.authorEmail}
+                </a>
+              )}
             </div>
           </div>
-        )}
+          <div className="text-sm text-gray-600 dark:text-gray-400">
+            <p>Published: {format(new Date(blog.createdAt), "MMMM dd, yyyy")}</p>
+            {blog.createdAt !== blog.updatedAt && (
+              <p>Updated: {format(new Date(blog.updatedAt), "MMMM dd, yyyy")}</p>
+            )}
+          </div>
+        </div>
 
-        {/* Featured image */}
-        {blog.imageUrl && (
-          <div className="mb-6 relative aspect-video overflow-hidden rounded-lg shadow-md">
-            <img
-              src={blog.imageUrl}
-              alt={`Featured image for ${blog.title}`}
-              width={400}
-              height={200}
-              className="object-cover rounded-lg"
-            />
+        {/* Tags */}
+        {blog.tags.length > 0 && (
+          <div className="flex flex-wrap gap-2 mt-4">
+            {blog.tags.map((tag, index) => (
+              <span
+                key={index}
+                className="px-3 py-1 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 text-sm rounded-full hover:bg-blue-500 hover:text-white transition-colors duration-300"
+              >
+                {tag}
+              </span>
+            ))}
           </div>
         )}
       </header>
 
+      {/* Featured image */}
+      {blog.imageUrl && (
+        <div className="mb-8 relative aspect-video overflow-hidden rounded-xl shadow-lg">
+          <img
+            src={blog.imageUrl}
+            alt={`Featured image for ${blog.title}`}
+            className="object-cover w-full h-full transition-transform duration-300 hover:scale-105"
+          />
+        </div>
+      )}
+
       {/* Blog content */}
-      <div className="prose max-w-none prose-lg dark:prose-invert">
+      <div className="prose prose-lg max-w-none dark:prose-invert bg-white dark:bg-gray-800 p-8 rounded-xl shadow-lg">
         {blog.contentType === "markdown" ? (
-          <MarkdownRenderer content={blog.content}></MarkdownRenderer>
+          <MarkdownRenderer content={blog.content} />
         ) : (
           <div
             dangerouslySetInnerHTML={{
@@ -211,29 +236,43 @@ const BlogDisplay = () => {
 
       {/* Footer */}
       <footer className="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700">
-        {blog.author && (
-          <div className="flex items-center">
-            {blog.author&& (
-              <div className="mr-3">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+          {blog.author && (
+            <div className="flex items-center mb-4 sm:mb-0">
+              {blog.author.avatar && (
                 <img
-                  src={blog?.author?.avatar}
-                  alt={blog.author.name}
-                  width={40}
-                  height={40}
-                  className="rounded-full"
+                  src={blog.author.avatar}
+                  alt={`${blog.author.name}'s avatar`}
+                  width={48}
+                  height={48}
+                  className="rounded-full mr-3 border-2 border-gray-200 dark:border-gray-700"
                 />
+              )}
+              <div>
+                <h3 className="font-bold text-lg text-gray-900 dark:text-white">
+                  Written by {blog.author.name || "Anonymous"}
+                </h3>
+                <p className="text-gray-600 dark:text-gray-400">
+                  Professional content creator
+                </p>
+                {blog.authorEmail && (
+                  <a
+                    href={`mailto:${blog.authorEmail}`}
+                    className="text-sm text-blue-600 dark:text-blue-400 hover:underline"
+                  >
+                    Contact Author
+                  </a>
+                )}
               </div>
-            )}
-            <div>
-              <h3 className="font-bold text-lg">
-                Written by {blog.author?.name || "Anonymous"}
-              </h3>
-              <p className="text-gray-600 dark:text-gray-400">
-                Professional content creator
-              </p>
             </div>
+          )}
+          <div className="text-sm text-gray-600 dark:text-gray-400">
+            <p>Published: {format(new Date(blog.createdAt), "MMMM dd, yyyy")}</p>
+            {blog.createdAt !== blog.updatedAt && (
+              <p>Updated: {format(new Date(blog.updatedAt), "MMMM dd, yyyy")}</p>
+            )}
           </div>
-        )}
+        </div>
       </footer>
     </article>
   );

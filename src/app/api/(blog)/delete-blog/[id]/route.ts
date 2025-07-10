@@ -7,6 +7,13 @@ export async function DELETE(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
+  if (request.method !== "DELETE") {
+    return NextResponse.json(
+      { message: "Method not allowed", success: false },
+      { status: 405 }
+    );
+  }
+
   await connectDB();
 
   try {
@@ -26,7 +33,7 @@ export async function DELETE(
       );
     }
 
-    if (idea.createdBy !== session.user.id) {
+    if (idea.createdBy.toString() !== session.user.id) {
       return NextResponse.json(
         { message: "You are not authorized to delete this blog", success: false },
         { status: 403 }
@@ -42,10 +49,7 @@ export async function DELETE(
   } catch (error) {
     console.error("Error deleting blog:", error);
     return NextResponse.json(
-      {
-        message: "Failed to delete blog post",
-        success: false,
-      },
+      { message: "Failed to delete blog post", success: false },
       { status: 500 }
     );
   }
