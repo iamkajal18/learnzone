@@ -3,14 +3,13 @@ import connectDB from "@/lib/util";
 import Idea from "@/model/Idea";
 import { auth } from "../../../../../../auth";
 
-export async function GET(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function GET(request: NextRequest, context: any) {
+  const id = context?.params?.id;
+
   await connectDB();
 
   try {
-    const idea = await Idea.findById(params.id);
+    const idea = await Idea.findById(id);
     if (!idea) {
       return NextResponse.json(
         { message: "Blog not found", success: false },

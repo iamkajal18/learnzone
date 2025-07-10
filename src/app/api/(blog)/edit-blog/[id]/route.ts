@@ -4,10 +4,9 @@ import Idea from "@/model/Idea";
 import { auth } from "../../../../../../auth";
 import mongoose from "mongoose";
 
-export async function PUT(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function PUT(request: NextRequest, context: any) {
+  const id = context?.params?.id;
+
   await connectDB();
 
   try {
@@ -28,7 +27,7 @@ export async function PUT(
       );
     }
 
-    const idea = await Idea.findById(params.id);
+    const idea = await Idea.findById(id);
     if (!idea) {
       return NextResponse.json(
         { message: "Blog not found", success: false },
