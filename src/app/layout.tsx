@@ -7,8 +7,9 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { SessionProvider } from "next-auth/react";
 import toast, { Toaster } from "react-hot-toast";
-import "react-markdown-editor-lite/lib/index.css";
+import { ClerkProvider } from "@clerk/nextjs"; // Only if you were using Clerk
 import { ThemeProvider } from "@/components/ThemeContext";
+
 export default function Layout({ children }: { children: ReactNode }) {
   const [isFirstVisit, setIsFirstVisit] = useState(false);
 
@@ -22,19 +23,17 @@ export default function Layout({ children }: { children: ReactNode }) {
   }, []);
 
   return (
-    <html lang="en">
-      <body>
-       
-        <SessionProvider>
+    <SessionProvider>
+      <html lang="en">
+        <body>
           <ThemeProvider>
             <Navbar />
             <Toaster />
             <main className="min-h-screen py-16">{children}</main>
             <Footer />
           </ThemeProvider>
-        </SessionProvider>
-      
-      </body>
-    </html>
+        </body>
+      </html>
+    </SessionProvider>
   );
 }

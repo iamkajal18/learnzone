@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useCallback, useEffect, useMemo } from "react";
 import axios from "axios";
-import { useRouter } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 import { CldUploadWidget } from "next-cloudinary";
 import { useEditor, EditorContent, BubbleMenu } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
@@ -27,9 +27,9 @@ import DOMPurify from "dompurify";
 import Turndown from "turndown";
 import { marked } from "marked";
 import ReactMarkdown from "react-markdown";
-import { useSession } from "next-auth/react"; // Import useSession
+import { useSession } from "next-auth/react";
+import toast from "react-hot-toast";
 
-// Debounce utility
 const debounce = (func, wait) => {
   let timeout;
   return (...args) => {
@@ -38,9 +38,10 @@ const debounce = (func, wait) => {
   };
 };
 
-function Page() {
+function BlogForm({ isEdit = false }) {
   const router = useRouter();
-  const { data: session } = useSession(); // Get session data
+  const { id } = useParams();
+  const { data: session } = useSession();
   const [title, setTitle] = useState("");
   const [imageUrl, setImageUrl] = useState("");
   const [category, setCategory] = useState("");
@@ -56,7 +57,6 @@ function Page() {
   const [showFontDropdown, setShowFontDropdown] = useState(false);
   const [showColorPicker, setShowColorPicker] = useState(false);
 
-  // Define category groups with similar categories together
   const categoryGroups = {
     Programming: ["Technology", "Data Science", "Java", "Python"],
     Lifestyle: ["Lifestyle"],
@@ -176,40 +176,33 @@ function Page() {
   });
 
   useEffect(() => {
-    let isMounted = true;
-    if (mode === "wysiwyg" && editor && !editor.isDestroyed && markdownContent) {
-      try {
-        marked.parse(markdownContent, (err, html) => {
-          if (!err && editor && !editor.isDestroyed && isMounted) {
-            const sanitized = DOMPurify.sanitize(html);
-            editor.commands.setContent(sanitized);
+    if (isEdit && id) {
+      const fetchBlog = async () => {
+        try {
+          const response = await axios.get(`/api/get-idea/${id}`);
+          const blog = response.data.idea;
+          setTitle(blog.title);
+          setImageUrl(blog.imageUrl || "");
+          setCategory(blog.category);
+          setTags(blog.tags?.join(",") || "");
+          
+          if (blog.contentType === "markdown") {
+            setMarkdownContent(blog.content);
+            setMode("markdown");
+          } else {
+            if (editor && !editor.isDestroyed) {
+              editor.commands.setContent(blog.content);
+            }
+            setMode("wysiwyg");
           }
-        });
-      } catch (error) {
-        console.error("Error syncing markdown to editor:", error);
-        setError("Failed to sync markdown content.");
-      }
+        } catch (error) {
+          toast.error("Failed to load blog post");
+          console.error("Error fetching blog:", error);
+        }
+      };
+      fetchBlog();
     }
-    return () => {
-      isMounted = false;
-    };
-  }, [mode, editor, markdownContent]);
-
-  useEffect(() => {
-    setShowFontDropdown(false);
-    setShowColorPicker(false);
-    if (mode !== "wysiwyg" && editor && !editor.isDestroyed) {
-      try {
-        const html = editor.getHTML();
-        const markdown = turndownService.turndown(html);
-        setMarkdownContent(markdown);
-        editor.destroy();
-      } catch (error) {
-        console.error("Error saving content on mode switch:", error);
-        setError("Failed to switch editor mode.");
-      }
-    }
-  }, [mode, editor, turndownService]);
+  }, [id, isEdit, editor]);
 
   const setLink = useCallback(() => {
     if (!editor || editor.isDestroyed) return;
@@ -308,30 +301,35 @@ function Page() {
       const contentType = mode === "markdown" ? "markdown" : "html";
       const tagsArray = tags.split(",").map((tag) => tag.trim()).filter((tag) => tag);
 
-      console.log("Submitting data:", { title, content, imageUrl, contentType, category, tags: tagsArray, createdBy: session.user.id }); // Debug log
-
-      const response = await axios.post("/api/add-blog", {
+      const payload = {
         title,
         content,
         imageUrl,
         contentType,
         category,
         tags: tagsArray,
-        createdBy: session.user.id, // Add createdBy field
-      });
+        createdBy: session.user.id,
+      };
 
-      if (response.status === 201) {
-        router.push("/");
+      let response;
+      if (isEdit) {
+        response = await axios.put(`/api/edit-blog/${id}`, payload);
+        toast.success("Blog updated successfully!");
       } else {
-        setError(response.data.message || "Failed to create blog post.");
+        response = await axios.post("/api/add-blog", payload);
+        toast.success("Blog created successfully!");
+      }
+
+      if (response.status === (isEdit ? 200 : 201)) {
+        router.push(isEdit ? `/viewmore/${id}` : "/blogs");
       }
     } catch (error) {
       console.error("Error in submitHandler:", error);
       const errorMessage =
         error.response?.data?.message ||
         error.message ||
-        (error.response?.data?.errors?.join("; ") ?? "Failed to create blog post.");
-      setError(errorMessage);
+        (error.response?.data?.errors?.join("; ") ?? `Failed to ${isEdit ? "update" : "create"} blog post.`);
+      toast.error(errorMessage);
     } finally {
       setIsSubmitting(false);
     }
@@ -346,9 +344,9 @@ function Page() {
       <div className="w-full max-w-4xl bg-white dark:bg-gray-800 p-8 my-12 border border-gray-300 dark:border-gray-700 rounded-lg shadow-md">
         <h2 className="text-2xl font-bold mb-6 text-center">
           <span className="bg-gradient-to-r from-pink-400 to-orange-300 bg-clip-text text-transparent">
-            Add
+            {isEdit ? "Edit" : "Add"}
           </span>{" "}
-          New Blog Post
+          Blog Post
         </h2>
 
         {error && <div className="mb-4 p-4 bg-red-100 text-red-700 rounded-lg">{error}</div>}
@@ -364,7 +362,6 @@ function Page() {
             aria-label="Blog Title"
           />
 
-          {/* Category Input with Groups */}
           <div className="flex flex-col gap-2">
             <label className="text-sm font-medium">Category</label>
             <select
@@ -387,7 +384,6 @@ function Page() {
             </select>
           </div>
 
-          {/* Tags Input */}
           <div className="flex flex-col gap-2">
             <label className="text-sm font-medium">Tags (comma-separated)</label>
             <input
@@ -798,9 +794,9 @@ function Page() {
             className={`bg-black text-white mt-4 px-4 py-2 rounded-md ${
               isSubmitting ? "opacity-50 cursor-not-allowed" : "hover:bg-gray-800"
             }`}
-            aria-label="Publish blog post"
+            aria-label={isEdit ? "Update blog post" : "Publish blog post"}
           >
-            {isSubmitting ? "Creating..." : "Publish Blog Post"}
+            {isSubmitting ? (isEdit ? "Updating..." : "Creating...") : (isEdit ? "Update Blog Post" : "Publish Blog Post")}
           </button>
         </form>
       </div>
@@ -818,19 +814,4 @@ function Page() {
   );
 }
 
-class EditorErrorBoundary extends React.Component {
-  state = { hasError: false };
-
-  static getDerivedStateFromError() {
-    return { hasError: true };
-  }
-
-  render() {
-    if (this.state.hasError) {
-      return <div>Something went wrong with the editor. Please try again.</div>;
-    }
-    return this.props.children;
-  }
-}
-
-export default Page;
+export default BlogForm;

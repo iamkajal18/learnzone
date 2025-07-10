@@ -31,6 +31,7 @@ export default function Page() {
     <Banner/>
     
     <StudyPlan/>
+  
     <RoadMap/>
      <PlacementPre/>
      <AllBlogs/>

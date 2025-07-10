@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import MarkdownRenderer from "@/components/MarkDown";
+import MarkdownRenderer from "@/components/MarkdownRenderer";
 import DOMPurify from "dompurify";
 import { useParams } from "next/navigation";
 import axios from "axios";
@@ -216,7 +216,7 @@ const BlogDisplay = () => {
             {blog.author&& (
               <div className="mr-3">
                 <img
-                  src={blog.author.avatar}
+                  src={blog?.author?.avatar}
                   alt={blog.author.name}
                   width={40}
                   height={40}

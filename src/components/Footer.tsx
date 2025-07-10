@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { useTheme } from "./ThemeContext"; // Assuming ThemeContext is set up
 import Link from "next/link";
+import { FaMapSigns, FaCoffee } from 'react-icons/fa';
 
 function Footer() {
   const { theme } = useTheme(); // Get theme from context
@@ -361,25 +362,38 @@ function Footer() {
                 Kajal Kasaudhan
               </span>
             </div>
+            
           </div>
+             
           
           <div className="flex items-center space-x-6">
-            {[
-              { href: "/privacy", label: "Privacy Policy" },
-              { href: "/terms", label: "Terms of Service" },
-            ].map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className={`relative text-sm transition-all duration-300 hover:text-[#00cfd1] ${
-                  theme === "dark" ? "text-gray-400" : "text-gray-600"
-                }`}
-              >
-                {link.label}
-                <span className="absolute bottom-0 left-0 h-0.5 w-0 bg-gradient-to-r from-[#00cfd1] to-[#0286a3] transition-all duration-300 hover:w-full"></span>
-              </Link>
-            ))}
-          </div>
+  {[
+    { href: "/privacy", label: "Privacy Policy" },
+    { href: "/terms", label: "Terms of Service" },
+  ].map((link) => (
+    <Link
+      key={link.href}
+      href={link.href}
+      className={`relative text-sm transition-all duration-300 hover:text-[#00cfd1] ${
+        theme === "dark" ? "text-gray-400" : "text-gray-600"
+      }`}
+    >
+      {link.label}
+      <span className="absolute bottom-0 left-0 h-0.5 w-0 bg-gradient-to-r from-[#00cfd1] to-[#0286a3] transition-all duration-300 hover:w-full"></span>
+    </Link>
+  ))}
+
+  {/* Buy Me a Coffee External Link */}
+  <a
+    href="/support"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="flex items-center gap-1 text-sm text-teal-800 hover:text-yellow-700 transition-all duration-300"
+  >
+    <FaCoffee size={16} />
+    Buy Me a Coffee
+  </a>
+</div>
         </div>
       </div>
     </footer>

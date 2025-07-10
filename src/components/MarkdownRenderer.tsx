@@ -1,4 +1,3 @@
-// src/components/MarkDown.jsx
 import React from "react";
 import { marked } from "marked";
 import DOMPurify from "dompurify";
