@@ -27,7 +27,7 @@ import DOMPurify from "dompurify";
 import Turndown from "turndown";
 import { marked } from "marked";
 import ReactMarkdown from "react-markdown";
-import { useSession } from "next-auth/react"; // Import useSession
+import { useSession } from "next-auth/react";
 
 // Debounce utility
 const debounce = (func, wait) => {
@@ -40,7 +40,7 @@ const debounce = (func, wait) => {
 
 function Page() {
   const router = useRouter();
-  const { data: session } = useSession(); // Get session data
+  const { data: session } = useSession();
   const [title, setTitle] = useState("");
   const [imageUrl, setImageUrl] = useState("");
   const [category, setCategory] = useState("");
@@ -55,6 +55,15 @@ function Page() {
   const [error, setError] = useState("");
   const [showFontDropdown, setShowFontDropdown] = useState(false);
   const [showColorPicker, setShowColorPicker] = useState(false);
+
+  // Theme colors based on #0286a3
+  const themeColors = {
+    primary: "#0286a3",
+    primaryLight: "#e6f7fb",
+    primaryDark: "#01687e",
+    accent: "#ff9e4f",
+    background: "#f8fdff"
+  };
 
   // Define category groups with similar categories together
   const categoryGroups = {
@@ -79,7 +88,7 @@ function Page() {
   ];
 
   const colors = [
-    "#000000", "#333333", "#666666", "#999999", "#cccccc",
+    "#0286a3", "#000000", "#333333", "#666666", "#999999", "#cccccc",
     "#ff0000", "#00ff00", "#0000ff", "#ffff00", "#ff00ff",
     "#00ffff", "#ff8000", "#8000ff", "#ff0080", "#80ff00",
     "#0080ff", "#ff4000", "#4000ff", "#ff0040", "#40ff00",
@@ -308,8 +317,6 @@ function Page() {
       const contentType = mode === "markdown" ? "markdown" : "html";
       const tagsArray = tags.split(",").map((tag) => tag.trim()).filter((tag) => tag);
 
-      console.log("Submitting data:", { title, content, imageUrl, contentType, category, tags: tagsArray, createdBy: session.user.id }); // Debug log
-
       const response = await axios.post("/api/add-blog", {
         title,
         content,
@@ -317,7 +324,7 @@ function Page() {
         contentType,
         category,
         tags: tagsArray,
-        createdBy: session.user.id, // Add createdBy field
+        createdBy: session.user.id,
       });
 
       if (response.status === 201) {
@@ -342,214 +349,126 @@ function Page() {
   }
 
   return (
-    <div className="flex justify-center mt-10">
-      <div className="w-full max-w-4xl bg-white dark:bg-gray-800 p-8 my-12 border border-gray-300 dark:border-gray-700 rounded-lg shadow-md">
-        <h2 className="text-2xl font-bold mb-6 text-center">
-          <span className="bg-gradient-to-r from-pink-400 to-orange-300 bg-clip-text text-transparent">
-            Add
-          </span>{" "}
-          New Blog Post
-        </h2>
+    <div className="flex justify-center p-4" style={{ background: themeColors.background }}>
+      <div className="w-full max-w-4xl">
+        {/* Header with theme color */}
+        <div className="mb-8 p-6 rounded-lg" style={{ background: themeColors.primary }}>
+          <h2 className="text-3xl font-bold text-white text-center mb-2">
+            Create Your Masterpiece
+          </h2>
+          <p className="text-white/90 text-center">Share your knowledge with the world</p>
+        </div>
 
-        {error && <div className="mb-4 p-4 bg-red-100 text-red-700 rounded-lg">{error}</div>}
-
-        <form onSubmit={submitHandler} className="flex flex-col gap-4">
-          <input
-            type="text"
-            placeholder="Blog Title"
-            className="bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            required
-            aria-label="Blog Title"
-          />
-
-          {/* Category Input with Groups */}
-          <div className="flex flex-col gap-2">
-            <label className="text-sm font-medium">Category</label>
-            <select
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
-              className="bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              required
-              aria-label="Category"
-            >
-              <option value="">Select a category</option>
-              {Object.entries(categoryGroups).map(([group, categories]) => (
-                <optgroup key={group} label={group}>
-                  {categories.map((cat) => (
-                    <option key={cat} value={cat}>
-                      {cat}
-                    </option>
-                  ))}
-                </optgroup>
-              ))}
-            </select>
+        {error && (
+          <div className="mb-6 p-4 bg-red-100 text-red-700 rounded-lg border-l-4 border-red-500">
+            {error}
           </div>
+        )}
 
-          {/* Tags Input */}
-          <div className="flex flex-col gap-2">
-            <label className="text-sm font-medium">Tags (comma-separated)</label>
+        <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md border border-gray-200 dark:border-gray-700">
+          <form onSubmit={submitHandler} className="flex flex-col gap-4">
             <input
               type="text"
-              placeholder="Enter tags (e.g., tech, coding, javascript)"
-              className="bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              value={tags}
-              onChange={(e) => setTags(e.target.value)}
-              aria-label="Tags"
+              placeholder="Blog Title"
+              className="bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-[#0286a3]"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              required
+              aria-label="Blog Title"
             />
-          </div>
 
-          <div className="flex mb-4 border-b border-gray-200 dark:border-gray-700">
-            <button
-              type="button"
-              onClick={() => debouncedSetMode("wysiwyg")}
-              className={`px-4 py-2 font-medium text-sm ${
-                mode === "wysiwyg" ? "text-blue-600 border-b-2 border-blue-600" : "text-gray-500"
-              }`}
-              aria-label="Switch to Rich Text mode"
-            >
-              Rich Text
-            </button>
-            <button
-              type="button"
-              onClick={() => debouncedSetMode("markdown")}
-              className={`px-4 py-2 font-medium text-sm ${
-                mode === "markdown" ? "text-blue-600 border-b-2 border-blue-600" : "text-gray-500"
-              }`}
-              aria-label="Switch to Markdown mode"
-            >
-              Markdown
-            </button>
-            <button
-              type="button"
-              onClick={() => debouncedSetMode("preview")}
-              className={`px-4 py-2 font-medium text-sm ${
-                mode === "preview" ? "text-blue-600 border-b-2 border-blue-600" : "text-gray-500"
-              }`}
-              aria-label="Switch to Preview mode"
-            >
-              Preview
-            </button>
-            {mode === "wysiwyg" && (
+            {/* Category Input with Groups */}
+            <div className="flex flex-col gap-2">
+              <label className="text-sm font-medium">Category</label>
+              <select
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
+                className="bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-[#0286a3]"
+                required
+                aria-label="Category"
+              >
+                <option value="">Select a category</option>
+                {Object.entries(categoryGroups).map(([group, categories]) => (
+                  <optgroup key={group} label={group}>
+                    {categories.map((cat) => (
+                      <option key={cat} value={cat}>
+                        {cat}
+                      </option>
+                    ))}
+                  </optgroup>
+                ))}
+              </select>
+            </div>
+
+            {/* Tags Input */}
+            <div className="flex flex-col gap-2">
+              <label className="text-sm font-medium">Tags (comma-separated)</label>
+              <input
+                type="text"
+                placeholder="Enter tags (e.g., tech, coding, javascript)"
+                className="bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-[#0286a3]"
+                value={tags}
+                onChange={(e) => setTags(e.target.value)}
+                aria-label="Tags"
+              />
+            </div>
+
+            <div className="flex mb-4 border-b border-gray-200 dark:border-gray-700">
               <button
                 type="button"
-                onClick={convertEditorContentToMarkdown}
-                className="ml-auto px-4 py-2 text-sm text-blue-600"
-                aria-label="Convert to Markdown"
+                onClick={() => debouncedSetMode("wysiwyg")}
+                className={`px-4 py-2 font-medium text-sm ${
+                  mode === "wysiwyg" 
+                    ? "text-[#0286a3] border-b-2 border-[#0286a3]" 
+                    : "text-gray-500 hover:text-[#0286a3]"
+                }`}
+                aria-label="Switch to Rich Text mode"
               >
-                Convert to Markdown
+                Rich Text
               </button>
-            )}
-          </div>
-
-          {mode === "wysiwyg" && editor && (
-            <>
-              <BubbleMenu
-                editor={editor}
-                className="flex bg-white dark:bg-gray-800 p-1 border rounded shadow-lg"
+              <button
+                type="button"
+                onClick={() => debouncedSetMode("markdown")}
+                className={`px-4 py-2 font-medium text-sm ${
+                  mode === "markdown" 
+                    ? "text-[#0286a3] border-b-2 border-[#0286a3]" 
+                    : "text-gray-500 hover:text-[#0286a3]"
+                }`}
+                aria-label="Switch to Markdown mode"
               >
+                Markdown
+              </button>
+              <button
+                type="button"
+                onClick={() => debouncedSetMode("preview")}
+                className={`px-4 py-2 font-medium text-sm ${
+                  mode === "preview" 
+                    ? "text-[#0286a3] border-b-2 border-[#0286a3]" 
+                    : "text-gray-500 hover:text-[#0286a3]"
+                }`}
+                aria-label="Switch to Preview mode"
+              >
+                Preview
+              </button>
+              {mode === "wysiwyg" && (
                 <button
-                  onClick={() => editor.chain().focus().toggleBold().run()}
-                  className={`p-2 rounded hover:bg-gray-200 ${editor.isActive("bold") ? "bg-gray-200" : ""}`}
-                  title="Bold"
+                  type="button"
+                  onClick={convertEditorContentToMarkdown}
+                  className="ml-auto px-4 py-2 text-sm text-[#0286a3] hover:bg-[#e6f7fb] rounded-md"
+                  aria-label="Convert to Markdown"
                 >
-                  <strong>B</strong>
+                  Convert to Markdown
                 </button>
-                <button
-                  onClick={() => editor.chain().focus().toggleItalic().run()}
-                  className={`p-2 rounded hover:bg-gray-200 ${editor.isActive("italic") ? "bg-gray-200" : ""}`}
-                  title="Italic"
-                >
-                  <em>I</em>
-                </button>
-                <button
-                  onClick={() => editor.chain().focus().toggleUnderline().run()}
-                  className={`p-2 rounded hover:bg-gray-200 ${editor.isActive("underline") ? "bg-gray-200" : ""}`}
-                  title="Underline"
-                >
-                  <u>U</u>
-                </button>
-                <button
-                  onClick={setLink}
-                  className={`p-2 rounded hover:bg-gray-200 ${editor.isActive("link") ? "bg-gray-200" : ""}`}
-                  title="Link"
-                >
-                  🔗
-                </button>
-              </BubbleMenu>
+              )}
+            </div>
 
-              <div className="w-full border rounded-lg bg-gray-50 mb-2">
-                <div className="flex flex-wrap items-center gap-2 p-2">
-                  <div className="relative">
-                    <button
-                      type="button"
-                      onClick={() => setShowFontDropdown(!showFontDropdown)}
-                      className="p-2 rounded hover:bg-gray-200 border bg-white min-w-[120px] text-left"
-                      title="Font Family"
-                    >
-                      {editor.getAttributes("textStyle").fontFamily
-                        ? fontFamilies.find((f) => f.value === editor.getAttributes("textStyle").fontFamily)?.name || "Custom"
-                        : "Default"}
-                      <span className="ml-2">▼</span>
-                    </button>
-                    {showFontDropdown && (
-                      <div className="absolute top-full left-0 mt-1 bg-white border rounded shadow-lg z-10 min-w-[200px]">
-                        {fontFamilies.map((font) => (
-                          <button
-                            key={font.name}
-                            type="button"
-                            onClick={() => changeFontFamily(font.value)}
-                            className="block w-full text-left px-3 py-2 hover:bg-gray-100"
-                            style={{ fontFamily: font.value }}
-                          >
-                            {font.name}
-                          </button>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="relative">
-                    <button
-                      type="button"
-                      onClick={() => setShowColorPicker(!showColorPicker)}
-                      className="p-2 rounded hover:bg-gray-200 border bg-white"
-                      title="Text Color"
-                    >
-                      <span
-                        className="inline-block w-4 h-4 border rounded"
-                        style={{ backgroundColor: editor.getAttributes("textStyle").color || "#000000" }}
-                      ></span>
-                      <span className="ml-1">A</span>
-                    </button>
-                    {showColorPicker && (
-                      <div className="absolute top-full left-0 mt-1 bg-white border rounded shadow-lg z-10 p-2">
-                        <div className="grid grid-cols-5 gap-1">
-                          {colors.map((color) => (
-                            <button
-                              key={color}
-                              type="button"
-                              onClick={() => changeTextColor(color)}
-                              className="w-6 h-6 rounded border hover:scale-110 transition-transform"
-                              style={{ backgroundColor: color }}
-                              title={color}
-                            />
-                          ))}
-                        </div>
-                        <button
-                          type="button"
-                          onClick={() => changeTextColor("#000000")}
-                          className="mt-2 px-2 py-1 text-xs bg-gray-100 rounded w-full"
-                        >
-                          Reset Color
-                        </button>
-                      </div>
-                    )}
-                  </div>
-
+            {mode === "wysiwyg" && editor && (
+              <>
+                <BubbleMenu
+                  editor={editor}
+                  className="flex bg-white dark:bg-gray-800 p-1 border rounded shadow-lg"
+                >
                   <button
-                    type="button"
                     onClick={() => editor.chain().focus().toggleBold().run()}
                     className={`p-2 rounded hover:bg-gray-200 ${editor.isActive("bold") ? "bg-gray-200" : ""}`}
                     title="Bold"
@@ -557,7 +476,6 @@ function Page() {
                     <strong>B</strong>
                   </button>
                   <button
-                    type="button"
                     onClick={() => editor.chain().focus().toggleItalic().run()}
                     className={`p-2 rounded hover:bg-gray-200 ${editor.isActive("italic") ? "bg-gray-200" : ""}`}
                     title="Italic"
@@ -565,7 +483,6 @@ function Page() {
                     <em>I</em>
                   </button>
                   <button
-                    type="button"
                     onClick={() => editor.chain().focus().toggleUnderline().run()}
                     className={`p-2 rounded hover:bg-gray-200 ${editor.isActive("underline") ? "bg-gray-200" : ""}`}
                     title="Underline"
@@ -573,264 +490,360 @@ function Page() {
                     <u>U</u>
                   </button>
                   <button
-                    type="button"
-                    onClick={() => editor.chain().focus().toggleHighlight().run()}
-                    className={`p-2 rounded hover:bg-gray-200 ${editor.isActive("highlight") ? "bg-gray-200" : ""}`}
-                    title="Highlight"
+                    onClick={setLink}
+                    className={`p-2 rounded hover:bg-gray-200 ${editor.isActive("link") ? "bg-gray-200" : ""}`}
+                    title="Link"
                   >
-                    🖍️
+                    🔗
                   </button>
-                  <button
-                    type="button"
-                    onClick={() => setShowImageModal(true)}
-                    className="p-2 rounded hover:bg-gray-200"
-                    title="Insert Image"
-                  >
-                    🖼️
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setShowVideoModal(true)}
-                    className="p-2 rounded hover:bg-gray-200"
-                    title="Insert Video"
-                  >
-                    🎥
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => editor.chain().focus().setTextAlign("left").run()}
-                    className={`p-2 rounded hover:bg-gray-200 ${editor.isActive({ textAlign: "left" }) ? "bg-gray-200" : ""}`}
-                    title="Align Left"
-                  >
-                    ⬅️
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => editor.chain().focus().setTextAlign("center").run()}
-                    className={`p-2 rounded hover:bg-gray-200 ${editor.isActive({ textAlign: "center" }) ? "bg-gray-200" : ""}`}
-                    title="Align Center"
-                  >
-                    ↔️
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => editor.chain().focus().setTextAlign("right").run()}
-                    className={`p-2 rounded hover:bg-gray-200 ${editor.isActive({ textAlign: "right" }) ? "bg-gray-200" : ""}`}
-                    title="Align Right"
-                  >
-                    ➡️
-                  </button>
+                </BubbleMenu>
+
+                <div className="w-full border rounded-lg bg-gray-50 mb-2">
+                  <div className="flex flex-wrap items-center gap-2 p-2">
+                    <div className="relative">
+                      <button
+                        type="button"
+                        onClick={() => setShowFontDropdown(!showFontDropdown)}
+                        className="p-2 rounded hover:bg-gray-200 border bg-white min-w-[120px] text-left"
+                        title="Font Family"
+                      >
+                        {editor.getAttributes("textStyle").fontFamily
+                          ? fontFamilies.find((f) => f.value === editor.getAttributes("textStyle").fontFamily)?.name || "Custom"
+                          : "Default"}
+                        <span className="ml-2">▼</span>
+                      </button>
+                      {showFontDropdown && (
+                        <div className="absolute top-full left-0 mt-1 bg-white border rounded shadow-lg z-10 min-w-[200px]">
+                          {fontFamilies.map((font) => (
+                            <button
+                              key={font.name}
+                              type="button"
+                              onClick={() => changeFontFamily(font.value)}
+                              className="block w-full text-left px-3 py-2 hover:bg-gray-100"
+                              style={{ fontFamily: font.value }}
+                            >
+                              {font.name}
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="relative">
+                      <button
+                        type="button"
+                        onClick={() => setShowColorPicker(!showColorPicker)}
+                        className="p-2 rounded hover:bg-gray-200 border bg-white"
+                        title="Text Color"
+                      >
+                        <span
+                          className="inline-block w-4 h-4 border rounded"
+                          style={{ backgroundColor: editor.getAttributes("textStyle").color || "#000000" }}
+                        ></span>
+                        <span className="ml-1">A</span>
+                      </button>
+                      {showColorPicker && (
+                        <div className="absolute top-full left-0 mt-1 bg-white border rounded shadow-lg z-10 p-2">
+                          <div className="grid grid-cols-5 gap-1">
+                            {colors.map((color) => (
+                              <button
+                                key={color}
+                                type="button"
+                                onClick={() => changeTextColor(color)}
+                                className="w-6 h-6 rounded border hover:scale-110 transition-transform"
+                                style={{ backgroundColor: color }}
+                                title={color}
+                              />
+                            ))}
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => changeTextColor("#000000")}
+                            className="mt-2 px-2 py-1 text-xs bg-gray-100 rounded w-full"
+                          >
+                            Reset Color
+                          </button>
+                        </div>
+                      )}
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() => editor.chain().focus().toggleBold().run()}
+                      className={`p-2 rounded hover:bg-gray-200 ${editor.isActive("bold") ? "bg-gray-200" : ""}`}
+                      title="Bold"
+                    >
+                      <strong>B</strong>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => editor.chain().focus().toggleItalic().run()}
+                      className={`p-2 rounded hover:bg-gray-200 ${editor.isActive("italic") ? "bg-gray-200" : ""}`}
+                      title="Italic"
+                    >
+                      <em>I</em>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => editor.chain().focus().toggleUnderline().run()}
+                      className={`p-2 rounded hover:bg-gray-200 ${editor.isActive("underline") ? "bg-gray-200" : ""}`}
+                      title="Underline"
+                    >
+                      <u>U</u>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => editor.chain().focus().toggleHighlight().run()}
+                      className={`p-2 rounded hover:bg-gray-200 ${editor.isActive("highlight") ? "bg-gray-200" : ""}`}
+                      title="Highlight"
+                    >
+                      🖍️
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setShowImageModal(true)}
+                      className="p-2 rounded hover:bg-gray-200"
+                      title="Insert Image"
+                    >
+                      🖼️
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setShowVideoModal(true)}
+                      className="p-2 rounded hover:bg-gray-200"
+                      title="Insert Video"
+                    >
+                      🎥
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => editor.chain().focus().setTextAlign("left").run()}
+                      className={`p-2 rounded hover:bg-gray-200 ${editor.isActive({ textAlign: "left" }) ? "bg-gray-200" : ""}`}
+                      title="Align Left"
+                    >
+                      ⬅️
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => editor.chain().focus().setTextAlign("center").run()}
+                      className={`p-2 rounded hover:bg-gray-200 ${editor.isActive({ textAlign: "center" }) ? "bg-gray-200" : ""}`}
+                      title="Align Center"
+                    >
+                      ↔️
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => editor.chain().focus().setTextAlign("right").run()}
+                      className={`p-2 rounded hover:bg-gray-200 ${editor.isActive({ textAlign: "right" }) ? "bg-gray-200" : ""}`}
+                      title="Align Right"
+                    >
+                      ➡️
+                    </button>
+                  </div>
                 </div>
-              </div>
 
-              <div className="border rounded-lg min-h-[400px]">
-                <EditorContent editor={editor} />
-              </div>
-
-              {editor && !editor.isDestroyed && (
-                <div className="text-sm text-gray-500 text-right">
-                  {editor.storage.characterCount.characters()}/{editor.options.extensions.find((ext) => ext.name === "characterCount")?.options.limit || 10000} characters
+                <div className="border rounded-lg min-h-[400px]">
+                  <EditorContent editor={editor} />
                 </div>
-              )}
-            </>
-          )}
 
-          {mode === "markdown" && (
-            <div className="flex flex-col space-y-4">
-              <textarea
-                className="w-full h-96 p-4 border rounded-lg font-mono text-sm"
-                value={markdownContent}
-                onChange={(e) => setMarkdownContent(e.target.value)}
-                placeholder="Write in markdown format..."
-                aria-label="Markdown editor"
-              />
-              <div className="border rounded-lg p-4">
-                <h3 className="text-lg font-medium mb-2">Preview</h3>
-                <ReactMarkdown>{markdownContent}</ReactMarkdown>
-              </div>
-            </div>
-          )}
+                {editor && !editor.isDestroyed && (
+                  <div className="text-sm text-gray-500 text-right">
+                    {editor.storage.characterCount.characters()}/{editor.options.extensions.find((ext) => ext.name === "characterCount")?.options.limit || 10000} characters
+                  </div>
+                )}
+              </>
+            )}
 
-          {mode === "preview" && (
-            <div className="prose max-w-none p-4 border rounded-lg">
-              {mode === "preview" && editor && !editor.isDestroyed ? (
-                <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(editor.getHTML()) }} />
-              ) : (
-                <ReactMarkdown>{markdownContent}</ReactMarkdown>
-              )}
-            </div>
-          )}
-
-          {showImageModal && (
-            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-              <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg w-full max-w-md">
-                <h3 className="text-lg font-semibold mb-4">Insert Image</h3>
-                <input
-                  type="text"
-                  placeholder="Enter image URL"
-                  className="w-full p-2 border rounded mb-4"
-                  value={inlineImageUrl}
-                  onChange={(e) => setInlineImageUrl(e.target.value)}
-                  aria-label="Image URL"
+            {mode === "markdown" && (
+              <div className="flex flex-col space-y-4">
+                <textarea
+                  className="w-full h-96 p-4 border rounded-lg font-mono text-sm"
+                  value={markdownContent}
+                  onChange={(e) => setMarkdownContent(e.target.value)}
+                  placeholder="Write in markdown format..."
+                  aria-label="Markdown editor"
                 />
-                <CldUploadWidget
-                  uploadPreset={process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET}
-                  options={{ sources: ["local"], multiple: false, maxFiles: 1 }}
-                  onSuccess={(result) => {
-                    const url = result?.info?.secure_url || "";
-                    if (url) {
-                      setInlineImageUrl(url);
-                      setError("");
-                    } else {
-                      setError("Image upload failed.");
-                    }
-                  }}
-                  onError={() => setError("Image upload failed.")}
-                >
-                  {({ open }) => (
+                <div className="border rounded-lg p-4">
+                  <h3 className="text-lg font-medium mb-2">Preview</h3>
+                  <ReactMarkdown>{markdownContent}</ReactMarkdown>
+                </div>
+              </div>
+            )}
+
+            {mode === "preview" && (
+              <div className="prose max-w-none p-4 border rounded-lg">
+                {mode === "preview" && editor && !editor.isDestroyed ? (
+                  <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(editor.getHTML()) }} />
+                ) : (
+                  <ReactMarkdown>{markdownContent}</ReactMarkdown>
+                )}
+              </div>
+            )}
+
+            {showImageModal && (
+              <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg w-full max-w-md">
+                  <h3 className="text-lg font-semibold mb-4">Insert Image</h3>
+                  <input
+                    type="text"
+                    placeholder="Enter image URL"
+                    className="w-full p-2 border rounded mb-4"
+                    value={inlineImageUrl}
+                    onChange={(e) => setInlineImageUrl(e.target.value)}
+                    aria-label="Image URL"
+                  />
+                  <CldUploadWidget
+                    uploadPreset={process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET}
+                    options={{ sources: ["local"], multiple: false, maxFiles: 1 }}
+                    onSuccess={(result) => {
+                      const url = result?.info?.secure_url || "";
+                      if (url) {
+                        setInlineImageUrl(url);
+                        setError("");
+                      } else {
+                        setError("Image upload failed.");
+                      }
+                    }}
+                    onError={() => setError("Image upload failed.")}
+                  >
+                    {({ open }) => (
+                      <button
+                        type="button"
+                        onClick={() => open()}
+                        className="w-full p-2 bg-gray-200 rounded mb-4"
+                        aria-label="Upload image"
+                      >
+                        Upload Image
+                      </button>
+                    )}
+                  </CldUploadWidget>
+                  <div className="flex justify-end gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setShowImageModal(false)}
+                      className="px-4 py-2 bg-gray-200 rounded"
+                      aria-label="Cancel"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      type="button"
+                      onClick={addImageToEditor}
+                      className="px-4 py-2 bg-[#0286a3] text-white rounded"
+                      aria-label="Insert image"
+                    >
+                      Insert
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {showVideoModal && (
+              <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg w-full max-w-md">
+                  <h3 className="text-lg font-semibold mb-4">Insert YouTube Video</h3>
+                  <input
+                    type="text"
+                    placeholder="Enter YouTube URL"
+                    className="w-full p-2 border rounded mb-4"
+                    value={videoUrl}
+                    onChange={(e) => setVideoUrl(e.target.value)}
+                    aria-label="YouTube video URL"
+                  />
+                  <div className="flex justify-end gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setShowVideoModal(false)}
+                      className="px-4 py-2 bg-gray-200 rounded"
+                      aria-label="Cancel"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      type="button"
+                      onClick={addVideoToEditor}
+                      className="px-4 py-2 bg-[#0286a3] text-white rounded"
+                      aria-label="Insert video"
+                    >
+                      Insert
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            <div className="flex flex-col gap-2">
+              <label className="text-sm font-medium">Featured Image (optional)</label>
+              <CldUploadWidget
+                uploadPreset={process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET}
+                options={{ sources: ["local"], multiple: false, maxFiles: 1 }}
+                onSuccess={(result) => {
+                  const url = result?.info?.secure_url || "";
+                  if (url) {
+                    setImageUrl(url);
+                    setError("");
+                  } else {
+                    setError("Image upload failed.");
+                  }
+                }}
+                onError={() => setError("Image upload failed.")}
+              >
+                {({ open }) => (
+                  <>
                     <button
                       type="button"
                       onClick={() => open()}
-                      className="w-full p-2 bg-gray-200 rounded mb-4"
-                      aria-label="Upload image"
+                      className="bg-[#e6f7fb] text-[#0286a3] px-4 py-2 rounded-md hover:bg-[#d0eef5] transition-colors"
+                      aria-label={imageUrl ? "Change featured image" : "Upload featured image"}
                     >
-                      Upload Image
+                      {imageUrl ? "Change Featured Image" : "Upload Featured Image"}
                     </button>
-                  )}
-                </CldUploadWidget>
-                <div className="flex justify-end gap-2">
-                  <button
-                    type="button"
-                    onClick={() => setShowImageModal(false)}
-                    className="px-4 py-2 bg-gray-200 rounded"
-                    aria-label="Cancel"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    type="button"
-                    onClick={addImageToEditor}
-                    className="px-4 py-2 bg-blue-600 text-white rounded"
-                    aria-label="Insert image"
-                  >
-                    Insert
-                  </button>
-                </div>
-              </div>
+                    {imageUrl && (
+                      <img
+                        src={imageUrl.replace("/upload/", "/upload/w_150,h_100,c_fill,q_auto,f_auto/")}
+                        alt="Featured image preview"
+                        className="mt-2 max-h-40 rounded-md object-cover"
+                      />
+                    )}
+                  </>
+                )}
+              </CldUploadWidget>
             </div>
-          )}
 
-          {showVideoModal && (
-            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-              <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg w-full max-w-md">
-                <h3 className="text-lg font-semibold mb-4">Insert YouTube Video</h3>
-                <input
-                  type="text"
-                  placeholder="Enter YouTube URL"
-                  className="w-full p-2 border rounded mb-4"
-                  value={videoUrl}
-                  onChange={(e) => setVideoUrl(e.target.value)}
-                  aria-label="YouTube video URL"
-                />
-                <div className="flex justify-end gap-2">
-                  <button
-                    type="button"
-                    onClick={() => setShowVideoModal(false)}
-                    className="px-4 py-2 bg-gray-200 rounded"
-                    aria-label="Cancel"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    type="button"
-                    onClick={addVideoToEditor}
-                    className="px-4 py-2 bg-blue-600 text-white rounded"
-                    aria-label="Insert video"
-                  >
-                    Insert
-                  </button>
-                </div>
-              </div>
-            </div>
-          )}
-
-          <div className="flex flex-col gap-2">
-            <label className="text-sm font-medium">Featured Image (optional)</label>
-            <CldUploadWidget
-              uploadPreset={process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET}
-              options={{ sources: ["local"], multiple: false, maxFiles: 1 }}
-              onSuccess={(result) => {
-                const url = result?.info?.secure_url || "";
-                if (url) {
-                  setImageUrl(url);
-                  setError("");
-                } else {
-                  setError("Image upload failed.");
-                }
-              }}
-              onError={() => setError("Image upload failed.")}
+            <button
+              type="submit"
+              disabled={isSubmitting || (mode === "wysiwyg" && !editor)}
+              className={`bg-[#0286a3] text-white mt-4 px-4 py-2 rounded-md hover:bg-[#01687e] transition-colors ${
+                isSubmitting ? "opacity-50 cursor-not-allowed" : ""
+              }`}
+              aria-label="Publish blog post"
             >
-              {({ open }) => (
-                <>
-                  <button
-                    type="button"
-                    onClick={() => open()}
-                    className="bg-gray-200 text-gray-800 px-4 py-2 rounded-md"
-                    aria-label={imageUrl ? "Change featured image" : "Upload featured image"}
-                  >
-                    {imageUrl ? "Change Featured Image" : "Upload Featured Image"}
-                  </button>
-                  {imageUrl && (
-                    <img
-                      src={imageUrl.replace("/upload/", "/upload/w_150,h_100,c_fill,q_auto,f_auto/")}
-                      alt="Featured image preview"
-                      className="mt-2 max-h-40 rounded-md object-cover"
-                    />
-                  )}
-                </>
-              )}
-            </CldUploadWidget>
-          </div>
+              {isSubmitting ? (
+                <span className="flex items-center justify-center">
+                  <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  Creating...
+                </span>
+              ) : "Publish Blog Post"}
+            </button>
+          </form>
+        </div>
 
-          <button
-            type="submit"
-            disabled={isSubmitting || (mode === "wysiwyg" && !editor)}
-            className={`bg-black text-white mt-4 px-4 py-2 rounded-md ${
-              isSubmitting ? "opacity-50 cursor-not-allowed" : "hover:bg-gray-800"
-            }`}
-            aria-label="Publish blog post"
-          >
-            {isSubmitting ? "Creating..." : "Publish Blog Post"}
-          </button>
-        </form>
+        {(showFontDropdown || showColorPicker) && (
+          <div
+            className="fixed inset-0 z-5"
+            onClick={() => {
+              setShowFontDropdown(false);
+              setShowColorPicker(false);
+            }}
+          />
+        )}
       </div>
-
-      {(showFontDropdown || showColorPicker) && (
-        <div
-          className="fixed inset-0 z-5"
-          onClick={() => {
-            setShowFontDropdown(false);
-            setShowColorPicker(false);
-          }}
-        />
-      )}
     </div>
   );
-}
-
-class EditorErrorBoundary extends React.Component {
-  state = { hasError: false };
-
-  static getDerivedStateFromError() {
-    return { hasError: true };
-  }
-
-  render() {
-    if (this.state.hasError) {
-      return <div>Something went wrong with the editor. Please try again.</div>;
-    }
-    return this.props.children;
-  }
 }
 
 export default Page;

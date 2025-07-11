@@ -70,7 +70,7 @@ const RoadmapList = () => {
 function RoadMap() {
   const { theme } = useTheme();
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-5 px-4 sm:px-6 lg:px-8">
       <div className="max-w-3xl mx-auto text-center mb-8">
         <div className="relative inline-block">
           <h1 className="text-2xl sm:text-2xl md:text-3xl font-bold tracking-tight">

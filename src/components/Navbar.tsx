@@ -121,12 +121,15 @@ const Navbar: React.FC = () => {
                 />
                 <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-600 opacity-0 group-hover:opacity-20 rounded-lg transition-opacity duration-300" />
               </div>
-              <span
-                className="text-transparent bg-clip-text font-bold text-2xl"
-                style={{ backgroundImage: 'linear-gradient(to right, #00cfd1, #0286a3)' }}
-              >
-                LearnLive
-              </span>
+             <span
+  className="text-transparent bg-clip-text font-bold text-2xl"
+  style={{
+    backgroundImage: 'linear-gradient(to right, #00bbc6, #0286a3)',
+  }}
+>
+  LearnLive
+</span>
+
             </Link>
 
             <div className="hidden lg:flex items-center space-x-1">
@@ -203,7 +206,7 @@ const Navbar: React.FC = () => {
                       <ul className="py-2 list-none">
                         <li>
                           <Link
-                            href="/admin-dashboard"
+                            href="/dashboard"
                             className={`flex items-center px-4 py-2 text-sm font-medium transition-all duration-200 hover:bg-gradient-to-r hover:from-blue-500 hover:to-purple-600 hover:text-white ${
                               theme === 'light' ? 'text-gray-700' : 'text-gray-200'
                             }`}
@@ -214,7 +217,7 @@ const Navbar: React.FC = () => {
                         </li>
                         <li>
                           <Link
-                            href={`/profile/${session.user?.email}`}
+                            href={`/profilesection/${session.user?.email}`}
                             className={`flex items-center px-4 py-2 text-sm font-medium transition-all duration-200 hover:bg-gradient-to-r hover:from-blue-500 hover:to-purple-600 hover:text-white ${
                               theme === 'light' ? 'text-gray-700' : 'text-gray-200'
                             }`}
