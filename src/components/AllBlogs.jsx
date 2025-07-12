@@ -7,12 +7,14 @@ import Link from "next/link";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import BlogCard from "@/components/BlogCard";
+import { useTheme } from "@/components/ThemeContext"; // Added this import
 
 function AllBlogs() {
   const { data: session } = useSession();
   const [ideas, setIdeas] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
+  const { theme } = useTheme(); // Added theme context
 
   const fetchIdeas = async () => {
     try {
@@ -61,9 +63,17 @@ function AllBlogs() {
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8 px-4">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold">
-            <span className="text-teal-500 dark:text-teal-400">Creative Blogs</span> Hub
-          </h1>
+          <h3 className="text-3xl md:text-3xl font-bold tracking-tight">
+            <span className="bg-gradient-to-r from-teal-400 to-cyan-600 bg-clip-text text-transparent">
+              Creative Blogs
+            </span>{" "}
+            <span className="relative inline-block">
+              Hub
+              <span className={`absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-cyan-400 to-teal-500 rounded-full ${
+                theme === 'dark' ? 'opacity-90' : 'opacity-100'
+              }`}></span>
+            </span>
+          </h3>
           <p className="text-gray-600 dark:text-gray-300 mt-2 max-w-md mx-auto">
             Discover and share innovative blog posts
           </p>

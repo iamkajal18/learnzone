@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from "react";
+import { useTheme } from "next-themes";
 
 const faqs = [
   {
@@ -22,6 +23,13 @@ const faqs = [
     answer:
       "Our platform features 17+ regularly updated roadmaps covering technical skills like JavaScript, Python, C++, Data Structures, and placement prep topics like algorithms, verbal ability, and communication skills.",
     icon: "🗺️"
+  },
+  {
+    id: 4,
+    question: "Does LearnLive have a blogging platform?",
+    answer:
+      "Yes! LearnLive features a built-in blogging platform where students and instructors can share knowledge, write tutorials, and document their learning journeys. You can publish technical articles, exam tips, and career advice.",
+    icon: "✍️"
   },
   {
     id: 5,
@@ -62,6 +70,7 @@ const faqs = [
 
 function Faq() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const { theme } = useTheme();
 
   const toggleFAQ = (faqId: number) => {
     setOpenIndex((prevId) => (prevId === faqId ? null : faqId));
@@ -81,22 +90,26 @@ function Faq() {
           <div className="inline-flex items-center justify-center w-12 h-12 bg-gradient-to-r from-[#00cfd1] to-[#0286a3] rounded-full mb-4">
             <span className="text-white text-xl">❓</span>
           </div>
-          
-          <h2 className="text-2xl md:text-3xl font-bold mb-4">
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00cfd1] to-[#0286a3]">
+          <h3 className="text-3xl md:text-3xl font-bold tracking-tight">
+            <span className="bg-gradient-to-r from-teal-400 to-cyan-600 bg-clip-text text-transparent">
               Frequently Asked
             </span>{" "}
-            Questions
-          </h2>
+            <span className="relative inline-block">
+              Questions
+              <span className={`absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-cyan-400 to-teal-500 rounded-full ${
+                theme === 'dark' ? 'opacity-90' : 'opacity-100'
+              }`}></span>
+            </span>
+          </h3>
           
-          <p className="text-sm text-gray-600 dark:text-gray-400 max-w-xl mx-auto">
+          <p className="text-md text-gray-600 dark:text-gray-400 max-w-xl mx-auto py-2">
             Discover everything you need to know about mastering your learning journey with LearnLive.
           </p>
         </div>
 
         {/* FAQ Items */}
         <div className="space-y-3">
-          {faqs.map((faq, index) => (
+          {faqs.map((faq) => (
             <div
               key={faq.id}
               className={`group relative overflow-hidden rounded-xl bg-white/80 dark:bg-gray-700/80 backdrop-blur-sm border border-gray-200/50 dark:border-gray-600/50 shadow-sm hover:shadow-md cursor-pointer transition-all duration-300 ${
@@ -156,15 +169,14 @@ function Faq() {
         </div>
 
         {/* Bottom CTA */}
-<div className="text-center mt-8">
-  <a
-    href="/support"
-    className="text-xs font-medium text-[#0286a3] dark:text-[#00cfd1] hover:text-[#00cfd1] dark:hover:text-[#0286a3] transition-colors duration-300"
-  >
-    Contact support →
-  </a>
-</div>
-
+        <div className="text-center mt-8">
+          <a
+            href="/support"
+            className="text-xs font-medium text-[#0286a3] dark:text-[#00cfd1] hover:text-[#00cfd1] dark:hover:text-[#0286a3] transition-colors duration-300"
+          >
+             support →
+          </a>
+        </div>
       </div>
     </div>
   );

@@ -106,13 +106,12 @@ const StudyPlan = () => {
     { value: '3.1x', label: 'Faster Learning', target: 3.1 },
   ];
 
-  // Optimize animation with useCallback
   const animateCards = useCallback(() => {
     setIsVisible(true);
     strategies.forEach((_, index) => {
       setTimeout(() => {
         setAnimatedCards((prev) => [...prev, index]);
-      }, index * 150);
+      }, index * 100);
     });
   }, [strategies]);
 
@@ -121,11 +120,10 @@ const StudyPlan = () => {
     return () => clearTimeout(timer);
   }, [animateCards]);
 
-  // Animate metrics counting
   useEffect(() => {
     if (isVisible) {
       successMetrics.forEach((metric, index) => {
-        const duration = 2000;
+        const duration = 1500;
         const steps = 60;
         const increment = metric.target / steps;
         let current = 0;
@@ -147,146 +145,105 @@ const StudyPlan = () => {
   }, [isVisible, successMetrics]);
 
   return (
-    <section
-      className="min-h-screen bg-gray-50 dark:bg-gray-900 px-4 sm:px-6 lg:px-8 transition-colors duration-300 relative overflow-hidden"
-      aria-label="Study Plan Section"
-    >
-      {/* Animated background elements */}
+    <section className="min-h-screen bg-white dark:bg-gray-900 px-4 sm:px-6 lg:px-8 transition-colors duration-300 relative overflow-hidden">
+      {/* Improved background elements */}
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-20 left-10 w-64 h-64 bg-gradient-to-r from-[#0286a3]/10 to-[#7fd1e8]/10 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute bottom-20 right-10 w-80 h-80 bg-gradient-to-r from-purple-500/10 to-blue-500/10 rounded-full blur-3xl animate-pulse delay-1000" />
+        <div className="absolute top-20 left-10 w-64 h-64 bg-gradient-to-r from-[#0286a3]/5 to-[#7fd1e8]/5 rounded-full blur-3xl animate-pulse" />
+        <div className="absolute bottom-20 right-10 w-80 h-80 bg-gradient-to-r from-purple-500/5 to-blue-500/5 rounded-full blur-3xl animate-pulse delay-1000" />
       </div>
 
-      <div className="max-w-6xl mx-auto py-8 relative z-10">
-        {/* Header Section with Moved-Up Heading */}
-        <div
-          className={`text-center mb-2 transition-all duration-4000 ease-out ${
-            isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-10'
-          }`}
-        >
-          <h1 className="text-2xl sm:text-2xl md:text-3xl font-bold tracking-tight">
-            <span className="text-teal-400 dark:text-teal-300">Competition Domination </span>
-            <span className="text-black dark:text-gray-100">Framework</span>
+      <div className="max-w-7xl mx-auto py-12 md:py-16 relative z-10">
+        {/* Enhanced Header Section */}
+        <div className={`text-center mb-12 transition-all duration-700 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-10'}`}>
+          <div className="inline-flex items-center px-4 py-2 rounded-full bg-[#0286a3]/10 dark:bg-[#7fd1e8]/10 mb-4">
+            <span className="text-[#0286a3] dark:text-[#7fd1e8] font-medium text-sm">PROVEN METHODOLOGY</span>
+          </div>
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-gray-900 dark:text-white mb-4">
+            <span className="text-[#0286a3] dark:text-[#7fd1e8]">Competition Domination</span> Framework
           </h1>
-          
-          <p className="text-base md:text-lg text-gray-600 dark:text-gray-300 mt-2 max-w-3xl mx-auto">
-            Evidence-based strategies used by top 1% competitors to systematically outperform.
+          <p className="text-lg md:text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+            Evidence-based strategies used by top performers to systematically outperform competition
           </p>
 
-          {/* Success Metrics */}
-          <div className="mt-6 py-2 grid grid-cols-2 md:grid-cols-4 gap-4 max-w-2xl mx-auto">
-            {successMetrics.map((metric, index) => (
-              <div
-                key={index}
-                className={`bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 transform transition-all duration-500 hover:scale-105 hover:shadow-lg ${
-                  isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'
-                }`}
-                style={{ transitionDelay: `${index * 100}ms` }}
-                aria-label={`${metric.label}: ${countingMetrics[index] || '0%'}`}
-              >
-                <p className="text-xl font-bold text-[#0286a3] dark:text-[#7fd1e8]">
-                  {countingMetrics[index] || '0%'}
-                </p>
-                <p className="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  {metric.label}
-                </p>
-              </div>
-            ))}
-          </div>
+         
         </div>
 
-        {/* Strategy Grid */}
+        {/* Enhanced Strategy Grid */}
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {strategies.map((strategy, index) => (
             <div
               key={index}
-              className={`group bg-gradient-to-br ${strategy.gradient} p-4 rounded-lg shadow-md border-t-2 ${strategy.borderColor} transform transition-all duration-500 hover:scale-105 hover:shadow-xl hover:-translate-y-1 cursor-pointer relative overflow-hidden ${
-                animatedCards.includes(index)
-                  ? 'opacity-100 translate-y-0'
-                  : 'opacity-0 translate-y-10'
+              className={`group bg-gradient-to-br ${strategy.gradient} p-6 rounded-xl shadow-sm border-t-4 ${strategy.borderColor} transform transition-all duration-500 hover:scale-[1.03] hover:shadow-lg hover:-translate-y-2 cursor-pointer relative overflow-hidden ${
+                animatedCards.includes(index) ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
               }`}
               onMouseEnter={() => setHoveredCard(index)}
               onMouseLeave={() => setHoveredCard(null)}
-              role="article"
-              aria-label={strategy.title}
             >
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 transform -translate-x-full group-hover:translate-x-full" />
-              <div className="flex flex-col items-center text-center mb-3 relative z-10">
-                <div
-                  className={`bg-white dark:bg-gray-800/30 rounded-full w-10 h-10 flex items-center justify-center mb-2 transform transition-all duration-300 ${
-                    hoveredCard === index ? 'scale-110 rotate-12' : 'scale-100 rotate-0'
-                  }`}
-                >
-                  <span className="text-xl">{strategy.icon}</span>
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 transform -translate-x-full group-hover:translate-x-full" />
+              <div className="flex flex-col items-center text-center mb-4 relative z-10">
+                <div className={`bg-white dark:bg-gray-800/50 rounded-xl w-14 h-14 flex items-center justify-center mb-3 transform transition-all duration-300 ${
+                  hoveredCard === index ? 'scale-110 rotate-6' : 'scale-100 rotate-0'
+                }`}>
+                  <span className="text-2xl">{strategy.icon}</span>
                 </div>
-                <h2 className="text-base font-semibold text-gray-800 dark:text-gray-100">
+                <h2 className="text-lg font-semibold text-gray-800 dark:text-gray-100">
                   {strategy.title}
                 </h2>
               </div>
-              <ul className="space-y-2 text-sm text-gray-700 dark:text-gray-300 relative z-10">
+              <ul className="space-y-3 text-sm text-gray-700 dark:text-gray-300 relative z-10">
                 {strategy.items.map((item, itemIndex) => (
                   <li
                     key={itemIndex}
                     className={`flex items-start transition-all duration-300 ${
                       hoveredCard === index ? 'transform translate-x-2' : ''
                     }`}
-                    style={{ transitionDelay: `${itemIndex * 100}ms` }}
+                    style={{ transitionDelay: `${itemIndex * 50}ms` }}
                   >
                     <span className="text-[#0286a3] dark:text-[#7fd1e8] mr-2 mt-0.5">▹</span>
                     <span>{item}</span>
                   </li>
                 ))}
               </ul>
-              <div className="absolute top-2 right-2 w-3 h-3 bg-white/30 rounded-full animate-ping opacity-0 group-hover:opacity-100" />
+              <div className="absolute top-3 right-3 w-2 h-2 bg-white/50 rounded-full animate-ping opacity-0 group-hover:opacity-100" />
             </div>
           ))}
         </div>
 
-        {/* CTA Section */}
-        <div
-          className={`mt-8 bg-gradient-to-r from-[#0286a3] to-[#015a70] dark:from-[#015a70] dark:to-[#01485a] p-6 rounded-lg text-center relative overflow-hidden transition-all duration-1000 ease-out ${
-            isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-          }`}
-        >
+        {/* Enhanced CTA Section */}
+        <div className={`mt-16 bg-gradient-to-r from-[#0286a3] to-[#015a70] dark:from-[#015a70] dark:to-[#01485a] p-8 rounded-2xl text-center relative overflow-hidden transition-all duration-700 ease-out ${
+          isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+        }`}>
           <div className="absolute inset-0 bg-gradient-to-r from-[#7fd1e8]/20 via-transparent to-[#7fd1e8]/20 animate-pulse" />
           <div className="relative z-10">
-            <h3 className="text-lg font-semibold text-white mb-2">Ready for Competitive Excellence?</h3>
-            <p className="text-sm text-[#b3e5f5] dark:text-[#7fd1e8] mb-4 max-w-md mx-auto">
-              Join thousands of high-performers who transformed their results.
+            <h3 className="text-2xl font-bold text-white mb-3">Ready for Competitive Excellence?</h3>
+            <p className="text-lg text-[#b3e5f5] dark:text-[#7fd1e8] mb-6 max-w-2xl mx-auto">
+              Join thousands of high-performers who transformed their results with our framework.
             </p>
-            <div className="flex flex-col sm:flex-row justify-center gap-3">
+            <div className="flex flex-col sm:flex-row justify-center gap-4">
               <Link
                 href="/create"
-                passHref
-                className="group inline-flex items-center justify-center bg-white text-[#0286a3] dark:bg-gray-900 dark:text-[#7fd1e8] px-4 py-2 rounded-md font-medium text-sm hover:bg-gray-50 dark:hover:bg-gray-800 transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
-                aria-label="Start AI Mock Interview"
+                className="group inline-flex items-center justify-center bg-white text-[#0286a3] dark:bg-gray-900 dark:text-[#7fd1e8] px-6 py-3 rounded-lg font-medium text-base hover:bg-gray-50 dark:hover:bg-gray-800 transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
               >
                 <span>Write your Masterpiece</span>
-                <div className="ml-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">🎯</div>
+                <span className="ml-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">🎯</span>
               </Link>
               <Link
                 href="https://trackode.in/programming-quizzes"
-                passHref
-                className="group inline-flex items-center justify-center bg-white text-[#0286a3] dark:bg-gray-900 dark:text-[#7fd1e8] px-4 py-2 rounded-md font-medium text-sm hover:bg-gray-50 dark:hover:bg-gray-800 transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
-                aria-label="Start Dominating with Programming Quizzes"
+                className="group inline-flex items-center justify-center bg-white text-[#0286a3] dark:bg-gray-900 dark:text-[#7fd1e8] px-6 py-3 rounded-lg font-medium text-base hover:bg-gray-50 dark:hover:bg-gray-800 transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
               >
-                <span>Start Dominating For Quiz</span>
-                <div className="ml-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">🚀</div>
+                <span>Start Dominating Quizzes</span>
+                <span className="ml-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">🚀</span>
               </Link>
             </div>
           </div>
         </div>
 
-        {/* Competitive Edge Stack */}
-        <div
-          className={`mt-8 transition-all duration-1000 ease-out delay-500 ${
-            isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-          }`}
-        >
-          <h2 className="text-xl font-semibold text-center text-gray-800 dark:text-gray-100 mb-4">
+        {/* Enhanced Competitive Edge Stack */}
+        <div className={`mt-16 transition-all duration-700 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+          <h2 className="text-2xl font-bold text-center text-gray-900 dark:text-white mb-8">
             The Competitive Edge Stack
           </h2>
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-3 gap-8">
             {[
               {
                 icon: 'M13 10V3L4 14h7v7l9-11h-7z',
@@ -306,35 +263,26 @@ const StudyPlan = () => {
             ].map((item, index) => (
               <div
                 key={index}
-                className={`group bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 hover:shadow-lg hover:border-[#0286a3] dark:hover:border-[#7fd1e8] transition-all duration-300 transform hover:scale-105 hover:-translate-y-1 ${
+                className={`group bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-md hover:border-[#0286a3] dark:hover:border-[#7fd1e8] transition-all duration-300 transform hover:scale-105 hover:-translate-y-2 ${
                   isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'
                 }`}
                 style={{ transitionDelay: `${600 + index * 200}ms` }}
-                role="article"
-                aria-label={item.title}
               >
-                <div className="text-[#0286a3] dark:text-[#7fd1e8] mb-3 transform transition-all duration-300 group-hover:scale-110 group-hover:rotate-12">
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="text-[#0286a3] dark:text-[#7fd1e8] mb-4 transform transition-all duration-300 group-hover:scale-110 group-hover:rotate-6">
+                  <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={item.icon} />
                   </svg>
                 </div>
-                <h3 className="font-semibold text-base text-gray-800 dark:text-gray-100 mb-2 group-hover:text-[#0286a8] dark:group-hover:text-[#7fd1e8]">
+                <h3 className="font-bold text-lg text-gray-900 dark:text-white mb-3 group-hover:text-[#0286a8] dark:group-hover:text-[#7fd1e8]">
                   {item.title}
                 </h3>
-                <p className="text-sm text-gray-600 dark:text-gray-300 group-hover:text-gray-700 dark:group-hover:text-gray-200">
+                <p className="text-gray-600 dark:text-gray-300 group-hover:text-gray-700 dark:group-hover:text-gray-200">
                   {item.description}
                 </p>
               </div>
             ))}
           </div>
         </div>
-      </div>
-
-      {/* Floating particles */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-1/4 left-1/4 w-2 h-2 bg-[#0286a3]/30 rounded-full animate-ping delay-1000" />
-        <div className="absolute top-1/3 right-1/3 w-2 h-2 bg-[#7fd1e8]/30 rounded-full animate-ping delay-2000" />
-        <div className="absolute bottom-1/4 left-1/3 w-2 h-2 bg-purple-500/30 rounded-full animate-ping delay-3000" />
       </div>
     </section>
   );

@@ -2,7 +2,9 @@
 import React, { useState, useMemo } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { FiBook, FiAward, FiClock, FiStar, FiTrendingUp, FiFilter, FiSearch } from "react-icons/fi";
+import { useTheme } from "next-themes";
+import { FiBook, FiClock, FiStar, FiSearch } from "react-icons/fi";
+
 
 const guidesData = [
   {
@@ -238,6 +240,7 @@ const LearningHub = () => {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [sortOption, setSortOption] = useState("title");
   const [searchQuery, setSearchQuery] = useState("");
+  const { theme } = useTheme();
 
   const categories = ["All", "Placement Prep", "Technical Skills", "Soft Skills", "Career Development", "Coding"];
 
@@ -257,15 +260,22 @@ const LearningHub = () => {
   }, [selectedCategory, sortOption, searchQuery]);
 
   return (
-    <div className="bg-gray-50 dark:bg-gray-900 min-h-screen py-2 px-4 sm:px-6">
+    <div className="bg-gray-50 dark:bg-gray-900 min-h-screen py-8 px-4 sm:px-6">
       <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-5">
-          <h1 className="text-2xl sm:text-2xl md:text-3xl font-bold tracking-tight">
-            <span className="text-teal-400 dark:text-teal-300">Placement Prepartion</span>
-            <span className="text-black dark:text-gray-100"> & Tips </span>
-          </h1>
-          <p className="text-gray-600 dark:text-gray-300 max-w-md mx-auto">
-            Comprehensive guides for career development and technical skills
+        <div className="text-center mb-8">
+          <h3 className="text-3xl md:text-4xl font-bold tracking-tight">
+            <span className="bg-gradient-to-r from-teal-400 to-cyan-600 bg-clip-text text-transparent">
+              Placement Prepartions
+            </span>{" "}
+            <span className="relative inline-block">
+               & Tips
+              <span className={`absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-cyan-400 to-teal-500 rounded-full ${
+                theme === 'dark' ? 'opacity-90' : 'opacity-100'
+              }`}></span>
+            </span>
+          </h3>
+          <p className="text-gray-600 dark:text-gray-300 max-w-md mx-auto mt-3">
+            Master your skills with our structured learning paths
           </p>
         </div>
 

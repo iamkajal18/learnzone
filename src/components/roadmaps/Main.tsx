@@ -6,59 +6,82 @@ import { useTheme } from '@/components/ThemeContext';
 
 const RoadmapList = () => {
   const roadmapItems = [
-    { name: 'TCS NQT', slug: 'tcs-nqt', icon: '/Tcs.jpeg' },
-    { name: 'GATE', slug: 'gate', icon: 'https://img.icons8.com/fluency/96/graduation-cap.png' },
-    { name: 'SSC CGL', slug: 'ssc-cgl', icon: '/ssc_cgl.jpeg' },
-    { name: 'SSC CHSL', slug: 'ssc-chsl', icon: '/SSC_chsl.png'},
-    { name: 'Banking', slug: 'banking', icon: '/banking.jpeg' },
-    { name: 'C', slug: 'c', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/c/c-original.svg' },
-    { name: 'C++', slug: 'cpp', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg' },
-    { name: 'Go', slug: 'go', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/go/go-original.svg' },
-    { name: 'Java', slug: 'java', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg' },
-    { name: 'JavaScript', slug: 'javascript', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg' },
-    { name: 'Kotlin', slug: 'kotlin', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/kotlin/kotlin-original.svg' },
-    { name: 'PHP', slug: 'php', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/php/php-original.svg' },
-    { name: 'Python', slug: 'python', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg' },
-    { name: 'R', slug: 'r', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/r/r-original.svg' },
-    { name: 'Ruby', slug: 'ruby', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/ruby/ruby-original.svg' },
-    { name: 'Rust', slug: 'rust', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/rust/rust-original.svg' },
-    { name: 'SQL', slug: 'sql', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg' },
+    { name: 'TCS NQT', slug: 'tcs-nqt', icon: '/Tcs.jpeg', category: 'exam' },
+    { name: 'GATE', slug: 'gate', icon: 'https://img.icons8.com/fluency/96/graduation-cap.png', category: 'exam' },
+    { name: 'SSC CGL', slug: 'ssc-cgl', icon: '/ssc_cgl.jpeg', category: 'exam' },
+    { name: 'SSC CHSL', slug: 'ssc-chsl', icon: '/SSC_chsl.png', category: 'exam' },
+    { name: 'Banking', slug: 'banking', icon: '/banking.jpeg', category: 'exam' },
+    { name: 'C', slug: 'c', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/c/c-original.svg', category: 'programming' },
+    { name: 'C++', slug: 'cpp', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg', category: 'programming' },
+    { name: 'Go', slug: 'go', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/go/go-original.svg', category: 'programming' },
+    { name: 'Java', slug: 'java', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg', category: 'programming' },
+    { name: 'JavaScript', slug: 'javascript', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg', category: 'programming' },
+    { name: 'Kotlin', slug: 'kotlin', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/kotlin/kotlin-original.svg', category: 'programming' },
+    { name: 'PHP', slug: 'php', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/php/php-original.svg', category: 'programming' },
+    { name: 'Python', slug: 'python', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg', category: 'programming' },
+    { name: 'R', slug: 'r', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/r/r-original.svg', category: 'programming' },
+    { name: 'Ruby', slug: 'ruby', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/ruby/ruby-original.svg', category: 'programming' },
+    { name: 'Rust', slug: 'rust', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/rust/rust-original.svg', category: 'programming' },
+    { name: 'SQL', slug: 'sql', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg', category: 'programming' },
   ];
 
+  const getCategoryColor = (category: string) => {
+    return category === 'exam' 
+      ? 'from-emerald-400/20 to-teal-400/20' 
+      : 'from-violet-400/20 to-purple-400/20';
+  };
+
+  const getCategoryAccent = (category: string) => {
+    return category === 'exam' 
+      ? 'group-hover:border-emerald-400 dark:group-hover:border-emerald-500' 
+      : 'group-hover:border-violet-400 dark:group-hover:border-violet-500';
+  };
+
   return (
-    <div className="max-w-7xl mx-auto px-4 py-6 mt-8 mb-12"> {/* Increased mt-5 to mt-8 and added mb-12 */}
-     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 py-2">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 sm:gap-6">
         {roadmapItems.map((item, index) => (
           <div
             key={item.slug}
             className="group relative"
             style={{
-              animationDelay: `${index * 100}ms`,
-              animation: 'fadeInUp 0.6s ease-out forwards'
+              animationDelay: `${index * 75}ms`,
+              animationFillMode: 'both',
+              animationDuration: '500ms',
+              animationName: 'fadeInUp'
             }}
           >
             <Link
               href={`/roadmap/${item.slug}`}
-              className="block p-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100 dark:border-gray-700 hover:border-blue-400 dark:hover:border-blue-500 transform hover:-translate-y-1"
+              className={`block p-4 bg-white dark:bg-gray-800 rounded-xl shadow-xs hover:shadow-lg transition-all duration-300 border border-gray-200 dark:border-gray-700 ${getCategoryAccent(item.category)} hover:shadow-blue-100 dark:hover:shadow-blue-900/20 hover:-translate-y-1 transform`}
+              aria-label={`${item.name} roadmap`}
             >
-              <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg"></div>
-              <div className="relative z-10 flex flex-col items-center text-center gap-2">
-                <div className="w-12 h-12 flex items-center justify-center rounded-lg bg-white dark:bg-gray-700 shadow-inner group-hover:shadow-md transition-all duration-300 border border-gray-100 dark:border-gray-600">
+              <div className={`absolute inset-0 bg-gradient-to-br ${getCategoryColor(item.category)} opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl`} />
+              
+              {/* Subtle corner accent */}
+              <div className={`absolute top-2 right-2 w-3 h-3 rounded-full ${item.category === 'exam' ? 'bg-emerald-400/30' : 'bg-violet-400/30'} opacity-0 group-hover:opacity-100 transition-all duration-300`} />
+              
+              <div className="relative z-10 flex flex-col items-center text-center gap-3">
+                <div className="w-12 h-12 flex items-center justify-center rounded-xl bg-white dark:bg-gray-700 shadow-xs group-hover:shadow-md transition-all duration-300 border border-gray-200 dark:border-gray-600 group-hover:border-white dark:group-hover:border-gray-500">
                   <Image
                     src={item.icon}
                     alt={`${item.name} icon`}
-                    className="object-contain h-7 w-7 group-hover:scale-105 transition-transform duration-200"
+                    className="object-contain h-7 w-7 group-hover:scale-110 transition-transform duration-300"
                     width={28}
                     height={28}
                     loading={index < 6 ? "eager" : "lazy"}
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      target.onerror = null;
+                      target.src = '/default-icon.svg';
+                    }}
                   />
                 </div>
-                <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-200">
+                <h3 className={`text-sm font-medium text-gray-800 dark:text-gray-200 transition-colors duration-300 ${item.category === 'exam' ? 'group-hover:text-emerald-600 dark:group-hover:text-emerald-400' : 'group-hover:text-violet-600 dark:group-hover:text-violet-400'}`}>
                   {item.name}
                 </h3>
-                <div className="w-5 h-1 bg-blue-500 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-1 group-hover:translate-y-0"></div>
+                <div className={`w-6 h-0.5 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-1 group-hover:translate-y-0 ${item.category === 'exam' ? 'bg-emerald-500' : 'bg-violet-500'}`} />
               </div>
-              <div className="absolute inset-0 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none shadow-[0_0_15px_-3px_rgba(59,130,246,0.3)] dark:shadow-[0_0_15px_-3px_rgba(96,165,250,0.3)]"></div>
             </Link>
           </div>
         ))}
@@ -67,44 +90,82 @@ const RoadmapList = () => {
   );
 };
 
-function RoadMap() {
+const RoadMapHeader = () => {
   const { theme } = useTheme();
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-5 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-3xl mx-auto text-center mb-8">
-        <div className="relative inline-block">
-          <h1 className="text-2xl sm:text-2xl md:text-3xl font-bold tracking-tight">
-            <span className="text-teal-400 dark:text-teal-300">Comprehensive Learning </span>
-            <span className="text-black dark:text-gray-100">Roadmaps</span>
-          </h1>
-        </div>
-        <p className="text-gray-600 dark:text-gray-300 text-sm sm:text-base mt-4 mb-6 max-w-2xl mx-auto">
-          Structured paths to master various technologies and ace competitive exams
-        </p>
-        <div className="flex flex-wrap justify-center gap-3 text-xs sm:text-sm">
-          <div className="flex items-center px-2 py-1 bg-white dark:bg-gray-800 rounded-full shadow-sm">
-            <span className="w-2 h-2 bg-green-500 rounded-full mr-1"></span>
-            <span className="text-gray-700 dark:text-gray-300">17+ Roadmaps</span>
-          </div>
-          <div className="flex items-center px-2 py-1 bg-white dark:bg-gray-800 rounded-full shadow-sm">
-            <span className="w-2 h-2 bg-blue-500 rounded-full mr-1"></span>
-            <span className="text-gray-700 dark:text-gray-300">Regular Updates</span>
-          </div>
-          <div className="flex items-center px-2 py-1 bg-white dark:bg-gray-800 rounded-full shadow-sm">
-            <span className="w-2 h-2 bg-purple-500 rounded-full mr-1"></span>
-            <span className="text-gray-700 dark:text-gray-300">Free Access</span>
-          </div>
-        </div>
+    <div className="max-w-4xl mx-auto text-center mb-3 relative">
+      {/* Subtle background decoration */}
+      <div className="absolute -top-4 -left-4 w-24 h-24 bg-gradient-to-br from-cyan-400/10 to-teal-400/10 rounded-full blur-xl" />
+      <div className="absolute -top-8 -right-8 w-32 h-32 bg-gradient-to-br from-violet-400/10 to-purple-400/10 rounded-full blur-xl" />
+      
+      <div className="relative inline-block">
+        <h3 className="text-3xl md:text-3xl font-bold tracking-tight">
+          <span className="bg-gradient-to-r from-teal-400 to-cyan-600 bg-clip-text text-transparent">
+            Comprehensive Learning
+          </span>{" "}
+          <span className="relative inline-block">
+            Roadmaps
+            <span className={`absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-cyan-400 to-teal-500 rounded-full ${
+              theme === 'dark' ? 'opacity-90' : ''
+            }`}></span>
+          </span>
+        </h3>
       </div>
-      <RoadmapList />
-      <style jsx>{`
+      
+      <p className="text-gray-600 dark:text-gray-300 text-base sm:text-lg mt-6 mb-8 max-w-3xl mx-auto leading-relaxed">
+        Structured paths to master various technologies and ace competitive exams with our carefully curated learning roadmaps
+      </p>
+      
+      <div className="flex flex-wrap justify-center gap-3">
+        {[
+          { label: '17+ Roadmaps', color: 'bg-emerald-500', shadow: 'shadow-emerald-500/20' },
+          { label: 'Regular Updates', color: 'bg-blue-500', shadow: 'shadow-blue-500/20' },
+          { label: 'Free Access', color: 'bg-violet-500', shadow: 'shadow-violet-500/20' },
+          { label: 'Expert Curated', color: 'bg-amber-500', shadow: 'shadow-amber-500/20' }
+        ].map((item, index) => (
+          <div 
+            key={index}
+            className={`flex items-center px-3 py-1.5 bg-white dark:bg-gray-800 rounded-full shadow-sm ${item.shadow} border border-gray-200 dark:border-gray-700 hover:shadow-md transition-all duration-200 hover:-translate-y-0.5`}
+          >
+            <span className={`w-2 h-2 ${item.color} rounded-full mr-2 animate-pulse`} />
+            <span className="text-sm font-medium text-gray-700 dark:text-gray-300">{item.label}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+const RoadMap = () => {
+  const { theme } = useTheme();
+
+  return (
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+      {/* Subtle animated background */}
+      <div className="absolute inset-0 opacity-30">
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-to-br from-cyan-400/5 to-teal-400/5 rounded-full blur-3xl animate-pulse" />
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-gradient-to-br from-violet-400/5 to-purple-400/5 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
+      </div>
+      
+      <div className="relative z-10">
+        <RoadMapHeader />
+        <RoadmapList />
+      </div>
+      
+      <style jsx global>{`
         @keyframes fadeInUp {
-          from { opacity: 0; transform: translateY(20px); }
-          to { opacity: 1; transform: translateY(0); }
+          from {
+            opacity: 0;
+            transform: translateY(12px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
         }
       `}</style>
     </div>
   );
-}
+};
 
 export default RoadMap;

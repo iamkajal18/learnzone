@@ -29,14 +29,11 @@ export default function Page() {
   return (
     <>
     <Banner/>
-    
-    <StudyPlan/>
-  
     <RoadMap/>
+    <AllBlogs/>
      <PlacementPre/>
-     <AllBlogs/>
-<Testimonial />
-  <Faq />
+     <Testimonial />
+     <Faq />
    
      
     </>
