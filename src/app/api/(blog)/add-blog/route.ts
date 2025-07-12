@@ -23,7 +23,8 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
-
+//  idea wale tble me store ho rha hai ...thik hai
+//  to jab find karenge to idea wale me se hi find karenge na haalog wale me se find kar hi ho 
     const idea = new Idea({
       title,
       content,

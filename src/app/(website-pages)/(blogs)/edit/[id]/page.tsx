@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import axios from "axios";
 import { Skeleton } from "@/components/skeleton";
-import { format } from "date-fns";
 
 interface Blog {
   id: string;
@@ -47,15 +46,22 @@ const EditBlog = () => {
     "Other",
   ];
 
+  const stripHtml = (html: string) => {
+    const div = document.createElement("div");
+    div.innerHTML = html;
+    return div.textContent || div.innerText || "";
+  };
+
   const fetchBlog = async () => {
     try {
       setLoading(true);
       const response = await axios.get(`/api/view-more/${id}`);
       const blogData = response.data.idea;
+
       setBlog(blogData);
       setFormData({
         title: blogData.title,
-        content: blogData.content,
+        content: stripHtml(blogData.content), // 💡 Strip HTML tags here
         imageUrl: blogData.imageUrl || "",
         category: blogData.category,
         tags: blogData.tags.join(", "),
@@ -89,10 +95,12 @@ const EditBlog = () => {
         .split(",")
         .map((tag) => tag.trim())
         .filter((tag) => tag.length > 0);
+
       const response = await axios.put(`/api/edit-blog/${id}`, {
         ...formData,
         tags: tagsArray,
       });
+
       if (response.data.success) {
         router.push(`/`);
       } else {

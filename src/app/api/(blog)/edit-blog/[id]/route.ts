@@ -4,6 +4,11 @@ import Idea from "@/model/Idea";
 import { auth } from "../../../../../../auth";
 import mongoose from "mongoose";
 
+// 👇 Helper to strip HTML
+function stripHtml(html: string): string {
+  return html.replace(/<[^>]*>/g, '').trim();
+}
+
 export async function PUT(request: NextRequest, context: any) {
   const id = context?.params?.id;
 
@@ -42,8 +47,10 @@ export async function PUT(request: NextRequest, context: any) {
       );
     }
 
+    // ✅ Update fields
     idea.title = title;
-    idea.content = content;
+    idea.content = content; // HTML or plain text (as you send it)
+    idea.plainTextContent = stripHtml(content); // 🔥 Plain text version
     idea.imageUrl = imageUrl || idea.imageUrl;
     idea.category = category;
     idea.tags = tags || idea.tags;

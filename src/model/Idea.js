@@ -23,6 +23,9 @@ const ideaSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    plainTextContent: {
+      type: String, // ✅ Add this line
+    },
     contentType: {
       type: String,
       enum: ["html", "markdown"],
@@ -34,17 +37,26 @@ const ideaSchema = new mongoose.Schema(
     category: {
       type: String,
       required: true,
-      enum: ["Technology", "Lifestyle", "Education", "Health", "Data Science", "Java", "Python", "Other"],
+      enum: [
+        "Technology",
+        "Lifestyle",
+        "Education",
+        "Health",
+        "Data Science",
+        "Java",
+        "Python",
+        "Other",
+      ],
     },
     tags: {
       type: [String],
       default: [],
     },
   },
-  { timestamps: true } // Automatically adds createdAt and updatedAt
+  { timestamps: true }
 );
 
-ideaSchema.index({ createdBy: 1 }); // Index for faster queries by createdBy
+ideaSchema.index({ createdBy: 1 });
 
 const Idea = mongoose.models.Idea || mongoose.model("Idea", ideaSchema);
 
