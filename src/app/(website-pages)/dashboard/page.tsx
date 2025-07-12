@@ -8,7 +8,7 @@ import BlogCard from "@/components/BlogCard";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Link from "next/link";
-import Idea from "@/model/Idea";
+
 
 export default function Dashboard() {
   const { data: session, status } = useSession();
@@ -16,6 +16,12 @@ export default function Dashboard() {
     _id: string;
     title: string;
     views?: number;
+    content: string;
+    imageUrl?: string;
+    authorEmail?: string;
+    createdAt?: string;
+    profilePhoto?: string;
+    tags?: string[];
     // add other properties as needed
   };
 

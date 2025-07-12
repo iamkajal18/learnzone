@@ -2,7 +2,7 @@
 
 import { useSession } from "next-auth/react";
 import Link from "next/link";
-// Utility function to strip HTML tags
+
 function stripHtmlTags(str: string): string {
   return str.replace(/<[^>]*>?/gm, "");
 }
