@@ -3,21 +3,25 @@
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 
+const DEFAULT_IMAGE_URL = "https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80";
+
 function stripHtmlTags(str: string): string {
   return str.replace(/<[^>]*>?/gm, "");
 }
 
+interface Blog {
+  _id: string;
+  title: string;
+  content: string;
+  imageUrl?: string;
+  authorEmail?: string;
+  createdAt?: string;
+  profilePhoto?: string;
+  tags?: string[];
+}
+
 interface BlogCardProps {
-  idea: {
-    _id: string;
-    title: string;
-    content: string;
-    imageUrl?: string;
-    authorEmail?: string;
-    createdAt?: string;
-    profilePhoto?: string;
-    tags?: string[];
-  };
+  idea: Blog;
   onDelete?: (id: string) => void;
   deletingId?: string | null;
   showActions: boolean;
@@ -26,15 +30,15 @@ interface BlogCardProps {
 export default function BlogCard({ idea, onDelete, deletingId, showActions }: BlogCardProps) {
   const { data: session } = useSession();
   const userEmail = session?.user?.email || "";
-
   const isAuthor = userEmail === idea.authorEmail;
   const shouldShowActions = showActions && isAuthor;
+  const authorName = idea.authorEmail ? stripHtmlTags(idea.authorEmail.split("@")[0]) : "Anonymous";
 
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-100 dark:border-gray-700 hover:shadow-md transition-shadow">
       <div className="relative h-40 overflow-hidden">
         <img
-          src={idea.imageUrl || "https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80"}
+          src={idea.imageUrl || DEFAULT_IMAGE_URL}
           alt={idea.title}
           className="w-full h-full object-cover"
         />
@@ -47,13 +51,13 @@ export default function BlogCard({ idea, onDelete, deletingId, showActions }: Bl
           <img
             src={
               idea.profilePhoto ||
-              `https://ui-avatars.com/api/?name=${encodeURIComponent(idea.authorEmail?.split("@")[0] || "User")}&background=00CFD1&color=fff`
+              `https://ui-avatars.com/api/?name=${encodeURIComponent(authorName)}&background=00CFD1&color=fff`
             }
             className="w-6 h-6 rounded-full"
-            alt={idea.authorEmail ? stripHtmlTags(idea.authorEmail.split("@")[0]) : "Anonymous"}
+            alt={`${authorName}'s profile`}
           />
           <span className="text-sm text-gray-600 dark:text-gray-300">
-            {idea.authorEmail ? stripHtmlTags(idea.authorEmail.split("@")[0]) : "Anonymous"}
+            {authorName}
           </span>
         </div>
         <div className="flex justify-between items-center">
