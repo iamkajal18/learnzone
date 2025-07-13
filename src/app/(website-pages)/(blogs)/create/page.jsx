@@ -3,7 +3,7 @@ import React, { useState, useCallback, useEffect, useMemo } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { CldUploadWidget } from "next-cloudinary";
-import { useEditor, EditorContent, BubbleMenu } from "@tiptap/react";
+import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Image from "@tiptap/extension-image";
 import TextStyle from "@tiptap/extension-text-style";
@@ -464,40 +464,6 @@ function Page() {
 
             {mode === "wysiwyg" && editor && (
               <>
-                <BubbleMenu
-                  editor={editor}
-                  className="flex bg-white dark:bg-gray-800 p-1 border rounded shadow-lg"
-                >
-                  <button
-                    onClick={() => editor.chain().focus().toggleBold().run()}
-                    className={`p-2 rounded hover:bg-gray-200 ${editor.isActive("bold") ? "bg-gray-200" : ""}`}
-                    title="Bold"
-                  >
-                    <strong>B</strong>
-                  </button>
-                  <button
-                    onClick={() => editor.chain().focus().toggleItalic().run()}
-                    className={`p-2 rounded hover:bg-gray-200 ${editor.isActive("italic") ? "bg-gray-200" : ""}`}
-                    title="Italic"
-                  >
-                    <em>I</em>
-                  </button>
-                  <button
-                    onClick={() => editor.chain().focus().toggleUnderline().run()}
-                    className={`p-2 rounded hover:bg-gray-200 ${editor.isActive("underline") ? "bg-gray-200" : ""}`}
-                    title="Underline"
-                  >
-                    <u>U</u>
-                  </button>
-                  <button
-                    onClick={setLink}
-                    className={`p-2 rounded hover:bg-gray-200 ${editor.isActive("link") ? "bg-gray-200" : ""}`}
-                    title="Link"
-                  >
-                    🔗
-                  </button>
-                </BubbleMenu>
-
                 <div className="w-full border rounded-lg bg-gray-50 mb-2">
                   <div className="flex flex-wrap items-center gap-2 p-2">
                     <div className="relative">

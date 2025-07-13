@@ -3,6 +3,11 @@ import React, { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import axios from "axios";
 import { Skeleton } from "@/components/skeleton";
+import { useEditor, EditorContent } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
+import Link from "@tiptap/extension-link";
+import Image from "@tiptap/extension-image";
+import Toolbar from "@/components/Toolbar";
 
 interface Blog {
   id: string;
@@ -35,6 +40,20 @@ const EditBlog = () => {
     contentType: "html",
   });
 
+  const editor = useEditor({
+    extensions: [
+      StarterKit,
+      Link.configure({
+        openOnClick: false,
+      }),
+      Image,
+    ],
+    content: formData.content,
+    onUpdate: ({ editor }) => {
+      setFormData({ ...formData, content: editor.getHTML() });
+    },
+  });
+
   const categories = [
     "Technology",
     "Lifestyle",
@@ -46,12 +65,6 @@ const EditBlog = () => {
     "Other",
   ];
 
-  const stripHtml = (html: string) => {
-    const div = document.createElement("div");
-    div.innerHTML = html;
-    return div.textContent || div.innerText || "";
-  };
-
   const fetchBlog = async () => {
     try {
       setLoading(true);
@@ -61,12 +74,16 @@ const EditBlog = () => {
       setBlog(blogData);
       setFormData({
         title: blogData.title,
-        content: stripHtml(blogData.content), // 💡 Strip HTML tags here
+        content: blogData.content,
         imageUrl: blogData.imageUrl || "",
         category: blogData.category,
         tags: blogData.tags.join(", "),
         contentType: blogData.contentType,
       });
+
+      if (editor) {
+        editor.commands.setContent(blogData.content);
+      }
     } catch (err) {
       setError("Failed to load blog post");
       console.error(err);
@@ -78,6 +95,12 @@ const EditBlog = () => {
   useEffect(() => {
     fetchBlog();
   }, [id]);
+
+  useEffect(() => {
+    if (editor && formData.content) {
+      editor.commands.setContent(formData.content);
+    }
+  }, [editor, formData.content]);
 
   const handleInputChange = (
     e: React.ChangeEvent<
@@ -102,7 +125,7 @@ const EditBlog = () => {
       });
 
       if (response.data.success) {
-        router.push(`/`);
+        router.push(`/blog/${id}`);
       } else {
         setError("Failed to update blog post");
       }
@@ -165,7 +188,7 @@ const EditBlog = () => {
             value={formData.title}
             onChange={handleInputChange}
             required
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2"
           />
         </div>
 
@@ -173,20 +196,18 @@ const EditBlog = () => {
           <label htmlFor="content" className="block text-sm font-medium text-gray-700">
             Content
           </label>
-          <textarea
-            name="content"
-            id="content"
-            value={formData.content}
-            onChange={handleInputChange}
-            required
-            rows={10}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-          />
+          <div className="mt-1 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+            <Toolbar editor={editor} />
+            <EditorContent
+              editor={editor}
+              className="min-h-[300px] border rounded-b-md p-4 focus:outline-none"
+            />
+          </div>
         </div>
 
         <div>
           <label htmlFor="imageUrl" className="block text-sm font-medium text-gray-700">
-            Image URL
+            Featured Image URL
           </label>
           <input
             type="url"
@@ -194,7 +215,8 @@ const EditBlog = () => {
             id="imageUrl"
             value={formData.imageUrl}
             onChange={handleInputChange}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2"
+            placeholder="https://example.com/image.jpg"
           />
         </div>
 
@@ -208,7 +230,7 @@ const EditBlog = () => {
             value={formData.category}
             onChange={handleInputChange}
             required
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2"
           >
             <option value="">Select a category</option>
             {categories.map((category) => (
@@ -229,7 +251,8 @@ const EditBlog = () => {
             id="tags"
             value={formData.tags}
             onChange={handleInputChange}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2"
+            placeholder="technology, web development, nextjs"
           />
         </div>
 
@@ -242,24 +265,24 @@ const EditBlog = () => {
             id="contentType"
             value={formData.contentType}
             onChange={handleInputChange}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2"
           >
             <option value="html">HTML</option>
             <option value="markdown">Markdown</option>
           </select>
         </div>
 
-        <div className="flex justify-end space-x-4">
+        <div className="flex justify-end space-x-4 pt-6">
           <button
             type="button"
             onClick={() => router.push(`/blog/${id}`)}
-            className="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400"
+            className="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400 transition-colors"
           >
             Cancel
           </button>
           <button
             type="submit"
-            className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
           >
             Save Changes
           </button>
