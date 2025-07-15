@@ -4,7 +4,7 @@ import { useSession, signOut } from 'next-auth/react';
 import Link from 'next/link';
 import { Toaster, toast } from 'react-hot-toast';
 import { useTheme } from './ThemeContext';
-import { Moon, Sun, Pencil, ChevronDown, Menu, X, User, LogOut, Home, BookOpen, Video, MessageSquare, BarChart } from 'lucide-react';
+import { Moon, Sun, Pencil, ChevronDown, Menu, X, User, LogOut, Home, BookOpen, MessageSquare, BarChart } from 'lucide-react';
 
 interface NavItemProps {
   href: string;
@@ -20,13 +20,13 @@ const NavItem: React.FC<NavItemProps> = ({ href, theme, icon, children, onClick,
     <Link
       href={href}
       onClick={onClick}
-      className={`relative flex items-center py-2 px-3 rounded-lg text-sm font-medium transition-all duration-300 group gradient-hover ${
+      className={`relative flex items-center py-2 px-4 rounded-xl text-sm font-semibold transition-all duration-300 group gradient-hover ${
         theme === 'light'
-          ? 'text-gray-700 hover:bg-blue-50 hover:text-blue-600'
-          : 'text-gray-200 hover:bg-gray-800 hover:text-blue-400'
+          ? 'text-gray-800 hover:bg-blue-100/50 hover:text-[#0286a3]'
+          : 'text-gray-100 hover:bg-gray-800/50 hover:text-[#40c4d0]'
       } ${mobile ? 'w-full' : ''}`}
     >
-      <span className="mr-2">{icon}</span>
+      <span className="mr-3">{icon}</span>
       {children}
     </Link>
   </li>
@@ -76,14 +76,14 @@ const Navbar: React.FC = () => {
   const ThemeToggleButton = ({ mobile = false }: { mobile?: boolean }) => (
     <button
       onClick={toggleTheme}
-      className={`relative flex items-center justify-start ${mobile ? 'w-full' : 'w-auto'} px-3 py-2 rounded-lg transition-all duration-300 group text-sm font-medium ${
+      className={`relative flex items-center justify-start ${mobile ? 'w-full' : 'w-auto'} px-4 py-2 rounded-xl transition-all duration-300 group text-sm font-semibold ${
         theme === 'light'
-          ? 'text-gray-700 hover:bg-blue-50'
-          : 'text-gray-200 hover:bg-gray-800'
+          ? 'text-gray-800 hover:bg-blue-100/50 hover:text-[#0286a3]'
+          : 'text-gray-100 hover:bg-gray-800/50 hover:text-[#40c4d0]'
       }`}
       aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
     >
-      <span className="relative w-6 h-6 flex items-center justify-center mr-2">
+      <span className="relative w-6 h-6 flex items-center justify-center mr-3">
         <Moon
           size={20}
           className={`absolute transition-opacity duration-300 ${theme === 'light' ? 'opacity-100' : 'opacity-0'}`}
@@ -96,8 +96,8 @@ const Navbar: React.FC = () => {
       {mobile && <span>{theme === 'light' ? 'Dark Mode' : 'Light Mode'}</span>}
       {!mobile && (
         <span
-          className={`absolute top-full mt-2 left-1/2 transform -translate-x-1/2 px-2 py-1 text-xs font-medium rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 ${
-            theme === 'light' ? 'bg-gray-800 text-white' : 'bg-gray-200 text-gray-900'
+          className={`absolute top-full mt-2 left-1/2 transform -translate-x-1/2 px-3 py-1 text-xs font-medium rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 ${
+            theme === 'light' ? 'bg-[#0286a3] text-white' : 'bg-[#40c4d0] text-gray-900'
           }`}
         >
           {theme === 'light' ? 'Dark Mode' : 'Light Mode'}
@@ -110,11 +110,11 @@ const Navbar: React.FC = () => {
     <>
       <Toaster position="top-right" />
       <nav
-        className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 border-b ${
+        className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 border-b ${
           theme === 'light'
-            ? 'bg-white/80 backdrop-blur-md border-gray-100'
-            : 'bg-gray-900/80 backdrop-blur-md border-gray-800'
-        } ${scrolled ? 'shadow-lg' : 'shadow-none'}`}
+            ? 'bg-white/90 backdrop-blur-lg border-gray-100'
+            : 'bg-gray-900/90 backdrop-blur-lg border-gray-800'
+        } ${scrolled ? 'shadow-xl' : 'shadow-none'}`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
@@ -127,14 +127,14 @@ const Navbar: React.FC = () => {
                 <img
                   src="/logo.png"
                   alt="LearnLive Logo"
-                  className="h-10 w-10 rounded-lg transform group-hover:scale-110 transition-transform duration-300"
+                  className="h-12 w-12 rounded-xl transform group-hover:scale-110 group-hover:shadow-lg transition-all duration-300"
                 />
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-600 opacity-0 group-hover:opacity-20 rounded-lg transition-opacity duration-300" />
+                <div className="absolute inset-0 bg-gradient-to-r from-[#0286a3] to-[#40c4d0] opacity-0 group-hover:opacity-30 rounded-xl transition-opacity duration-300" />
               </div>
               <span
-                className="text-transparent bg-clip-text font-bold text-2xl"
+                className="text-transparent bg-clip-text font-extrabold text-3xl tracking-tight"
                 style={{
-                  backgroundImage: 'linear-gradient(to right, #00bbc6, #0286a3)',
+                  backgroundImage: 'linear-gradient(to right, #0286a3, #40c4d0)',
                 }}
               >
                 LearnLive
@@ -142,21 +142,21 @@ const Navbar: React.FC = () => {
             </Link>
 
             {/* Desktop Navigation */}
-            <div className="hidden lg:flex items-center space-x-1">
-              <ul className="flex flex-row space-x-1 list-none">
-                <NavItem href="/" theme={theme} icon={<Home size={18} />}>
+            <div className="hidden lg:flex items-center space-x-2">
+              <ul className="flex flex-row space-x-2 list-none">
+                <NavItem href="/" theme={theme} icon={<Home size={20} />}>
                   Home
                 </NavItem>
-                <NavItem href="/studyplan" theme={theme} icon={<BookOpen size={18} />}>
+                <NavItem href="/studyplan" theme={theme} icon={<BookOpen size={20} />}>
                   Success Guide
                 </NavItem>
-                <NavItem href="/roadmap" theme={theme} icon={<BookOpen size={18} />}>
+                <NavItem href="/roadmap" theme={theme} icon={<BookOpen size={20} />}>
                   Courses
                 </NavItem>
-                <NavItem href="/create" theme={theme} icon={<Pencil size={18} />}>
+                <NavItem href="/create" theme={theme} icon={<Pencil size={20} />}>
                   Write Your Blog
                 </NavItem>
-                <NavItem href="/placementpre" theme={theme} icon={<MessageSquare size={18} />}>
+                <NavItem href="/placementpre" theme={theme} icon={<MessageSquare size={20} />}>
                   Placement Prep
                 </NavItem>
                 <li className="list-none">
@@ -170,7 +170,7 @@ const Navbar: React.FC = () => {
                 <div className="relative" ref={dropdownRef}>
                   <button
                     onClick={() => setDropdownOpen(!isDropdownOpen)}
-                    className={`flex items-center space-x-2 p-2 rounded-full transition-all duration-300 hover:bg-gradient-to-r hover:from-blue-500 hover:to-purple-600 ${
+                    className={`flex items-center space-x-2 p-2 rounded-full transition-all duration-300 hover:bg-gradient-to-r hover:from-[#0286a3] hover:to-[#40c4d0] ${
                       theme === 'light' ? 'bg-gray-100' : 'bg-gray-800'
                     }`}
                     aria-expanded={isDropdownOpen}
@@ -180,26 +180,26 @@ const Navbar: React.FC = () => {
                       <img
                         src={session.user?.image}
                         alt="User photo"
-                        className="w-9 h-9 rounded-full border-2 border-transparent group-hover:border-white transition-all"
+                        className="w-10 h-10 rounded-full border-2 border-[#0286a3] group-hover:border-[#40c4d0] transition-all duration-300"
                       />
                     ) : (
                       <div
-                        className={`w-9 h-9 rounded-full flex items-center justify-center ${
-                          theme === 'light' ? 'bg-blue-100' : 'bg-blue-900'
+                        className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                          theme === 'light' ? 'bg-[#0286a3]' : 'bg-[#40c4d0]'
                         }`}
                       >
-                        <User size={18} className={theme === 'light' ? 'text-blue-600' : 'text-blue-300'} />
+                        <User size={20} className={theme === 'light' ? 'text-white' : 'text-gray-900'} />
                       </div>
                     )}
                     <ChevronDown
-                      size={16}
+                      size={18}
                       className={`transform transition-transform duration-300 ${isDropdownOpen ? 'rotate-180' : ''}`}
                     />
                   </button>
 
                   {isDropdownOpen && (
                     <div
-                      className={`absolute right-0 mt-2 w-64 rounded-xl shadow-2xl overflow-hidden transform origin-top-right transition-all duration-300 animate-slide-in ${
+                      className={`absolute right-0 mt-2 w-64 rounded-2xl shadow-2xl overflow-hidden transform origin-top-right transition-all duration-300 animate-slide-in ${
                         theme === 'light' ? 'bg-white' : 'bg-gray-800'
                       }`}
                     >
@@ -217,35 +217,35 @@ const Navbar: React.FC = () => {
                         <li>
                           <Link
                             href="/dashboard"
-                            className={`flex items-center px-4 py-2 text-sm font-medium transition-all duration-200 hover:bg-gradient-to-r hover:from-blue-500 hover:to-purple-600 hover:text-white ${
-                              theme === 'light' ? 'text-gray-700' : 'text-gray-200'
+                            className={`flex items-center px-4 py-3 text-sm font-semibold transition-all duration-300 hover:bg-gradient-to-r hover:from-[#0286a3] hover:to-[#40c4d0] hover:text-white ${
+                              theme === 'light' ? 'text-gray-800' : 'text-gray-100'
                             }`}
                             onClick={() => setDropdownOpen(false)}
                           >
-                            <BarChart size={16} className="mr-2" />
+                            <BarChart size={18} className="mr-3" />
                             Dashboard
                           </Link>
                         </li>
                         <li>
                           <Link
-                            href={`/profilesection/${session.user?.email}`}
-                            className={`flex items-center px-4 py-2 text-sm font-medium transition-all duration-200 hover:bg-gradient-to-r hover:from-blue-500 hover:to-purple-600 hover:text-white ${
-                              theme === 'light' ? 'text-gray-700' : 'text-gray-200'
+                            href={`/support`}
+                            className={`flex items-center px-4 py-3 text-sm font-semibold transition-all duration-300 hover:bg-gradient-to-r hover:from-[#0286a3] hover:to-[#40c4d0] hover:text-white ${
+                              theme === 'light' ? 'text-gray-800' : 'text-gray-100'
                             }`}
                             onClick={() => setDropdownOpen(false)}
                           >
-                            <User size={16} className="mr-2" />
-                            Profile Settings
+                            <User size={18} className="mr-3" />
+                            Premium member
                           </Link>
                         </li>
                         <li>
                           <button
                             onClick={handleSignOut}
-                            className={`w-full flex items-center px-4 py-2 text-sm font-medium transition-all duration-200 hover:bg-red-500 hover:text-white ${
-                              theme === 'light' ? 'text-gray-700' : 'text-gray-200'
+                            className={`w-full flex items-center px-4 py-3 text-sm font-semibold transition-all duration-300 hover:bg-red-500 hover:text-white ${
+                              theme === 'light' ? 'text-gray-800' : 'text-gray-100'
                             }`}
                           >
-                            <LogOut size={16} className="mr-2" />
+                            <LogOut size={18} className="mr-3" />
                             Sign out
                           </button>
                         </li>
@@ -256,18 +256,18 @@ const Navbar: React.FC = () => {
               ) : (
                 <Link
                   href="/signin"
-                  className={`flex items-center px-4 py-2 text-sm font-medium rounded-full bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:from-blue-700 hover:to-purple-700 transition-all duration-300 transform hover:scale-105`}
+                  className={`flex items-center px-4 py-2 text-sm font-semibold rounded-full bg-gradient-to-r from-[#0286a3] to-[#40c4d0] text-white hover:from-[#026f88] hover:to-[#33a8bb] transition-all duration-300 transform hover:scale-105 shadow-md`}
                   onClick={() => setNavOpen(false)}
                 >
-                  <User size={16} className="mr-2" />
+                  <User size={18} className="mr-2" />
                   Sign In
                 </Link>
               )}
 
               <button
                 onClick={() => setNavOpen(!isNavOpen)}
-                className={`lg:hidden p-2 rounded-lg transition-all duration-300 mobile-menu-toggle ${
-                  theme === 'light' ? 'text-gray-700 hover:bg-gray-100' : 'text-gray-300 hover:bg-gray-700'
+                className={`lg:hidden p-2 rounded-xl transition-all duration-300 mobile-menu-toggle ${
+                  theme === 'light' ? 'text-gray-800 hover:bg-blue-100/50' : 'text-gray-100 hover:bg-gray-800/50'
                 }`}
                 aria-label={isNavOpen ? 'Close menu' : 'Open menu'}
               >
@@ -279,19 +279,19 @@ const Navbar: React.FC = () => {
           {/* Mobile Navigation */}
           <div
             ref={navRef}
-            className={`lg:hidden transition-all duration-300 ease-in-out ${
+            className={`lg:hidden transition-all duration-500 ease-in-out ${
               isNavOpen ? 'max-h-screen opacity-100 py-4' : 'max-h-0 opacity-0 py-0'
             } overflow-hidden mobile-menu`}
           >
             <ul
-              className={`flex flex-col space-y-2 p-4 rounded-xl list-none ${
+              className={`flex flex-col space-y-2 p-4 rounded-2xl list-none shadow-lg ${
                 theme === 'light' ? 'bg-white' : 'bg-gray-900'
               }`}
             >
               <NavItem 
                 href="/" 
                 theme={theme} 
-                icon={<Home size={18} />}
+                icon={<Home size={20} />}
                 onClick={() => setNavOpen(false)}
                 mobile
               >
@@ -300,7 +300,7 @@ const Navbar: React.FC = () => {
               <NavItem 
                 href="/studyplan" 
                 theme={theme} 
-                icon={<BookOpen size={18} />}
+                icon={<BookOpen size={20} />}
                 onClick={() => setNavOpen(false)}
                 mobile
               >
@@ -309,7 +309,7 @@ const Navbar: React.FC = () => {
               <NavItem 
                 href="/roadmap" 
                 theme={theme} 
-                icon={<BookOpen size={18} />}
+                icon={<BookOpen size={20} />}
                 onClick={() => setNavOpen(false)}
                 mobile
               >
@@ -318,7 +318,7 @@ const Navbar: React.FC = () => {
               <NavItem 
                 href="/create" 
                 theme={theme} 
-                icon={<Pencil size={18} />}
+                icon={<Pencil size={20} />}
                 onClick={() => setNavOpen(false)}
                 mobile
               >
@@ -327,7 +327,7 @@ const Navbar: React.FC = () => {
               <NavItem 
                 href="/placementpre" 
                 theme={theme} 
-                icon={<MessageSquare size={18} />}
+                icon={<MessageSquare size={20} />}
                 onClick={() => setNavOpen(false)}
                 mobile
               >
@@ -341,7 +341,7 @@ const Navbar: React.FC = () => {
                   <NavItem 
                     href="/dashboard" 
                     theme={theme} 
-                    icon={<BarChart size={18} />}
+                    icon={<BarChart size={20} />}
                     onClick={() => setNavOpen(false)}
                     mobile
                   >
@@ -349,8 +349,8 @@ const Navbar: React.FC = () => {
                   </NavItem>
                   <NavItem 
                     href={`/profilesection/${session.user?.email}`} 
-                    theme={theme} 
-                    icon={<User size={18} />}
+  theme={theme} 
+                    icon={<User size={20} />}
                     onClick={() => setNavOpen(false)}
                     mobile
                   >
@@ -359,13 +359,13 @@ const Navbar: React.FC = () => {
                   <li className="list-none">
                     <button
                       onClick={handleSignOut}
-                      className={`relative flex items-center w-full py-2 px-3 rounded-lg text-sm font-medium transition-all duration-300 ${
+                      className={`relative flex items-center w-full py-2 px-4 rounded-xl text-sm font-semibold transition-all duration-300 ${
                         theme === 'light'
-                          ? 'text-gray-700 hover:bg-red-50 hover:text-red-600'
-                          : 'text-gray-200 hover:bg-red-900/50 hover:text-red-400'
+                          ? 'text-gray-800 hover:bg-red-100/50 hover:text-red-600'
+                          : 'text-gray-100 hover:bg-red-900/50 hover:text-red-400'
                       }`}
                     >
-                      <span className="mr-2"><LogOut size={18} /></span>
+                      <span className="mr-3"><LogOut size={20} /></span>
                       Sign out
                     </button>
                   </li>
@@ -400,8 +400,8 @@ const Navbar: React.FC = () => {
           bottom: 0;
           left: 0;
           width: 100%;
-          height: 2px;
-          background: linear-gradient(to right, #3b82f6, #8b5cf6);
+          height: 3px;
+          background: linear-gradient(to right, #0286a3, #40c4d0);
           transform: scaleX(0);
           transform-origin: right;
           transition: transform 0.3s ease;

@@ -131,7 +131,6 @@ const BlogDisplay = () => {
         <button
           onClick={fetchDetails}
           className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-300"
-          aria-label="Retry loading blog post"
         >
           Retry
         </button>
@@ -149,7 +148,6 @@ const BlogDisplay = () => {
 
   return (
     <article className="w-full max-w-5xl mx-auto my-12 px-4 sm:px-6 lg:px-8">
-      {/* Blog header with gradient background */}
       <header className="mb-10 bg-gradient-to-r from-blue-100 via-indigo-100 to-purple-100 dark:from-blue-900 dark:via-indigo-900 dark:to-purple-900 rounded-xl p-8 shadow-lg">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
           <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 dark:text-white leading-tight">
@@ -160,7 +158,6 @@ const BlogDisplay = () => {
           </span>
         </div>
 
-        {/* Author and meta info */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center mb-4 sm:mb-0">
             {blog.author?.avatar && (
@@ -194,7 +191,6 @@ const BlogDisplay = () => {
           </div>
         </div>
 
-        {/* Tags */}
         {blog.tags.length > 0 && (
           <div className="flex flex-wrap gap-2 mt-4">
             {blog.tags.map((tag, index) => (
@@ -209,18 +205,19 @@ const BlogDisplay = () => {
         )}
       </header>
 
-      {/* Featured image */}
-      {blog.imageUrl && (
-        <div className="mb-8 relative aspect-video overflow-hidden rounded-xl shadow-lg">
-          <img
-            src={blog.imageUrl}
-            alt={`Featured image for ${blog.title}`}
-            className="object-cover w-full h-full transition-transform duration-300 hover:scale-105"
-          />
-        </div>
-      )}
+      {/* ✅ Featured Image - updated */}
+   {blog.imageUrl && (
+  <div className="mb-8 overflow-hidden rounded-xl shadow-lg">
+    <img
+      src={blog.imageUrl}
+      alt={`Featured image for ${blog.title}`}
+      className="w-full max-h-64 object-contain rounded-xl transition-transform duration-300 ease-in-out hover:scale-105"
+    />
+  </div>
+)}
 
-      {/* Blog content */}
+
+
       <div className="prose prose-lg max-w-none dark:prose-invert bg-white dark:bg-gray-800 p-8 rounded-xl shadow-lg">
         {blog.contentType === "markdown" ? (
           <MarkdownRenderer content={blog.content} />
@@ -234,7 +231,6 @@ const BlogDisplay = () => {
         )}
       </div>
 
-      {/* Footer */}
       <footer className="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
           {blog.author && (

@@ -4,27 +4,134 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
-import BlogCard from "@/components/BlogCard";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Link from "next/link";
+import { User, BookOpen, Eye, Calendar, Trash2, Edit, Plus, BarChart3, RefreshCw } from "lucide-react";
 
+const DEFAULT_IMAGE_URL = "https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80";
+
+function stripHtmlTags(str: string): string {
+  return str.replace(/<[^>]*>?/gm, "");
+}
+
+interface Blog {
+  _id: string;
+  title: string;
+  views?: number;
+  content: string;
+  imageUrl?: string;
+  authorEmail?: string;
+  createdAt?: string;
+  profilePhoto?: string;
+  tags?: string[];
+}
+
+interface BlogCardProps {
+  idea: Blog;
+  onDelete?: (id: string) => void;
+  deletingId?: string | null;
+  showActions: boolean;
+}
+
+const BlogCard = ({ idea, onDelete, deletingId, showActions }: BlogCardProps) => {
+  const { data: session } = useSession();
+  const userEmail = session?.user?.email || "";
+  const isAuthor = userEmail === idea.authorEmail;
+  const shouldShowActions = showActions && isAuthor;
+  const authorName = idea.authorEmail ? stripHtmlTags(idea.authorEmail.split("@")[0]) : "Anonymous";
+
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric'
+    });
+  };
+
+  return (
+    <div className="bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-100 dark:border-gray-700 hover:shadow-md transition-shadow">
+      <div className="relative h-40 overflow-hidden">
+        <img
+          src={idea.imageUrl || DEFAULT_IMAGE_URL}
+          alt={idea.title}
+          className="w-full h-full object-cover"
+          onError={(e) => {
+            e.currentTarget.src = DEFAULT_IMAGE_URL;
+          }}
+        />
+      </div>
+      <div className="p-4">
+        <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-2 line-clamp-1">
+          {idea.title}
+        </h3>
+        
+        <div className="flex items-center gap-2 mb-3">
+          <img
+            src={
+              idea.profilePhoto ||
+              `https://ui-avatars.com/api/?name=${encodeURIComponent(authorName)}&background=00CFD1&color=fff`
+            }
+            className="w-6 h-6 rounded-full"
+            alt={`${authorName}'s profile`}
+          />
+          <span className="text-sm text-gray-600 dark:text-gray-300">
+            {authorName}
+          </span>
+        </div>
+
+        <div className="flex items-center justify-between text-sm text-gray-500 dark:text-gray-400 mb-3">
+          <div className="flex items-center space-x-3">
+            <div className="flex items-center space-x-1">
+              <Eye className="h-4 w-4" />
+              <span>{(idea.views || 0).toLocaleString()}</span>
+            </div>
+            {idea.createdAt && (
+              <div className="flex items-center space-x-1">
+                <Calendar className="h-4 w-4" />
+                <span>{formatDate(idea.createdAt)}</span>
+              </div>
+            )}
+          </div>
+        </div>
+
+        <div className="flex justify-between items-center">
+          <Link href={`/viewmore/${idea._id}`}>
+            <button className="text-sm bg-teal-500 hover:bg-teal-600 dark:bg-teal-600 dark:hover:bg-teal-700 text-white py-1.5 px-3 rounded">
+              View
+            </button>
+          </Link>
+          {shouldShowActions && (
+            <div className="flex gap-2">
+              <Link href={`/edit/${idea._id}`}>
+                <button className="text-sm bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 text-white py-1.5 px-3 rounded">
+                  Edit
+                </button>
+              </Link>
+              {onDelete && (
+                <button
+                  onClick={() => onDelete(idea._id)}
+                  disabled={deletingId === idea._id}
+                  className="text-sm bg-red-500 hover:bg-red-600 dark:bg-red-600 dark:hover:bg-red-700 text-white py-1.5 px-3 rounded flex items-center gap-1"
+                >
+                  {deletingId === idea._id ? (
+                    <span className="inline-block w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                  ) : (
+                    "Delete"
+                  )}
+                </button>
+              )}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
 
 export default function Dashboard() {
   const { data: session, status } = useSession();
-  type Blog = {
-    _id: string;
-    title: string;
-    views?: number;
-    content: string;
-    imageUrl?: string;
-    authorEmail?: string;
-    createdAt?: string;
-    profilePhoto?: string;
-    tags?: string[];
-    // add other properties as needed
-  };
-
+  
   const [blogs, setBlogs] = useState<Blog[]>([]);
   const [analytics, setAnalytics] = useState({ totalBlogs: 0, totalViews: 0 });
   const [loading, setLoading] = useState(true);
@@ -46,10 +153,16 @@ export default function Dashboard() {
       const response = await axios.get("/api/user-blogs");
       const { blogs: blogsData = [] } = response.data;
       
-      setBlogs(blogsData);
+      // Ensure views are properly handled as numbers
+      const processedBlogs = blogsData.map((blog: Blog) => ({
+        ...blog,
+        views: typeof blog.views === "number" ? blog.views : 0,
+      }));
+
+      setBlogs(processedBlogs);
       setAnalytics({
-        totalBlogs: blogsData.length,
-        totalViews: blogsData.reduce((sum: number, blog: Blog) => sum + (blog.views || 0), 0)
+        totalBlogs: processedBlogs.length,
+        totalViews: processedBlogs.reduce((sum: number, blog: Blog) => sum + (blog.views || 0), 0),
       });
     } catch (err) {
       console.error("Fetch error:", err);
@@ -57,6 +170,11 @@ export default function Dashboard() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleRefresh = () => {
+    fetchUserData();
+    toast.info("Dashboard data refreshed!");
   };
 
   const handleDelete = async (id: string) => {
@@ -67,9 +185,10 @@ export default function Dashboard() {
       const response = await axios.delete(`/api/delete-blog/${id}`);
       if (response.data.success) {
         setBlogs((prev) => prev.filter((blog) => blog._id !== id));
-        setAnalytics(prev => ({
+        setAnalytics((prev) => ({
           ...prev,
-          totalBlogs: prev.totalBlogs - 1
+          totalBlogs: prev.totalBlogs - 1,
+          totalViews: prev.totalViews - (blogs.find((blog) => blog._id === id)?.views || 0),
         }));
         toast.success("Blog post deleted successfully!");
       }
@@ -84,59 +203,121 @@ export default function Dashboard() {
   if (status === "loading" || loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-teal-500"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#0286a3]"></div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto">
-        <h1 className="text-4xl font-extrabold text-gray-900 dark:text-white text-center mb-10">
-          Your Blog Dashboard
-        </h1>
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex">
+      {/* Left Sidebar - Analytics */}
+      <div className="w-80 bg-white dark:bg-gray-800 shadow-lg p-6 overflow-y-auto">
+        <div className="mb-8">
+          <h1 className="text-2xl font-bold text-gray-800 dark:text-white mb-2">Dashboard</h1>
+          <p className="text-gray-600 dark:text-gray-400">Welcome back! Here's your blog overview.</p>
+          <button
+            onClick={handleRefresh}
+            className="mt-2 flex items-center gap-2 text-sm text-[#0286a3] hover:text-[#0286a3]/80 dark:text-teal-400 dark:hover:text-teal-300"
+          >
+            <RefreshCw className="h-4 w-4" />
+            Refresh Data
+          </button>
+        </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-          <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg">
-            <h2 className="text-lg font-medium text-gray-600 dark:text-gray-300">Total Blogs</h2>
-            <p className="text-3xl font-bold text-teal-500 dark:text-teal-400 mt-2">{analytics.totalBlogs}</p>
+        {/* Analytics Cards */}
+        <div className="space-y-4 mb-8">
+          <div className="bg-gradient-to-r from-[#0286a3] to-[#0286a3]/80 p-4 rounded-lg text-white">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm opacity-90">Total Blogs</p>
+                <p className="text-2xl font-bold">{analytics.totalBlogs}</p>
+              </div>
+              <BookOpen className="h-8 w-8 opacity-80" />
+            </div>
           </div>
-          <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg">
-            <h2 className="text-lg font-medium text-gray-600 dark:text-gray-300">Total Views</h2>
-            <p className="text-3xl font-bold text-teal-500 dark:text-teal-400 mt-2">{analytics.totalViews}</p>
+
+          <div className="bg-gradient-to-r from-emerald-500 to-emerald-600 p-4 rounded-lg text-white">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm opacity-90">Total Views</p>
+                <p className="text-2xl font-bold">{analytics.totalViews.toLocaleString()}</p>
+              </div>
+              <Eye className="h-8 w-8 opacity-80" />
+            </div>
           </div>
-          <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg">
-            <h2 className="text-lg font-medium text-gray-600 dark:text-gray-300">Recent Blog</h2>
-            <p className="text-xl font-semibold text-gray-800 dark:text-white mt-2 truncate">
-              {blogs[0]?.title || "No blogs yet"}
-            </p>
+
+          <div className="bg-gradient-to-r from-purple-500 to-purple-600 p-4 rounded-lg text-white">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm opacity-90">Avg Views/Blog</p>
+                <p className="text-2xl font-bold">
+                  {analytics.totalBlogs > 0 ? Math.round(analytics.totalViews / analytics.totalBlogs).toLocaleString() : 0}
+                </p>
+              </div>
+              <BarChart3 className="h-8 w-8 opacity-80" />
+            </div>
           </div>
         </div>
 
-        <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-6">Your Blog Posts</h2>
-        
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {blogs.length === 0 ? (
-            <div className="col-span-full text-center py-12">
-              <p className="text-gray-500 dark:text-gray-400 text-lg">
-                No blogs found. Start creating your first blog!
-              </p>
-              <Link href="/create" className="mt-4 inline-block bg-teal-500 hover:bg-teal-600 text-white font-medium py-2 px-4 rounded-lg">
-                Create Blog
-              </Link>
-            </div>
-          ) : (
-            blogs.map((blog) => (
+        {/* Recent Activity */}
+        <div className="mb-8">
+          <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">Recent Activity</h3>
+          <div className="space-y-3">
+            {blogs.slice(0, 3).map((blog) => (
+              <div key={blog._id} className="flex items-center space-x-3 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                <div className="w-2 h-2 bg-[#0286a3] rounded-full"></div>
+                <div className="flex-1">
+                  <p className="text-sm font-medium text-gray-800 dark:text-white truncate">{blog.title}</p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">{(blog.views || 0).toLocaleString()} views</p>
+                </div>
+              </div>
+            ))}
+            {blogs.length === 0 && (
+              <p className="text-gray-500 dark:text-gray-400 text-sm">No recent activity</p>
+            )}
+          </div>
+        </div>
+
+        {/* Quick Actions */}
+        <div>
+          <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">Quick Actions</h3>
+          <Link href="/create" className="w-full bg-[#0286a3] hover:bg-[#0286a3]/90 text-white font-medium py-3 px-4 rounded-lg flex items-center justify-center space-x-2 transition-colors">
+            <Plus className="h-4 w-4" />
+            <span>Create New Blog</span>
+          </Link>
+        </div>
+      </div>
+
+      {/* Right Content Area - Blog Posts */}
+      <div className="flex-1 p-6 overflow-y-auto">
+        <div className="mb-6">
+          <h2 className="text-3xl font-bold text-gray-800 dark:text-white mb-2">Your Blog Posts</h2>
+          <p className="text-gray-600 dark:text-gray-400">Manage and view all your published content</p>
+        </div>
+
+        {blogs.length === 0 ? (
+          <div className="col-span-full text-center py-12">
+            <BookOpen className="h-16 w-16 text-gray-400 mx-auto mb-4" />
+            <p className="text-gray-500 dark:text-gray-400 text-lg mb-4">
+              No blogs found. Start creating your first blog!
+            </p>
+            <Link href="/create" className="mt-4 inline-block bg-[#0286a3] hover:bg-[#0286a3]/90 text-white font-medium py-2 px-4 rounded-lg">
+              Create Blog
+            </Link>
+          </div>
+        ) : (
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {blogs.map((blog) => (
               <BlogCard
                 key={blog._id}
                 idea={blog}
                 onDelete={handleDelete}
                 deletingId={deletingId}
-                showActions={true} // Always show actions on dashboard
+                showActions={true}
               />
-            ))
-          )}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

@@ -24,7 +24,7 @@ const ideaSchema = new mongoose.Schema(
       required: true,
     },
     plainTextContent: {
-      type: String, // ✅ Add this line
+      type: String,
     },
     contentType: {
       type: String,
@@ -51,6 +51,34 @@ const ideaSchema = new mongoose.Schema(
     tags: {
       type: [String],
       default: [],
+    },
+    views: {
+      type: Number,
+      default: 0,
+    },
+    likes: {
+      type: Number,
+      default: 0,
+    },
+    comments: [
+      {
+        userEmail: { type: String, required: true },
+        content: { type: String, required: true },
+        createdAt: { type: Date, default: Date.now },
+      },
+    ],
+    shares: {
+      type: Number,
+      default: 0,
+    },
+    status: {
+      type: String,
+      enum: ["draft", "published", "scheduled"],
+      default: "published",
+    },
+    scheduledAt: {
+      type: Date,
+      default: null,
     },
   },
   { timestamps: true }
