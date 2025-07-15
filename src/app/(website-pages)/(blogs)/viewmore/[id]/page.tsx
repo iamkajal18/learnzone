@@ -1,11 +1,13 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import MarkdownRenderer from "@/components/MarkdownRenderer";
+
 import DOMPurify from "dompurify";
 import { useParams } from "next/navigation";
 import axios from "axios";
 import { format } from "date-fns";
-import { Skeleton } from "@/components/skeleton";
+import MarkdownRenderer from "../../../../../components/MarkdownRenderer";
+import { Skeleton } from "../../../../../components/Skeleton";
+
 
 interface BlogDisplayProps {
   blog: {

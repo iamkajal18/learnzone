@@ -1,5 +1,6 @@
 import React from "react";
-import Signin from "@/components/Signin";
+import Signin from "../../../../components/Signin";
+
 
 function page() {
   return (
