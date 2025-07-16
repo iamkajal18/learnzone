@@ -28,7 +28,7 @@ const RoadmapList = ({ isParentLoaded }: { isParentLoaded: boolean }) => {
 
   useEffect(() => {
     if (isParentLoaded) {
-      const timer = setTimeout(() => setItemsLoaded(true), 300);
+      const timer = setTimeout(() => setItemsLoaded(true), 100);
       return () => clearTimeout(timer);
     }
   }, [isParentLoaded]);
@@ -52,10 +52,10 @@ const RoadmapList = ({ isParentLoaded }: { isParentLoaded: boolean }) => {
           <div
             key={item.slug}
             className={`group relative transition-all duration-700 ease-out ${
-              itemsLoaded ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-10'
+              itemsLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
             }`}
             style={{
-              transitionDelay: `${index * 100 + 300}ms`,
+              transitionDelay: `${index * 100}ms`,
             }}
           >
             <Link
@@ -135,40 +135,40 @@ const RoadMapHeader = ({ isParentLoaded }: { isParentLoaded: boolean }) => {
         headerLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-10'
       }`}
     >
-      <div className="absolute -top-4 -left-4 w-24 h-24 bg-gradient-to-br from-cyan-400/10 to-teal-400/10 rounded-full blur-xl animate-pulse" />
-      <div className="absolute -top-8 -right-8 w-32 h-32 bg-gradient-to-br from-violet-400/10 to-purple-400/10 rounded-full blur-xl animate-pulse" />
-      <div className="relative inline-block">
-        <h3
-          className={`text-3xl md:text-4xl font-bold tracking-tight transition-all duration-700 ease-out delay-100 ${
-            headerLoaded ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-10'
-          }`}
-        >
-          <span className="bg-gradient-to-r from-teal-400 to-cyan-600 bg-clip-text text-transparent">
-            Comprehensive Learning
-          </span>{' '}
-          <span className="relative inline-block">
-            Roadmaps
-            <span
-              className={`absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-cyan-400 to-teal-500 rounded-full ${
-                theme === 'dark' ? 'opacity-90' : ''
-              } transition-all duration-700 ease-out delay-200 ${
-                headerLoaded ? 'opacity-100 scale-x-100' : 'opacity-0 scale-x-0'
-              }`}
-            ></span>
-          </span>
-        </h3>
-      </div>
+      <h3
+        className={`text-3xl md:text-4xl font-bold tracking-tight transition-all duration-700 ease-out ${
+          headerLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-5'
+        }`}
+        style={{ transitionDelay: '100ms' }}
+      >
+        <span className="bg-gradient-to-r from-cyan-600  to-teal-700 bg-clip-text text-transparent">
+          Comprehensive Learning
+        </span>{' '}
+        <span className="relative inline-block">
+          Roadmaps
+          <span
+            className={`absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-cyan-400 to-teal-500 rounded-full ${
+              theme === 'dark' ? 'opacity-90' : ''
+            } transition-all duration-700 ease-out ${
+              headerLoaded ? 'opacity-100 scale-x-100' : 'opacity-0 scale-x-0'
+            }`}
+            style={{ transitionDelay: '200ms' }}
+          ></span>
+        </span>
+      </h3>
       <p
-        className={`text-gray-600 dark:text-gray-300 text-base sm:text-lg mt-6 mb-8 max-w-3xl mx-auto leading-relaxed transition-all duration-700 ease-out delay-300 ${
+        className={`text-gray-600 dark:text-gray-300 text-base sm:text-lg mt-6 mb-8 max-w-3xl mx-auto leading-relaxed transition-all duration-700 ease-out ${
           headerLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'
         }`}
+        style={{ transitionDelay: '300ms' }}
       >
         Structured paths to master various technologies and ace competitive exams with our carefully curated learning roadmaps
       </p>
       <div
-        className={`flex flex-wrap justify-center gap-3 transition-all duration-700 ease-out delay-500 ${
-          headerLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+        className={`flex flex-wrap justify-center gap-3 transition-all duration-700 ease-out ${
+          headerLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'
         }`}
+        style={{ transitionDelay: '400ms' }}
       >
         {[
           { label: '17+ Roadmaps', color: 'bg-emerald-500', shadow: 'shadow-emerald-500/20' },
@@ -181,9 +181,9 @@ const RoadMapHeader = ({ isParentLoaded }: { isParentLoaded: boolean }) => {
             className={`flex items-center px-3 py-1.5 bg-white dark:bg-gray-800 rounded-full shadow-sm ${
               item.shadow
             } border border-gray-200 dark:border-gray-700 hover:shadow-md transition-all duration-300 hover:-translate-y-0.5 transform ${
-              headerLoaded ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-10'
+              headerLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'
             }`}
-            style={{ transitionDelay: `${600 + index * 100}ms` }}
+            style={{ transitionDelay: `${500 + index * 100}ms` }}
           >
             <span className={`w-2 h-2 ${item.color} rounded-full mr-2 animate-pulse`} />
             <span className="text-sm font-medium text-gray-700 dark:text-gray-300">{item.label}</span>
@@ -195,7 +195,6 @@ const RoadMapHeader = ({ isParentLoaded }: { isParentLoaded: boolean }) => {
 };
 
 const RoadMap = () => {
-  const { theme } = useTheme();
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
@@ -205,21 +204,10 @@ const RoadMap = () => {
 
   return (
     <div
-      className={`min-h-screen bg-gray-50 dark:bg-gray-900 py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden transition-opacity duration-700 ease-out ${
+      className={`min-h-screen py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden transition-opacity duration-700 ease-out ${
         isLoaded ? 'opacity-100' : 'opacity-0'
       }`}
     >
-      <div
-        className={`absolute inset-0 transition-opacity duration-1000 ease-out ${
-          isLoaded ? 'opacity-30' : 'opacity-0'
-        }`}
-      >
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-to-br from-cyan-400/5 to-teal-400/5 rounded-full blur-3xl animate-pulse" />
-        <div
-          className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-gradient-to-br from-violet-400/5 to-purple-400/5 rounded-full blur-3xl animate-pulse"
-          style={{ animationDelay: '1s' }}
-        />
-      </div>
       <div
         className={`relative z-10 transition-all duration-700 ease-out ${
           isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'

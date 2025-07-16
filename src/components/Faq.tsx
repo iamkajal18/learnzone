@@ -87,11 +87,9 @@ function Faq() {
       <div className="relative max-w-3xl mx-auto">
         {/* Header Section */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-12 h-12 bg-gradient-to-r from-[#00cfd1] to-[#0286a3] rounded-full mb-4">
-            <span className="text-white text-xl">❓</span>
-          </div>
+
           <h3 className="text-3xl md:text-3xl font-bold tracking-tight">
-            <span className="bg-gradient-to-r from-teal-400 to-cyan-600 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-cyan-600  to-teal-700 bg-clip-text text-transparent">
               Frequently Asked
             </span>{" "}
             <span className="relative inline-block">

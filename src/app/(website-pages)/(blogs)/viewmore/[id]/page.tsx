@@ -6,7 +6,7 @@ import { useParams } from "next/navigation";
 import axios from "axios";
 import { format } from "date-fns";
 import MarkdownRenderer from "../../../../../components/MarkdownRenderer";
-import { Skeleton } from "../../../../../components/Skeleton";
+import { Skeleton } from "@/components/skeleton"
 
 
 interface BlogDisplayProps {

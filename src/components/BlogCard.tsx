@@ -2,7 +2,6 @@
 
 import { useSession } from "next-auth/react";
 import Link from "next/link";
-import { Eye, Calendar, Trash2, Edit } from "lucide-react";
 
 const DEFAULT_IMAGE_URL = "https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80";
 
@@ -19,10 +18,6 @@ interface Blog {
   createdAt?: string;
   profilePhoto?: string;
   tags?: string[];
-  views: number;
-  likes: number;
-  comments: { userEmail: string; content: string; createdAt: string }[];
-  shares: number;
 }
 
 interface BlogCardProps {
@@ -39,14 +34,6 @@ export default function BlogCard({ idea, onDelete, deletingId, showActions }: Bl
   const shouldShowActions = showActions && isAuthor;
   const authorName = idea.authorEmail ? stripHtmlTags(idea.authorEmail.split("@")[0]) : "Anonymous";
 
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-    });
-  };
-
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-100 dark:border-gray-700 hover:shadow-md transition-shadow">
       <div className="relative h-40 overflow-hidden">
@@ -54,9 +41,6 @@ export default function BlogCard({ idea, onDelete, deletingId, showActions }: Bl
           src={idea.imageUrl || DEFAULT_IMAGE_URL}
           alt={idea.title}
           className="w-full h-full object-cover"
-          onError={(e) => {
-            e.currentTarget.src = DEFAULT_IMAGE_URL;
-          }}
         />
       </div>
       <div className="p-4">
@@ -72,21 +56,9 @@ export default function BlogCard({ idea, onDelete, deletingId, showActions }: Bl
             className="w-6 h-6 rounded-full"
             alt={`${authorName}'s profile`}
           />
-          <span className="text-sm text-gray-600 dark:text-gray-300">{authorName}</span>
-        </div>
-        <div className="flex items-center justify-between text-sm text-gray-500 dark:text-gray-400 mb-3">
-          <div className="flex items-center space-x-3">
-            <div className="flex items-center space-x-1">
-              <Eye className="h-4 w-4" />
-              <span>{(idea.views || 0).toLocaleString()}</span>
-            </div>
-            {idea.createdAt && (
-              <div className="flex items-center space-x-1">
-                <Calendar className="h-4 w-4" />
-                <span>{formatDate(idea.createdAt)}</span>
-              </div>
-            )}
-          </div>
+          <span className="text-sm text-gray-600 dark:text-gray-300">
+            {authorName}
+          </span>
         </div>
         <div className="flex justify-between items-center">
           <Link href={`/viewmore/${idea._id}`}>

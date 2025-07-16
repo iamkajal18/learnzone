@@ -2,12 +2,12 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import axios from "axios";
-import { Skeleton } from "../../../../../components/Skeleton";
+import { Skeleton } from "@/components/skeleton";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Link from "@tiptap/extension-link";
 import Image from "@tiptap/extension-image";
-import Toolbar from "../../../../../components/Toolbar";
+import Toolbar from "@/components/Toolbar";
 
 interface Blog {
   id: string;
