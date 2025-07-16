@@ -32,6 +32,7 @@ export async function POST(request:NextRequest){
             password:hashedPassword
         }
     )
+    
    user.save();
     
     return NextResponse.json({
