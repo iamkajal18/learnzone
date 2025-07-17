@@ -13,7 +13,7 @@ export default function BlogHeroSection() {
   }, []);
 
   return (
-    <div className="relative bg-white dark:bg-gray-900 mb-4">
+    <div className="relative bg-white dark:bg-gray-900 mb-4 mx-auto max-w-7xl rounded-xl overflow-hidden">
       {/* Subtle background pattern */}
       <div className="absolute inset-0 bg-gradient-to-b from-gray-50 to-white dark:from-gray-800 dark:to-gray-900 opacity-60 dark:opacity-20"></div>
       
@@ -32,7 +32,7 @@ export default function BlogHeroSection() {
       </div>
 
       {/* Main Content */}
-      <div className="relative z-10 container mx-auto px-6 lg:px-8 py-16">
+      <div className="relative z-10 px-6 lg:px-8 py-16">
         <div className="max-w-6xl mx-auto">
           
           {/* Header Badge */}

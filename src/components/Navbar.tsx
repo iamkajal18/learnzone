@@ -18,7 +18,6 @@ import {
   Video,
   MessageSquare,
   BarChart,
-  Settings,
 } from "lucide-react";
 
 interface NavItemProps {
@@ -165,9 +164,10 @@ const Navbar: React.FC = () => {
                 <div className="absolute inset-0 bg-gradient-to-r from-indigo-500 to-indigo-600 opacity-0 group-hover:opacity-20 rounded-lg transition-opacity duration-300" />
               </div>
               <span className="text-2xl font-bold">
-                <span className="text-indigo-600">Learn</span>
-                <span className="text-black">Live</span>
-              </span>
+  <span className="text-indigo-600">Learn</span>
+  <span className="text-black">Live</span>
+</span>
+
             </Link>
 
             {/* Desktop Navigation */}
@@ -286,21 +286,7 @@ const Navbar: React.FC = () => {
                         </li>
                         <li>
                           <Link
-                            href={`/profilesection/${session.user?.email}`}
-                            className={`flex items-center px-4 py-2 text-sm font-medium transition-all duration-200 hover:bg-gradient-to-r hover:from-indigo-500 hover:to-indigo-600 hover:text-white ${
-                              theme === "light"
-                                ? "text-gray-700"
-                                : "text-gray-200"
-                            }`}
-                            onClick={() => setDropdownOpen(false)}
-                          >
-                            <Settings size={16} className="mr-2" />
-                            Profile Settings
-                          </Link>
-                        </li>
-                        <li>
-                          <Link
-                            href="/support"
+                            href={`/support`}
                             className={`flex items-center px-4 py-2 text-sm font-medium transition-all duration-200 hover:bg-gradient-to-r hover:from-indigo-500 hover:to-indigo-600 hover:text-white ${
                               theme === "light"
                                 ? "text-gray-700"
@@ -432,20 +418,11 @@ const Navbar: React.FC = () => {
                   <NavItem
                     href={`/profilesection/${session.user?.email}`}
                     theme={theme}
-                    icon={<Settings size={18} />}
-                    onClick={() => setNavOpen(false)}
-                    mobile
-                  >
-                    Profile Settings
-                  </NavItem>
-                  <NavItem
-                    href="/support"
-                    theme={theme}
                     icon={<User size={18} />}
                     onClick={() => setNavOpen(false)}
                     mobile
                   >
-                    Premium Member
+                    Profile Settings
                   </NavItem>
                   <li className="list-none">
                     <button
