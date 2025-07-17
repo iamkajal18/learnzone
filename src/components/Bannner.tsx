@@ -11,7 +11,7 @@ export default function BlogHeroSection() {
   }, []);
 
   return (
-    <div className="relative min-h-screen bg-white dark:bg-gray-50">
+    <div className="relative bg-white dark:bg-gray-50 mb-4">
       {/* Subtle background pattern */}
       <div className="absolute inset-0 bg-gradient-to-b from-gray-50 to-white dark:from-gray-100 dark:to-gray-50 opacity-60"></div>
       
@@ -23,11 +23,11 @@ export default function BlogHeroSection() {
       </div>
 
       {/* Main Content */}
-      <div className="relative z-10 container mx-auto px-6 lg:px-8 py-10">
+      <div className="relative z-10 container mx-auto px-6 lg:px-8 py-16">
         <div className="max-w-6xl mx-auto">
           
           {/* Header Badge */}
-          <div className={`text-center  transition-all duration-600 ${
+          <div className={`text-center transition-all duration-600 ${
             isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
           }`}>
             <div className="inline-flex items-center px-4 py-2 rounded-full bg-blue-50 border border-blue-100 text-blue-600 text-sm font-medium mb-8">
@@ -39,13 +39,13 @@ export default function BlogHeroSection() {
           </div>
 
           {/* Main Hero Content */}
-          <div className="text-center max-w-4xl mx-auto ">
+          <div className="text-center max-w-4xl mx-auto">
             <h1 className={`text-3xl lg:text-4xl font-extrabold text-gray-900 leading-tight mb-6 transition-all duration-800 delay-100 ${
               isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'
             }`}>
               Professional
               <span className="ml-2 text-blue-600">Blogging</span>
-              <span className=" text-3xl lg:text-4xl ml-2 font-bold text-gray-600">
+              <span className="text-3xl lg:text-4xl ml-2 font-bold text-gray-600">
                 Made Simple
               </span>
             </h1>
@@ -58,24 +58,21 @@ export default function BlogHeroSection() {
             </p>
 
             {/* CTA Buttons */}
-            <div className={`flex flex-col sm:flex-row gap-4 justify-center items-center mb-10 transition-all duration-800 delay-300 ${
+            <div className={`flex flex-col sm:flex-row gap-4 justify-center items-center mb-1 transition-all duration-800 delay-300 ${
               isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
             }`}>
               <Link href="/create">
-                <button className="px-8 py-4 hover:bg-blue-600 bg-transparent text-blue-500 border-2 border-blue-500 hover:text-white font-semibold rounded-lg text-lg  transition-all duration-200 shadow-lg hover:shadow-xl">
+                <button className="px-8 py-4 hover:bg-blue-600 bg-transparent text-blue-500 border-2 border-blue-500 hover:text-white font-semibold rounded-lg text-lg transition-all duration-200 shadow-lg hover:shadow-xl">
                   Start Writing Today
                 </button>
               </Link>
               <Link href="/allblog">
-              <button className="px-8 py-4 bg-white text-gray-900 font-semibold rounded-lg text-lg border-2 border-gray-200 hover:border-gray-300 transition-all duration-200 hover:bg-gray-50">
-                Visit
-              </button>
+                <button className="px-8 py-4 bg-white text-gray-900 font-semibold rounded-lg text-lg border-2 border-gray-200 hover:border-gray-300 transition-all duration-200 hover:bg-gray-50">
+                  Visit
+                </button>
               </Link>
             </div>
           </div>
-
-          {/* Trust Indicators */}
-          
         </div>
       </div>
     </div>
