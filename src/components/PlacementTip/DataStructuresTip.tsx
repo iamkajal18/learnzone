@@ -1,12 +1,12 @@
-'use client';
-import React, { useState, useEffect } from 'react';
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { vs } from 'react-syntax-highlighter/dist/esm/styles/prism';
+"use client";
+import React, { useState, useEffect } from "react";
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { vs } from "react-syntax-highlighter/dist/esm/styles/prism";
 
 type PracticeProblem = {
   id: number;
   title: string;
-  difficulty: 'Easy' | 'Medium' | 'Hard';
+  difficulty: "Easy" | "Medium" | "Hard";
   description: string;
   tags: string[];
   examples: {
@@ -23,7 +23,7 @@ type PracticeProblem = {
 type InterviewQuestion = {
   id: number;
   question: string;
-  difficulty: 'Easy' | 'Medium' | 'Hard';
+  difficulty: "Easy" | "Medium" | "Hard";
   description: string;
   tags: string[];
   examples: {
@@ -44,7 +44,7 @@ type Subtopic = {
 };
 
 const DataStructuresBook = () => {
-  const [activeSolutionTab, setActiveSolutionTab] = useState('javascript');
+  const [activeSolutionTab, setActiveSolutionTab] = useState("javascript");
   const [activeProblemTab, setActiveProblemTab] = useState(0);
   const [activeQuestionTab, setActiveQuestionTab] = useState(0);
   const [showCookieConsent, setShowCookieConsent] = useState(false);
@@ -53,74 +53,85 @@ const DataStructuresBook = () => {
 
   const subtopics: Subtopic[] = [
     {
-      name: 'Arrays',
-      explanation: 'Arrays are contiguous memory structures allowing O(1) access and O(n) insertions/deletions.',
-      useCases: 'Sorting, searching, dynamic programming, matrix operations.',
+      name: "Arrays",
+      explanation:
+        "Arrays are contiguous memory structures allowing O(1) access and O(n) insertions/deletions.",
+      useCases: "Sorting, searching, dynamic programming, matrix operations.",
     },
     {
-      name: 'Linked Lists',
-      explanation: 'Linked lists are dynamic structures with nodes containing data and pointers, enabling O(1) insertions at known positions.',
-      useCases: 'Stacks, queues, dynamic memory allocation.',
+      name: "Linked Lists",
+      explanation:
+        "Linked lists are dynamic structures with nodes containing data and pointers, enabling O(1) insertions at known positions.",
+      useCases: "Stacks, queues, dynamic memory allocation.",
     },
     {
-      name: 'Stacks',
-      explanation: 'Stacks follow a Last-In-First-Out (LIFO) structure, useful for managing function calls and undo operations.',
-      useCases: 'Expression parsing, backtracking, recursion.',
+      name: "Stacks",
+      explanation:
+        "Stacks follow a Last-In-First-Out (LIFO) structure, useful for managing function calls and undo operations.",
+      useCases: "Expression parsing, backtracking, recursion.",
     },
     {
-      name: 'Queues',
-      explanation: 'Queues follow a First-In-First-Out (FIFO) structure, ideal for task scheduling and breadth-first search.',
-      useCases: 'Process scheduling, BFS, event handling.',
+      name: "Queues",
+      explanation:
+        "Queues follow a First-In-First-Out (FIFO) structure, ideal for task scheduling and breadth-first search.",
+      useCases: "Process scheduling, BFS, event handling.",
     },
     {
-      name: 'Binary Trees',
-      explanation: 'Binary trees are hierarchical structures with nodes having up to two children, used for searching and sorting.',
-      useCases: 'Binary search trees, expression trees, hierarchical data.',
+      name: "Binary Trees",
+      explanation:
+        "Binary trees are hierarchical structures with nodes having up to two children, used for searching and sorting.",
+      useCases: "Binary search trees, expression trees, hierarchical data.",
     },
     {
-      name: 'Binary Search Trees',
-      explanation: 'BSTs maintain sorted order, enabling O(log n) search, insertion, and deletion in balanced cases.',
-      useCases: 'Database indexing, autocomplete systems.',
+      name: "Binary Search Trees",
+      explanation:
+        "BSTs maintain sorted order, enabling O(log n) search, insertion, and deletion in balanced cases.",
+      useCases: "Database indexing, autocomplete systems.",
     },
     {
-      name: 'Graphs',
-      explanation: 'Graphs consist of nodes and edges, representing relationships for problems like pathfinding.',
-      useCases: 'Social networks, shortest path algorithms, dependency resolution.',
+      name: "Graphs",
+      explanation:
+        "Graphs consist of nodes and edges, representing relationships for problems like pathfinding.",
+      useCases:
+        "Social networks, shortest path algorithms, dependency resolution.",
     },
     {
-      name: 'Hash Tables',
-      explanation: 'Hash tables use key-value pairs with O(1) average-case lookup via hashing.',
-      useCases: 'Caching, dictionaries, database lookups.',
+      name: "Hash Tables",
+      explanation:
+        "Hash tables use key-value pairs with O(1) average-case lookup via hashing.",
+      useCases: "Caching, dictionaries, database lookups.",
     },
     {
-      name: 'Heaps',
-      explanation: 'Heaps are tree-based structures for priority queues, offering O(log n) insertions and deletions.',
-      useCases: 'Scheduling, Dijkstra’s algorithm, heap sort.',
+      name: "Heaps",
+      explanation:
+        "Heaps are tree-based structures for priority queues, offering O(log n) insertions and deletions.",
+      useCases: "Scheduling, Dijkstra’s algorithm, heap sort.",
     },
     {
-      name: 'Tries',
-      explanation: 'Tries are tree-like structures for storing strings, optimized for prefix-based searches.',
-      useCases: 'Autocomplete, spell checkers, IP routing.',
+      name: "Tries",
+      explanation:
+        "Tries are tree-like structures for storing strings, optimized for prefix-based searches.",
+      useCases: "Autocomplete, spell checkers, IP routing.",
     },
   ];
 
   const practiceProblems: PracticeProblem[] = [
     {
       id: 1,
-      title: 'Reverse Array',
-      difficulty: 'Easy',
-      description: 'Reverse an array in-place without using extra space.',
-      tags: ['Array', 'Two Pointers'],
+      title: "Reverse Array",
+      difficulty: "Easy",
+      description: "Reverse an array in-place without using extra space.",
+      tags: ["Array", "Two Pointers"],
       examples: [
         {
-          input: 'arr = [1, 2, 3, 4]',
-          output: '[4, 3, 2, 1]',
-          explanation: 'Swap elements from both ends until pointers meet.',
+          input: "arr = [1, 2, 3, 4]",
+          output: "[4, 3, 2, 1]",
+          explanation: "Swap elements from both ends until pointers meet.",
         },
       ],
       solutions: [
         {
-          language: 'javascript',
+          language: "javascript",
           code: `function reverseArray(arr) {
   let left = 0, right = arr.length - 1;
   while (left < right) {
@@ -135,20 +146,21 @@ const DataStructuresBook = () => {
     },
     {
       id: 2,
-      title: 'Detect Cycle in Linked List',
-      difficulty: 'Medium',
-      description: 'Determine if a linked list has a cycle using Floyd’s cycle detection.',
-      tags: ['Linked List', 'Two Pointers'],
+      title: "Detect Cycle in Linked List",
+      difficulty: "Medium",
+      description:
+        "Determine if a linked list has a cycle using Floyd’s cycle detection.",
+      tags: ["Linked List", "Two Pointers"],
       examples: [
         {
-          input: '1 -> 2 -> 3 -> 2 (cycle)',
-          output: 'true',
-          explanation: 'Fast and slow pointers meet if a cycle exists.',
+          input: "1 -> 2 -> 3 -> 2 (cycle)",
+          output: "true",
+          explanation: "Fast and slow pointers meet if a cycle exists.",
         },
       ],
       solutions: [
         {
-          language: 'javascript',
+          language: "javascript",
           code: `class ListNode {
   constructor(val) {
     this.val = val;
@@ -169,20 +181,21 @@ function hasCycle(head) {
     },
     {
       id: 3,
-      title: 'Implement Stack',
-      difficulty: 'Easy',
-      description: 'Implement a stack with push and pop operations using an array.',
-      tags: ['Stack', 'Implementation'],
+      title: "Implement Stack",
+      difficulty: "Easy",
+      description:
+        "Implement a stack with push and pop operations using an array.",
+      tags: ["Stack", "Implementation"],
       examples: [
         {
-          input: 'push(1), push(2), pop()',
-          output: '2',
-          explanation: 'Pop returns the most recently added element.',
+          input: "push(1), push(2), pop()",
+          output: "2",
+          explanation: "Pop returns the most recently added element.",
         },
       ],
       solutions: [
         {
-          language: 'javascript',
+          language: "javascript",
           code: `class Stack {
   constructor() {
     this.items = [];
@@ -199,20 +212,21 @@ function hasCycle(head) {
     },
     {
       id: 4,
-      title: 'Implement Queue',
-      difficulty: 'Medium',
-      description: 'Implement a queue with enqueue and dequeue operations using a linked list.',
-      tags: ['Queue', 'Linked List'],
+      title: "Implement Queue",
+      difficulty: "Medium",
+      description:
+        "Implement a queue with enqueue and dequeue operations using a linked list.",
+      tags: ["Queue", "Linked List"],
       examples: [
         {
-          input: 'enqueue(1), enqueue(2), dequeue()',
-          output: '1',
-          explanation: 'Dequeue returns the first element added.',
+          input: "enqueue(1), enqueue(2), dequeue()",
+          output: "1",
+          explanation: "Dequeue returns the first element added.",
         },
       ],
       solutions: [
         {
-          language: 'javascript',
+          language: "javascript",
           code: `class Node {
   constructor(val) {
     this.val = val;
@@ -247,20 +261,20 @@ class Queue {
     },
     {
       id: 5,
-      title: 'Binary Tree Inorder Traversal',
-      difficulty: 'Medium',
-      description: 'Perform an inorder traversal of a binary tree.',
-      tags: ['Binary Tree', 'Recursion'],
+      title: "Binary Tree Inorder Traversal",
+      difficulty: "Medium",
+      description: "Perform an inorder traversal of a binary tree.",
+      tags: ["Binary Tree", "Recursion"],
       examples: [
         {
-          input: 'root = [1,null,2,3]',
-          output: '[1,3,2]',
-          explanation: 'Inorder: left, root, right.',
+          input: "root = [1,null,2,3]",
+          output: "[1,3,2]",
+          explanation: "Inorder: left, root, right.",
         },
       ],
       solutions: [
         {
-          language: 'javascript',
+          language: "javascript",
           code: `class TreeNode {
   constructor(val) {
     this.val = val;
@@ -284,20 +298,20 @@ function inorderTraversal(root) {
     },
     {
       id: 6,
-      title: 'Validate Binary Search Tree',
-      difficulty: 'Hard',
-      description: 'Check if a binary tree is a valid BST.',
-      tags: ['Binary Search Tree', 'Recursion'],
+      title: "Validate Binary Search Tree",
+      difficulty: "Hard",
+      description: "Check if a binary tree is a valid BST.",
+      tags: ["Binary Search Tree", "Recursion"],
       examples: [
         {
-          input: 'root = [2,1,3]',
-          output: 'true',
-          explanation: 'All nodes in left subtree < root < right subtree.',
+          input: "root = [2,1,3]",
+          output: "true",
+          explanation: "All nodes in left subtree < root < right subtree.",
         },
       ],
       solutions: [
         {
-          language: 'javascript',
+          language: "javascript",
           code: `function isValidBST(root) {
   function validate(node, min, max) {
     if (!node) return true;
@@ -311,20 +325,21 @@ function inorderTraversal(root) {
     },
     {
       id: 7,
-      title: 'Shortest Path in Graph',
-      difficulty: 'Hard',
-      description: 'Find the shortest path in a weighted graph using Dijkstra’s algorithm.',
-      tags: ['Graph', 'Dijkstra'],
+      title: "Shortest Path in Graph",
+      difficulty: "Hard",
+      description:
+        "Find the shortest path in a weighted graph using Dijkstra’s algorithm.",
+      tags: ["Graph", "Dijkstra"],
       examples: [
         {
-          input: 'graph = [[0,4,0],[4,0,8],[0,8,0]], source = 0',
-          output: '[0,4,12]',
-          explanation: 'Shortest distances from source to all nodes.',
+          input: "graph = [[0,4,0],[4,0,8],[0,8,0]], source = 0",
+          output: "[0,4,12]",
+          explanation: "Shortest distances from source to all nodes.",
         },
       ],
       solutions: [
         {
-          language: 'javascript',
+          language: "javascript",
           code: `function dijkstra(graph, src) {
   const dist = Array(graph.length).fill(Infinity);
   const visited = Array(graph.length).fill(false);
@@ -352,40 +367,43 @@ function inorderTraversal(root) {
   const interviewQuestions: InterviewQuestion[] = [
     {
       id: 1,
-      question: 'What is the difference between an array and a linked list?',
-      difficulty: 'Easy',
-      description: 'Explain the key differences in terms of structure, performance, and use cases.',
-      tags: ['Array', 'Linked List'],
+      question: "What is the difference between an array and a linked list?",
+      difficulty: "Easy",
+      description:
+        "Explain the key differences in terms of structure, performance, and use cases.",
+      tags: ["Array", "Linked List"],
       examples: [
         {
-          input: 'Compare access time and insertion.',
-          output: 'Array: O(1) access, O(n) insertion; Linked List: O(n) access, O(1) insertion.',
-          explanation: 'Arrays use contiguous memory; linked lists use dynamic nodes.',
+          input: "Compare access time and insertion.",
+          output:
+            "Array: O(1) access, O(n) insertion; Linked List: O(n) access, O(1) insertion.",
+          explanation:
+            "Arrays use contiguous memory; linked lists use dynamic nodes.",
         },
       ],
       solutions: [
         {
-          language: 'text',
+          language: "text",
           code: `Arrays store elements in contiguous memory, offering O(1) access but O(n) insertion/deletion due to shifting. Linked lists use nodes with pointers, allowing O(1) insertion at known positions but O(n) access due to traversal. Arrays suit static data; linked lists suit dynamic data.`,
         },
       ],
     },
     {
       id: 2,
-      question: 'Implement a stack using two queues.',
-      difficulty: 'Hard',
-      description: 'Use two queues to simulate stack operations (push, pop).',
-      tags: ['Stack', 'Queue'],
+      question: "Implement a stack using two queues.",
+      difficulty: "Hard",
+      description: "Use two queues to simulate stack operations (push, pop).",
+      tags: ["Stack", "Queue"],
       examples: [
         {
-          input: 'push(1), push(2), pop()',
-          output: '2',
-          explanation: 'Ensure LIFO behavior using queue operations.',
+          input: "push(1), push(2), pop()",
+          output: "2",
+          explanation: "Ensure LIFO behavior using queue operations.",
         },
       ],
       solutions: [
         {
-          language: 'javascript',
+          language: "javascript",
           code: `class StackUsingQueues {
   constructor() {
     this.q1 = [];
@@ -405,20 +423,22 @@ function inorderTraversal(root) {
     },
     {
       id: 3,
-      question: 'Find the middle element of a linked list.',
-      difficulty: 'Medium',
-      description: 'Return the middle node’s value using the two-pointer technique.',
-      tags: ['Linked List', 'Two Pointers'],
+      question: "Find the middle element of a linked list.",
+      difficulty: "Medium",
+      description:
+        "Return the middle node’s value using the two-pointer technique.",
+      tags: ["Linked List", "Two Pointers"],
       examples: [
         {
-          input: '1 -> 2 -> 3 -> 4 -> 5',
-          output: '3',
-          explanation: 'Slow pointer reaches the middle when fast reaches the end.',
+          input: "1 -> 2 -> 3 -> 4 -> 5",
+          output: "3",
+          explanation:
+            "Slow pointer reaches the middle when fast reaches the end.",
         },
       ],
       solutions: [
         {
-          language: 'javascript',
+          language: "javascript",
           code: `function findMiddle(head) {
   let slow = head, fast = head;
   while (fast && fast.next) {
@@ -432,20 +452,21 @@ function inorderTraversal(root) {
     },
     {
       id: 4,
-      question: 'Check if a binary tree is balanced.',
-      difficulty: 'Hard',
-      description: 'Determine if the height difference between left and right subtrees is at most 1.',
-      tags: ['Binary Tree', 'Recursion'],
+      question: "Check if a binary tree is balanced.",
+      difficulty: "Hard",
+      description:
+        "Determine if the height difference between left and right subtrees is at most 1.",
+      tags: ["Binary Tree", "Recursion"],
       examples: [
         {
-          input: 'root = [1,2,3,4,5,null,null]',
-          output: 'true',
-          explanation: 'Height difference of subtrees is at most 1.',
+          input: "root = [1,2,3,4,5,null,null]",
+          output: "true",
+          explanation: "Height difference of subtrees is at most 1.",
         },
       ],
       solutions: [
         {
-          language: 'javascript',
+          language: "javascript",
           code: `function isBalanced(root) {
   function checkHeight(node) {
     if (!node) return 0;
@@ -463,20 +484,21 @@ function inorderTraversal(root) {
     },
     {
       id: 5,
-      question: 'Implement a hash table from scratch.',
-      difficulty: 'Hard',
-      description: 'Create a hash table with put, get, and remove operations, handling collisions.',
-      tags: ['Hash Table', 'Implementation'],
+      question: "Implement a hash table from scratch.",
+      difficulty: "Hard",
+      description:
+        "Create a hash table with put, get, and remove operations, handling collisions.",
+      tags: ["Hash Table", "Implementation"],
       examples: [
         {
           input: 'put(1, "one"), get(1), remove(1)',
           output: '"one", null',
-          explanation: 'Use chaining to handle collisions.',
+          explanation: "Use chaining to handle collisions.",
         },
       ],
       solutions: [
         {
-          language: 'javascript',
+          language: "javascript",
           code: `class HashTable {
   constructor(size = 100) {
     this.buckets = Array(size).fill(null).map(() => []);
@@ -518,20 +540,21 @@ function inorderTraversal(root) {
     },
     {
       id: 6,
-      question: 'Find the shortest path in a graph.',
-      difficulty: 'Hard',
-      description: 'Implement Dijkstra’s algorithm to find shortest paths from a source node.',
-      tags: ['Graph', 'Dijkstra'],
+      question: "Find the shortest path in a graph.",
+      difficulty: "Hard",
+      description:
+        "Implement Dijkstra’s algorithm to find shortest paths from a source node.",
+      tags: ["Graph", "Dijkstra"],
       examples: [
         {
-          input: 'graph = [[0,4,0],[4,0,8],[0,8,0]], src = 0',
-          output: '[0,4,12]',
-          explanation: 'Shortest distances from source to all nodes.',
+          input: "graph = [[0,4,0],[4,0,8],[0,8,0]], src = 0",
+          output: "[0,4,12]",
+          explanation: "Shortest distances from source to all nodes.",
         },
       ],
       solutions: [
         {
-          language: 'javascript',
+          language: "javascript",
           code: `function dijkstra(graph, src) {
   const dist = Array(graph.length).fill(Infinity);
   const visited = Array(graph.length).fill(false);
@@ -556,20 +579,20 @@ function inorderTraversal(root) {
     },
     {
       id: 7,
-      question: 'Explain the applications of heaps.',
-      difficulty: 'Medium',
-      description: 'Discuss practical uses of heaps in algorithms and systems.',
-      tags: ['Heap', 'Conceptual'],
+      question: "Explain the applications of heaps.",
+      difficulty: "Medium",
+      description: "Discuss practical uses of heaps in algorithms and systems.",
+      tags: ["Heap", "Conceptual"],
       examples: [
         {
-          input: 'Name three applications.',
-          output: 'Priority queues, heap sort, scheduling.',
-          explanation: 'Heaps efficiently manage prioritized data.',
+          input: "Name three applications.",
+          output: "Priority queues, heap sort, scheduling.",
+          explanation: "Heaps efficiently manage prioritized data.",
         },
       ],
       solutions: [
         {
-          language: 'text',
+          language: "text",
           code: `Heaps are used in:
 1. Priority Queues: For tasks like job scheduling where the highest-priority task is processed first.
 2. Heap Sort: Sorting data in O(n log n) time by leveraging heap properties.
@@ -579,20 +602,20 @@ function inorderTraversal(root) {
     },
     {
       id: 8,
-      question: 'Reverse a linked list.',
-      difficulty: 'Medium',
-      description: 'Reverse a singly linked list iteratively or recursively.',
-      tags: ['Linked List', 'Recursion'],
+      question: "Reverse a linked list.",
+      difficulty: "Medium",
+      description: "Reverse a singly linked list iteratively or recursively.",
+      tags: ["Linked List", "Recursion"],
       examples: [
         {
-          input: '1 -> 2 -> 3 -> null',
-          output: '3 -> 2 -> 1 -> null',
-          explanation: 'Reverse the pointers to change the list direction.',
+          input: "1 -> 2 -> 3 -> null",
+          output: "3 -> 2 -> 1 -> null",
+          explanation: "Reverse the pointers to change the list direction.",
         },
       ],
       solutions: [
         {
-          language: 'javascript',
+          language: "javascript",
           code: `function reverseList(head) {
   let prev = null, curr = head;
   while (curr) {
@@ -608,20 +631,21 @@ function inorderTraversal(root) {
     },
     {
       id: 9,
-      question: 'Implement a queue using two stacks.',
-      difficulty: 'Hard',
-      description: 'Use two stacks to simulate queue operations (enqueue, dequeue).',
-      tags: ['Queue', 'Stack'],
+      question: "Implement a queue using two stacks.",
+      difficulty: "Hard",
+      description:
+        "Use two stacks to simulate queue operations (enqueue, dequeue).",
+      tags: ["Queue", "Stack"],
       examples: [
         {
-          input: 'enqueue(1), enqueue(2), dequeue()',
-          output: '1',
-          explanation: 'Ensure FIFO behavior using stack operations.',
+          input: "enqueue(1), enqueue(2), dequeue()",
+          output: "1",
+          explanation: "Ensure FIFO behavior using stack operations.",
         },
       ],
       solutions: [
         {
-          language: 'javascript',
+          language: "javascript",
           code: `class QueueUsingStacks {
   constructor() {
     this.s1 = [];
@@ -642,20 +666,21 @@ function inorderTraversal(root) {
     },
     {
       id: 10,
-      question: 'Find the lowest common ancestor in a BST.',
-      difficulty: 'Medium',
-      description: 'Find the lowest node in a BST that is an ancestor of two given nodes.',
-      tags: ['Binary Search Tree', 'Recursion'],
+      question: "Find the lowest common ancestor in a BST.",
+      difficulty: "Medium",
+      description:
+        "Find the lowest node in a BST that is an ancestor of two given nodes.",
+      tags: ["Binary Search Tree", "Recursion"],
       examples: [
         {
-          input: 'root = [6,2,8,0,4,7,9], p = 2, q = 8',
-          output: '6',
-          explanation: 'Node 6 is the lowest common ancestor.',
+          input: "root = [6,2,8,0,4,7,9], p = 2, q = 8",
+          output: "6",
+          explanation: "Node 6 is the lowest common ancestor.",
         },
       ],
       solutions: [
         {
-          language: 'javascript',
+          language: "javascript",
           code: `function lowestCommonAncestor(root, p, q) {
   while (root) {
     if (root.val > p.val && root.val > q.val) {
@@ -673,20 +698,21 @@ function inorderTraversal(root) {
     },
     {
       id: 11,
-      question: 'Implement a trie for autocomplete.',
-      difficulty: 'Hard',
-      description: 'Build a trie to support autocomplete functionality for a list of words.',
-      tags: ['Trie', 'String'],
+      question: "Implement a trie for autocomplete.",
+      difficulty: "Hard",
+      description:
+        "Build a trie to support autocomplete functionality for a list of words.",
+      tags: ["Trie", "String"],
       examples: [
         {
           input: 'words = ["cat", "car"], prefix = "ca"',
           output: '["cat", "car"]',
-          explanation: 'Return all words with the given prefix.',
+          explanation: "Return all words with the given prefix.",
         },
       ],
       solutions: [
         {
-          language: 'javascript',
+          language: "javascript",
           code: `class TrieNode {
   constructor() {
     this.children = {};
@@ -727,20 +753,20 @@ class Trie {
     },
     {
       id: 12,
-      question: 'Merge two sorted arrays.',
-      difficulty: 'Medium',
-      description: 'Merge two sorted arrays into a single sorted array.',
-      tags: ['Array', 'Two Pointers'],
+      question: "Merge two sorted arrays.",
+      difficulty: "Medium",
+      description: "Merge two sorted arrays into a single sorted array.",
+      tags: ["Array", "Two Pointers"],
       examples: [
         {
-          input: 'arr1 = [1,3,5], arr2 = [2,4,6]',
-          output: '[1,2,3,4,5,6]',
-          explanation: 'Use two pointers to compare and merge.',
+          input: "arr1 = [1,3,5], arr2 = [2,4,6]",
+          output: "[1,2,3,4,5,6]",
+          explanation: "Use two pointers to compare and merge.",
         },
       ],
       solutions: [
         {
-          language: 'javascript',
+          language: "javascript",
           code: `function mergeSortedArrays(arr1, arr2) {
   const merged = [];
   let i = 0, j = 0;
@@ -760,20 +786,20 @@ class Trie {
     },
     {
       id: 13,
-      question: 'Find the intersection of two sorted arrays.',
-      difficulty: 'Medium',
-      description: 'Return the common elements of two sorted arrays.',
-      tags: ['Array', 'Two Pointers'],
+      question: "Find the intersection of two sorted arrays.",
+      difficulty: "Medium",
+      description: "Return the common elements of two sorted arrays.",
+      tags: ["Array", "Two Pointers"],
       examples: [
         {
-          input: 'arr1 = [1,2,4,5], arr2 = [2,3,5,6]',
-          output: '[2,5]',
-          explanation: 'Compare elements using two pointers.',
+          input: "arr1 = [1,2,4,5], arr2 = [2,3,5,6]",
+          output: "[2,5]",
+          explanation: "Compare elements using two pointers.",
         },
       ],
       solutions: [
         {
-          language: 'javascript',
+          language: "javascript",
           code: `function intersection(arr1, arr2) {
   const result = [];
   let i = 0, j = 0;
@@ -795,20 +821,21 @@ class Trie {
     },
     {
       id: 14,
-      question: 'Check if a string is a valid palindrome using a stack.',
-      difficulty: 'Medium',
-      description: 'Verify if a string is a palindrome using a stack-based approach.',
-      tags: ['Stack', 'String'],
+      question: "Check if a string is a valid palindrome using a stack.",
+      difficulty: "Medium",
+      description:
+        "Verify if a string is a palindrome using a stack-based approach.",
+      tags: ["Stack", "String"],
       examples: [
         {
           input: 's = "radar"',
-          output: 'true',
-          explanation: 'Characters match in reverse order.',
+          output: "true",
+          explanation: "Characters match in reverse order.",
         },
       ],
       solutions: [
         {
-          language: 'javascript',
+          language: "javascript",
           code: `function isPalindrome(s) {
   const stack = [];
   s = s.toLowerCase().replace(/[^a-z0-9]/g, '');
@@ -823,20 +850,21 @@ class Trie {
     },
     {
       id: 15,
-      question: 'Find the diameter of a binary tree.',
-      difficulty: 'Hard',
-      description: 'Compute the length of the longest path between any two nodes in a binary tree.',
-      tags: ['Binary Tree', 'Recursion'],
+      question: "Find the diameter of a binary tree.",
+      difficulty: "Hard",
+      description:
+        "Compute the length of the longest path between any two nodes in a binary tree.",
+      tags: ["Binary Tree", "Recursion"],
       examples: [
         {
-          input: 'root = [1,2,3,4,5]',
-          output: '4',
-          explanation: 'Longest path passes through nodes 4,2,1,3,5.',
+          input: "root = [1,2,3,4,5]",
+          output: "4",
+          explanation: "Longest path passes through nodes 4,2,1,3,5.",
         },
       ],
       solutions: [
         {
-          language: 'javascript',
+          language: "javascript",
           code: `function diameterOfBinaryTree(root) {
   let maxDiameter = 0;
   function height(node) {
@@ -862,22 +890,22 @@ class Trie {
   }, []);
 
   useEffect(() => {
-    const consent = localStorage.getItem('cookieConsent');
+    const consent = localStorage.getItem("cookieConsent");
     if (!consent) {
       setShowCookieConsent(true);
     }
   }, []);
 
   const handleAcceptCookies = () => {
-    localStorage.setItem('cookieConsent', 'accepted');
+    localStorage.setItem("cookieConsent", "accepted");
     setShowCookieConsent(false);
   };
 
   const chapters = [
-    { title: 'What are Data Structures?', id: 'overview' },
-    { title: 'Key Data Structures', id: 'subtopics' },
-    { title: 'Practice Problems', id: 'problems' },
-    { title: 'Interview Questions', id: 'interview' },
+    { title: "What are Data Structures?", id: "overview" },
+    { title: "Key Data Structures", id: "subtopics" },
+    { title: "Practice Problems", id: "problems" },
+    { title: "Interview Questions", id: "interview" },
   ];
 
   const handleSliderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -885,7 +913,7 @@ class Trie {
     setCurrentChapter(value);
     const element = document.getElementById(chapters[value].id);
     if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
+      element.scrollIntoView({ behavior: "smooth" });
     }
   };
 
@@ -900,12 +928,19 @@ class Trie {
   return (
     <div className="max-w-7xl mx-auto px-4 py-10 bg-gray-100 min-h-screen">
       <header className="bg-white rounded-lg shadow-lg p-6 mb-8 text-center">
-        <h1 className="text-4xl font-bold text-gray-800 mb-2">Data Structures: A Comprehensive Guide</h1>
-        <p className="text-sm text-gray-500">Last Updated: {new Date().toLocaleDateString()}</p>
+        <h1 className="text-4xl font-bold text-gray-800 mb-2">
+          Data Structures: A Comprehensive Guide
+        </h1>
+        <p className="text-sm text-gray-500">
+          Last Updated: {new Date().toLocaleDateString()}
+        </p>
       </header>
 
       <div className="sticky top-0 bg-white rounded-lg shadow-md p-4 mb-8 z-10">
-        <label htmlFor="chapter-slider" className="block text-lg font-semibold mb-2 text-gray-800">
+        <label
+          htmlFor="chapter-slider"
+          className="block text-lg font-semibold mb-2 text-gray-800"
+        >
           Navigate Chapters
         </label>
         <div className="relative">
@@ -922,7 +957,9 @@ class Trie {
             aria-valuemax={chapters.length - 1}
             aria-valuenow={currentChapter}
             style={{
-              background: `linear-gradient(to right, #0286a3 ${((currentChapter) / (chapters.length - 1)) * 100}%, #e5e7eb ${((currentChapter) / (chapters.length - 1)) * 100}%)`,
+              background: `linear-gradient(to right, #0286a3 ${
+                (currentChapter / (chapters.length - 1)) * 100
+              }%, #e5e7eb ${(currentChapter / (chapters.length - 1)) * 100}%)`,
             }}
           />
           <style jsx>{`
@@ -959,13 +996,13 @@ class Trie {
             <div key={index} className="relative group">
               <span
                 className={`cursor-pointer hover:text-[#0286a3] transition-colors ${
-                  currentChapter === index ? 'text-[#0286a3] font-semibold' : ''
+                  currentChapter === index ? "text-[#0286a3] font-semibold" : ""
                 }`}
                 onClick={() => {
                   setCurrentChapter(index);
                   const element = document.getElementById(chapter.id);
                   if (element) {
-                    element.scrollIntoView({ behavior: 'smooth' });
+                    element.scrollIntoView({ behavior: "smooth" });
                   }
                 }}
               >
@@ -981,32 +1018,52 @@ class Trie {
 
       <div className="space-y-12">
         <section id="overview" className="bg-white rounded-lg shadow-md p-8">
-          <h2 className="text-3xl font-bold text-gray-800 mb-4">Chapter 1: What are Data Structures?</h2>
+          <h2 className="text-3xl font-bold text-gray-800 mb-4">
+            Chapter 1: What are Data Structures?
+          </h2>
           <div className="prose max-w-none">
             <p className="mb-4">
-              <strong>Data Structures</strong> are specialized formats for organizing, storing, and retrieving data efficiently. They form the backbone of algorithms, enabling optimized solutions to computational problems.
+              <strong>Data Structures</strong> are specialized formats for
+              organizing, storing, and retrieving data efficiently. They form
+              the backbone of algorithms, enabling optimized solutions to
+              computational problems.
             </p>
             <p>
-              Data structures like arrays, linked lists, trees, and graphs are critical for solving problems in coding interviews, optimizing performance, and managing data in real-world applications.
+              Data structures like arrays, linked lists, trees, and graphs are
+              critical for solving problems in coding interviews, optimizing
+              performance, and managing data in real-world applications.
             </p>
           </div>
         </section>
 
         <section id="subtopics" className="bg-white rounded-lg shadow-md p-8">
-          <h2 className="text-3xl font-bold text-gray-800 mb-4">Chapter 2: Key Data Structures</h2>
+          <h2 className="text-3xl font-bold text-gray-800 mb-4">
+            Chapter 2: Key Data Structures
+          </h2>
           <div className="space-y-8">
             {subtopics.map((subtopic, index) => (
               <div key={index} className="border-l-4 border-[#0286a3] pl-4">
-                <h3 className="text-2xl font-semibold text-gray-800 mb-2">{subtopic.name}</h3>
-                <p className="text-gray-600 mb-2"><strong>Explanation:</strong> {subtopic.explanation}</p>
-                <p className="text-gray-600 mb-2"><strong>Use Cases:</strong> {subtopic.useCases}</p>
+                <h3 className="text-2xl font-semibold text-gray-800 mb-2">
+                  {subtopic.name}
+                </h3>
+                <p className="text-gray-600 mb-2">
+                  <strong>Explanation:</strong> {subtopic.explanation}
+                </p>
+                <p className="text-gray-600 mb-2">
+                  <strong>Use Cases:</strong> {subtopic.useCases}
+                </p>
               </div>
             ))}
           </div>
         </section>
 
-        <section id="problems" className="bg-white rounded-lg shadow-md overflow-hidden">
-          <h2 className="text-3xl font-bold text-gray-800 p-8 border-b">Chapter 3: Practice Problems</h2>
+        <section
+          id="problems"
+          className="bg-white rounded-lg shadow-md overflow-hidden"
+        >
+          <h2 className="text-3xl font-bold text-gray-800 p-8 border-b">
+            Chapter 3: Practice Problems
+          </h2>
           <div className="flex flex-col md:flex-row min-h-[500px]">
             <div className="w-full md:w-1/3 border-r bg-gray-50">
               <div className="overflow-y-auto h-[500px] p-2">
@@ -1019,19 +1076,19 @@ class Trie {
                     }}
                     className={`p-4 border-b cursor-pointer rounded-lg transition-colors ${
                       activeProblemTab === problem.id - 1
-                        ? 'bg-[#0286a3]/10 border-[#0286a3]/20'
-                        : 'hover:bg-gray-100 border-transparent'
+                        ? "bg-[#0286a3]/10 border-[#0286a3]/20"
+                        : "hover:bg-gray-100 border-transparent"
                     }`}
                   >
                     <div className="flex justify-between items-start">
                       <h3 className="font-medium">{problem.title}</h3>
                       <span
                         className={`text-xs px-2 py-1 rounded-full ${
-                          problem.difficulty === 'Easy'
-                            ? 'bg-green-100 text-green-800'
-                            : problem.difficulty === 'Medium'
-                            ? 'bg-yellow-100 text-yellow-800'
-                            : 'bg-red-100 text-red-800'
+                          problem.difficulty === "Easy"
+                            ? "bg-indigo-100 text-indigo-800"
+                            : problem.difficulty === "Medium"
+                            ? "bg-yellow-100 text-yellow-800"
+                            : "bg-red-100 text-red-800"
                         }`}
                       >
                         {problem.difficulty}
@@ -1055,50 +1112,70 @@ class Trie {
               {practiceProblems.length > 0 && (
                 <>
                   <div className="flex justify-between items-start mb-4">
-                    <h3 className="text-xl font-semibold">{practiceProblems[activeProblemTab].title}</h3>
+                    <h3 className="text-xl font-semibold">
+                      {practiceProblems[activeProblemTab].title}
+                    </h3>
                     <span
                       className={`text-xs px-2 py-1 rounded-full ${
-                        practiceProblems[activeProblemTab].difficulty === 'Easy'
-                          ? 'bg-green-100 text-green-800'
-                          : practiceProblems[activeProblemTab].difficulty === 'Medium'
-                          ? 'bg-yellow-100 text-yellow-800'
-                          : 'bg-red-100 text-red-800'
-                        }`}
+                        practiceProblems[activeProblemTab].difficulty === "Easy"
+                          ? "bg-indigo-100 text-indigo-800"
+                          : practiceProblems[activeProblemTab].difficulty ===
+                            "Medium"
+                          ? "bg-yellow-100 text-yellow-800"
+                          : "bg-red-100 text-red-800"
+                      }`}
                     >
                       {practiceProblems[activeProblemTab].difficulty}
                     </span>
                   </div>
-                  <p className="text-gray-700 mb-6">{practiceProblems[activeProblemTab].description}</p>
+                  <p className="text-gray-700 mb-6">
+                    {practiceProblems[activeProblemTab].description}
+                  </p>
                   <div className="space-y-4 mb-6">
                     <h4 className="font-medium text-lg">Examples:</h4>
-                    {practiceProblems[activeProblemTab].examples.map((example, index) => (
-                      <div key={index} className="bg-gray-100 p-4 rounded-md border border-gray-200">
-                        <p className="font-mono text-sm">
-                          <span className="font-semibold">Input:</span> {example.input}
-                          <br />
-                          <span className="font-semibold">Output:</span> {example.output}
-                          <br />
-                          <span className="font-semibold">Explanation:</span> {example.explanation}
-                        </p>
-                      </div>
-                    ))}
+                    {practiceProblems[activeProblemTab].examples.map(
+                      (example, index) => (
+                        <div
+                          key={index}
+                          className="bg-gray-100 p-4 rounded-md border border-gray-200"
+                        >
+                          <p className="font-mono text-sm">
+                            <span className="font-semibold">Input:</span>{" "}
+                            {example.input}
+                            <br />
+                            <span className="font-semibold">Output:</span>{" "}
+                            {example.output}
+                            <br />
+                            <span className="font-semibold">
+                              Explanation:
+                            </span>{" "}
+                            {example.explanation}
+                          </p>
+                        </div>
+                      )
+                    )}
                   </div>
                   <div className="mt-8">
                     <h4 className="font-medium text-lg mb-4">Solution:</h4>
                     <div className="flex space-x-2 mb-4 overflow-x-auto pb-2">
-                      {practiceProblems[activeProblemTab].solutions.map((solution) => (
-                        <button
-                          key={solution.language}
-                          onClick={() => setActiveSolutionTab(solution.language)}
-                          className={`px-4 py-2 rounded-md whitespace-nowrap transition-colors ${
-                            activeSolutionTab === solution.language
-                              ? 'bg-[#0286a3] text-white'
-                              : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                          }`}
-                        >
-                          {solution.language.charAt(0).toUpperCase() + solution.language.slice(1)}
-                        </button>
-                      ))}
+                      {practiceProblems[activeProblemTab].solutions.map(
+                        (solution) => (
+                          <button
+                            key={solution.language}
+                            onClick={() =>
+                              setActiveSolutionTab(solution.language)
+                            }
+                            className={`px-4 py-2 rounded-md whitespace-nowrap transition-colors ${
+                              activeSolutionTab === solution.language
+                                ? "bg-[#0286a3] text-white"
+                                : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                            }`}
+                          >
+                            {solution.language.charAt(0).toUpperCase() +
+                              solution.language.slice(1)}
+                          </button>
+                        )
+                      )}
                     </div>
                     <div className="rounded-md overflow-hidden border border-gray-200">
                       <SyntaxHighlighter
@@ -1106,18 +1183,18 @@ class Trie {
                         style={vs}
                         showLineNumbers
                         wrapLines
-                        lineNumberStyle={{ color: '#999', minWidth: '2.5em' }}
+                        lineNumberStyle={{ color: "#999", minWidth: "2.5em" }}
                         customStyle={{
                           margin: 0,
-                          padding: '1rem',
-                          fontSize: '0.875rem',
-                          lineHeight: '1.5',
-                          backgroundColor: '#f8fafc',
+                          padding: "1rem",
+                          fontSize: "0.875rem",
+                          lineHeight: "1.5",
+                          backgroundColor: "#f8fafc",
                         }}
                       >
                         {practiceProblems[activeProblemTab].solutions.find(
                           (s) => s.language === activeSolutionTab
-                        )?.code || '// No solution available for this language'}
+                        )?.code || "// No solution available for this language"}
                       </SyntaxHighlighter>
                     </div>
                   </div>
@@ -1127,8 +1204,13 @@ class Trie {
           </div>
         </section>
 
-        <section id="interview" className="bg-white rounded-lg shadow-md overflow-hidden">
-          <h2 className="text-3xl font-bold text-gray-800 p-8 border-b">Chapter 4: Interview Questions</h2>
+        <section
+          id="interview"
+          className="bg-white rounded-lg shadow-md overflow-hidden"
+        >
+          <h2 className="text-3xl font-bold text-gray-800 p-8 border-b">
+            Chapter 4: Interview Questions
+          </h2>
           <div className="flex flex-col md:flex-row min-h-[500px]">
             <div className="w-full md:w-1/3 border-r bg-gray-50">
               <div className="overflow-y-auto h-[500px] p-2">
@@ -1141,19 +1223,19 @@ class Trie {
                     }}
                     className={`p-4 border-b cursor-pointer rounded-lg transition-colors ${
                       activeQuestionTab === question.id - 1
-                        ? 'bg-[#0286a3]/10 border-[#0286a3]/20'
-                        : 'hover:bg-gray-100 border-transparent'
+                        ? "bg-[#0286a3]/10 border-[#0286a3]/20"
+                        : "hover:bg-gray-100 border-transparent"
                     }`}
                   >
                     <div className="flex justify-between items-start">
                       <h3 className="font-medium">{question.question}</h3>
                       <span
                         className={`text-xs px-2 py-1 rounded-full ${
-                          question.difficulty === 'Easy'
-                            ? 'bg-green-100 text-green-800'
-                            : question.difficulty === 'Medium'
-                            ? 'bg-yellow-100 text-yellow-800'
-                            : 'bg-red-100 text-red-800'
+                          question.difficulty === "Easy"
+                            ? "bg-indigo-100 text-indigo-800"
+                            : question.difficulty === "Medium"
+                            ? "bg-yellow-100 text-yellow-800"
+                            : "bg-red-100 text-red-800"
                         }`}
                       >
                         {question.difficulty}
@@ -1177,50 +1259,71 @@ class Trie {
               {interviewQuestions.length > 0 && (
                 <>
                   <div className="flex justify-between items-start mb-4">
-                    <h3 className="text-xl font-semibold">{interviewQuestions[activeQuestionTab].question}</h3>
+                    <h3 className="text-xl font-semibold">
+                      {interviewQuestions[activeQuestionTab].question}
+                    </h3>
                     <span
                       className={`text-xs px-2 py-1 rounded-full ${
-                        interviewQuestions[activeQuestionTab].difficulty === 'Easy'
-                          ? 'bg-green-100 text-green-800'
-                          : interviewQuestions[activeQuestionTab].difficulty === 'Medium'
-                          ? 'bg-yellow-100 text-yellow-800'
-                          : 'bg-red-100 text-red-800'
-                        }`}
+                        interviewQuestions[activeQuestionTab].difficulty ===
+                        "Easy"
+                          ? "bg-indigo-100 text-indigo-800"
+                          : interviewQuestions[activeQuestionTab].difficulty ===
+                            "Medium"
+                          ? "bg-yellow-100 text-yellow-800"
+                          : "bg-red-100 text-red-800"
+                      }`}
                     >
                       {interviewQuestions[activeQuestionTab].difficulty}
                     </span>
                   </div>
-                  <p className="text-gray-700 mb-6">{interviewQuestions[activeQuestionTab].description}</p>
+                  <p className="text-gray-700 mb-6">
+                    {interviewQuestions[activeQuestionTab].description}
+                  </p>
                   <div className="space-y-4 mb-6">
                     <h4 className="font-medium text-lg">Examples:</h4>
-                    {interviewQuestions[activeQuestionTab].examples.map((example, index) => (
-                      <div key={index} className="bg-gray-100 p-4 rounded-md border border-gray-200">
-                        <p className="font-mono text-sm">
-                          <span className="font-semibold">Input:</span> {example.input}
-                          <br />
-                          <span className="font-semibold">Output:</span> {example.output}
-                          <br />
-                          <span className="font-semibold">Explanation:</span> {example.explanation}
-                        </p>
-                      </div>
-                    ))}
+                    {interviewQuestions[activeQuestionTab].examples.map(
+                      (example, index) => (
+                        <div
+                          key={index}
+                          className="bg-gray-100 p-4 rounded-md border border-gray-200"
+                        >
+                          <p className="font-mono text-sm">
+                            <span className="font-semibold">Input:</span>{" "}
+                            {example.input}
+                            <br />
+                            <span className="font-semibold">Output:</span>{" "}
+                            {example.output}
+                            <br />
+                            <span className="font-semibold">
+                              Explanation:
+                            </span>{" "}
+                            {example.explanation}
+                          </p>
+                        </div>
+                      )
+                    )}
                   </div>
                   <div className="mt-8">
                     <h4 className="font-medium text-lg mb-4">Solution:</h4>
                     <div className="flex space-x-2 mb-4 overflow-x-auto pb-2">
-                      {interviewQuestions[activeQuestionTab].solutions.map((solution) => (
-                        <button
-                          key={solution.language}
-                          onClick={() => setActiveSolutionTab(solution.language)}
-                          className={`px-4 py-2 rounded-md whitespace-nowrap transition-colors ${
-                            activeSolutionTab === solution.language
-                              ? 'bg-[#0286a3] text-white'
-                              : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                          }`}
-                        >
-                          {solution.language.charAt(0).toUpperCase() + solution.language.slice(1)}
-                        </button>
-                      ))}
+                      {interviewQuestions[activeQuestionTab].solutions.map(
+                        (solution) => (
+                          <button
+                            key={solution.language}
+                            onClick={() =>
+                              setActiveSolutionTab(solution.language)
+                            }
+                            className={`px-4 py-2 rounded-md whitespace-nowrap transition-colors ${
+                              activeSolutionTab === solution.language
+                                ? "bg-[#0286a3] text-white"
+                                : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                            }`}
+                          >
+                            {solution.language.charAt(0).toUpperCase() +
+                              solution.language.slice(1)}
+                          </button>
+                        )
+                      )}
                     </div>
                     <div className="rounded-md overflow-hidden border border-gray-200">
                       <SyntaxHighlighter
@@ -1228,18 +1331,18 @@ class Trie {
                         style={vs}
                         showLineNumbers
                         wrapLines
-                        lineNumberStyle={{ color: '#999', minWidth: '2.5em' }}
+                        lineNumberStyle={{ color: "#999", minWidth: "2.5em" }}
                         customStyle={{
                           margin: 0,
-                          padding: '1rem',
-                          fontSize: '0.875rem',
-                          lineHeight: '1.5',
-                          backgroundColor: '#f8fafc',
+                          padding: "1rem",
+                          fontSize: "0.875rem",
+                          lineHeight: "1.5",
+                          backgroundColor: "#f8fafc",
                         }}
                       >
                         {interviewQuestions[activeQuestionTab].solutions.find(
                           (s) => s.language === activeSolutionTab
-                        )?.code || '// No solution available for this language'}
+                        )?.code || "// No solution available for this language"}
                       </SyntaxHighlighter>
                     </div>
                   </div>
@@ -1255,15 +1358,23 @@ class Trie {
           <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between">
             <div className="mb-4 md:mb-0">
               <p className="text-sm">
-                We use cookies to ensure you have the best browsing experience on our website. By using our site, you
-                acknowledge that you have read and understood our{' '}
-                <a href="/cookie-policy" className="text-[#0286a3] hover:underline">
+                We use cookies to ensure you have the best browsing experience
+                on our website. By using our site, you acknowledge that you have
+                read and understood our{" "}
+                <a
+                  href="/cookie-policy"
+                  className="text-[#0286a3] hover:underline"
+                >
                   Cookie Policy
-                </a>{' '}
-                &{' '}
-                <a href="/privacy-policy" className="text-[#0286a3] hover:underline">
+                </a>{" "}
+                &{" "}
+                <a
+                  href="/privacy-policy"
+                  className="text-[#0286a3] hover:underline"
+                >
                   Privacy Policy
-                </a>.
+                </a>
+                .
               </p>
             </div>
             <button

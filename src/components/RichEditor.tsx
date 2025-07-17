@@ -1,32 +1,35 @@
-import { useState, useCallback } from 'react';
-import { useEditor, EditorContent, BubbleMenu } from '@tiptap/react';
-import StarterKit from '@tiptap/starter-kit';
-import Underline from '@tiptap/extension-underline';
-import Link from '@tiptap/extension-link';
-import TextAlign from '@tiptap/extension-text-align';
-import Highlight from '@tiptap/extension-highlight';
-import Image from '@tiptap/extension-image';
-import Youtube from '@tiptap/extension-youtube';
-import TextStyle from '@tiptap/extension-text-style';
-import FontFamily from '@tiptap/extension-font-family';
-import { Color } from '@tiptap/extension-color';
-import Table from '@tiptap/extension-table';
-import TableRow from '@tiptap/extension-table-row';
-import TableHeader from '@tiptap/extension-table-header';
-import TableCell from '@tiptap/extension-table-cell';
-import { Markdown } from 'tiptap-markdown';
-import DOMPurify from 'dompurify';
+import { useState, useCallback } from "react";
+import { useEditor, EditorContent, BubbleMenu } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
+import Underline from "@tiptap/extension-underline";
+import Link from "@tiptap/extension-link";
+import TextAlign from "@tiptap/extension-text-align";
+import Highlight from "@tiptap/extension-highlight";
+import Image from "@tiptap/extension-image";
+import Youtube from "@tiptap/extension-youtube";
+import TextStyle from "@tiptap/extension-text-style";
+import FontFamily from "@tiptap/extension-font-family";
+import { Color } from "@tiptap/extension-color";
+import Table from "@tiptap/extension-table";
+import TableRow from "@tiptap/extension-table-row";
+import TableHeader from "@tiptap/extension-table-header";
+import TableCell from "@tiptap/extension-table-cell";
+import { Markdown } from "tiptap-markdown";
+import DOMPurify from "dompurify";
 
 type RichTextEditorProps = {
   initialContent?: string;
   onSave: (content: { html: string; markdown: string; text: string }) => void;
 };
 
-const RichTextEditor = ({ initialContent = '', onSave }: RichTextEditorProps) => {
-  const [mode, setMode] = useState('wysiwyg'); // 'wysiwyg', 'markdown', or 'preview'
-  const [videoUrl, setVideoUrl] = useState('');
+const RichTextEditor = ({
+  initialContent = "",
+  onSave,
+}: RichTextEditorProps) => {
+  const [mode, setMode] = useState("wysiwyg"); // 'wysiwyg', 'markdown', or 'preview'
+  const [videoUrl, setVideoUrl] = useState("");
   const [showVideoModal, setShowVideoModal] = useState(false);
-  const [imageUrl, setImageUrl] = useState('');
+  const [imageUrl, setImageUrl] = useState("");
   const [showImageModal, setShowImageModal] = useState(false);
 
   const editor = useEditor({
@@ -40,12 +43,12 @@ const RichTextEditor = ({ initialContent = '', onSave }: RichTextEditorProps) =>
       Link.configure({
         openOnClick: false,
         HTMLAttributes: {
-          rel: 'noopener noreferrer',
-          target: '_blank',
+          rel: "noopener noreferrer",
+          target: "_blank",
         },
       }),
       TextAlign.configure({
-        types: ['heading', 'paragraph'],
+        types: ["heading", "paragraph"],
       }),
       Highlight.configure({
         multicolor: true,
@@ -80,21 +83,16 @@ const RichTextEditor = ({ initialContent = '', onSave }: RichTextEditorProps) =>
 
   const setLink = useCallback(() => {
     if (!editor) return;
-    const previousUrl = editor.getAttributes('link').href;
-    const url = window.prompt('URL', previousUrl);
+    const previousUrl = editor.getAttributes("link").href;
+    const url = window.prompt("URL", previousUrl);
 
     if (url === null) return;
-    if (url === '') {
-      editor.chain().focus().extendMarkRange('link').unsetLink().run();
+    if (url === "") {
+      editor.chain().focus().extendMarkRange("link").unsetLink().run();
       return;
     }
 
-    editor
-      .chain()
-      .focus()
-      .extendMarkRange('link')
-      .setLink({ href: url })
-      .run();
+    editor.chain().focus().extendMarkRange("link").setLink({ href: url }).run();
   }, [editor]);
 
   const addVideo = useCallback(() => {
@@ -103,7 +101,7 @@ const RichTextEditor = ({ initialContent = '', onSave }: RichTextEditorProps) =>
         src: videoUrl,
       });
       setShowVideoModal(false);
-      setVideoUrl('');
+      setVideoUrl("");
     }
   }, [editor, videoUrl]);
 
@@ -111,7 +109,7 @@ const RichTextEditor = ({ initialContent = '', onSave }: RichTextEditorProps) =>
     if (imageUrl && editor) {
       editor.commands.setImage({ src: imageUrl });
       setShowImageModal(false);
-      setImageUrl('');
+      setImageUrl("");
     }
   }, [editor, imageUrl]);
 
@@ -138,31 +136,31 @@ const RichTextEditor = ({ initialContent = '', onSave }: RichTextEditorProps) =>
       {/* Mode Selector */}
       <div className="flex mb-4 border-b border-gray-200">
         <button
-          onClick={() => setMode('wysiwyg')}
+          onClick={() => setMode("wysiwyg")}
           className={`px-4 py-2 font-medium text-sm ${
-            mode === 'wysiwyg'
-              ? 'text-blue-600 border-b-2 border-blue-600'
-              : 'text-gray-500 hover:text-gray-700'
+            mode === "wysiwyg"
+              ? "text-blue-600 border-b-2 border-blue-600"
+              : "text-gray-500 hover:text-gray-700"
           }`}
         >
           Rich Text
         </button>
         <button
-          onClick={() => setMode('markdown')}
+          onClick={() => setMode("markdown")}
           className={`px-4 py-2 font-medium text-sm ${
-            mode === 'markdown'
-              ? 'text-blue-600 border-b-2 border-blue-600'
-              : 'text-gray-500 hover:text-gray-700'
+            mode === "markdown"
+              ? "text-blue-600 border-b-2 border-blue-600"
+              : "text-gray-500 hover:text-gray-700"
           }`}
         >
           Markdown
         </button>
         <button
-          onClick={() => setMode('preview')}
+          onClick={() => setMode("preview")}
           className={`px-4 py-2 font-medium text-sm ${
-            mode === 'preview'
-              ? 'text-blue-600 border-b-2 border-blue-600'
-              : 'text-gray-500 hover:text-gray-700'
+            mode === "preview"
+              ? "text-blue-600 border-b-2 border-blue-600"
+              : "text-gray-500 hover:text-gray-700"
           }`}
         >
           Preview
@@ -170,7 +168,7 @@ const RichTextEditor = ({ initialContent = '', onSave }: RichTextEditorProps) =>
       </div>
 
       {/* WYSIWYG Mode */}
-      {mode === 'wysiwyg' && (
+      {mode === "wysiwyg" && (
         <>
           {/* Floating Format Menu */}
           {editor && (
@@ -179,7 +177,7 @@ const RichTextEditor = ({ initialContent = '', onSave }: RichTextEditorProps) =>
                 <button
                   onClick={() => editor.chain().focus().toggleBold().run()}
                   className={`p-1 mx-1 rounded ${
-                    editor.isActive('bold') ? 'bg-gray-200' : ''
+                    editor.isActive("bold") ? "bg-gray-200" : ""
                   }`}
                   title="Bold"
                 >
@@ -204,7 +202,7 @@ const RichTextEditor = ({ initialContent = '', onSave }: RichTextEditorProps) =>
                 <button
                   onClick={() => editor.chain().focus().toggleItalic().run()}
                   className={`p-1 mx-1 rounded ${
-                    editor.isActive('italic') ? 'bg-gray-200' : ''
+                    editor.isActive("italic") ? "bg-gray-200" : ""
                   }`}
                   title="Italic"
                 >
@@ -229,7 +227,7 @@ const RichTextEditor = ({ initialContent = '', onSave }: RichTextEditorProps) =>
                 <button
                   onClick={() => editor.chain().focus().toggleUnderline().run()}
                   className={`p-1 mx-1 rounded ${
-                    editor.isActive('underline') ? 'bg-gray-200' : ''
+                    editor.isActive("underline") ? "bg-gray-200" : ""
                   }`}
                   title="Underline"
                 >
@@ -253,7 +251,7 @@ const RichTextEditor = ({ initialContent = '', onSave }: RichTextEditorProps) =>
                 <button
                   onClick={setLink}
                   className={`p-1 mx-1 rounded ${
-                    editor.isActive('link') ? 'bg-gray-200' : ''
+                    editor.isActive("link") ? "bg-gray-200" : ""
                   }`}
                   title="Link"
                 >
@@ -286,7 +284,7 @@ const RichTextEditor = ({ initialContent = '', onSave }: RichTextEditorProps) =>
               <button
                 onClick={() => editor.chain().focus().toggleBold().run()}
                 className={`p-2 rounded hover:bg-gray-200 ${
-                  editor.isActive('bold') ? 'bg-gray-200' : ''
+                  editor.isActive("bold") ? "bg-gray-200" : ""
                 }`}
                 title="Bold"
               >
@@ -295,7 +293,7 @@ const RichTextEditor = ({ initialContent = '', onSave }: RichTextEditorProps) =>
               <button
                 onClick={() => editor.chain().focus().toggleItalic().run()}
                 className={`p-2 rounded hover:bg-gray-200 ${
-                  editor.isActive('italic') ? 'bg-gray-200' : ''
+                  editor.isActive("italic") ? "bg-gray-200" : ""
                 }`}
                 title="Italic"
               >
@@ -304,7 +302,7 @@ const RichTextEditor = ({ initialContent = '', onSave }: RichTextEditorProps) =>
               <button
                 onClick={() => editor.chain().focus().toggleUnderline().run()}
                 className={`p-2 rounded hover:bg-gray-200 ${
-                  editor.isActive('underline') ? 'bg-gray-200' : ''
+                  editor.isActive("underline") ? "bg-gray-200" : ""
                 }`}
                 title="Underline"
               >
@@ -313,7 +311,7 @@ const RichTextEditor = ({ initialContent = '', onSave }: RichTextEditorProps) =>
               <button
                 onClick={() => editor.chain().focus().toggleStrike().run()}
                 className={`p-2 rounded hover:bg-gray-200 ${
-                  editor.isActive('strike') ? 'bg-gray-200' : ''
+                  editor.isActive("strike") ? "bg-gray-200" : ""
                 }`}
                 title="Strikethrough"
               >
@@ -324,7 +322,7 @@ const RichTextEditor = ({ initialContent = '', onSave }: RichTextEditorProps) =>
               <select
                 onChange={(e) => {
                   const value = e.target.value;
-                  if (value === 'paragraph') {
+                  if (value === "paragraph") {
                     editor.chain().focus().setParagraph().run();
                   } else {
                     editor
@@ -335,13 +333,13 @@ const RichTextEditor = ({ initialContent = '', onSave }: RichTextEditorProps) =>
                   }
                 }}
                 value={
-                  editor.isActive('heading', { level: 1 })
-                    ? '1'
-                    : editor.isActive('heading', { level: 2 })
-                    ? '2'
-                    : editor.isActive('heading', { level: 3 })
-                    ? '3'
-                    : 'paragraph'
+                  editor.isActive("heading", { level: 1 })
+                    ? "1"
+                    : editor.isActive("heading", { level: 2 })
+                    ? "2"
+                    : editor.isActive("heading", { level: 3 })
+                    ? "3"
+                    : "paragraph"
                 }
                 className="p-2 border rounded bg-white"
               >
@@ -355,7 +353,7 @@ const RichTextEditor = ({ initialContent = '', onSave }: RichTextEditorProps) =>
               <button
                 onClick={() => editor.chain().focus().toggleBulletList().run()}
                 className={`p-2 rounded hover:bg-gray-200 ${
-                  editor.isActive('bulletList') ? 'bg-gray-200' : ''
+                  editor.isActive("bulletList") ? "bg-gray-200" : ""
                 }`}
                 title="Bullet List"
               >
@@ -364,7 +362,7 @@ const RichTextEditor = ({ initialContent = '', onSave }: RichTextEditorProps) =>
               <button
                 onClick={() => editor.chain().focus().toggleOrderedList().run()}
                 className={`p-2 rounded hover:bg-gray-200 ${
-                  editor.isActive('orderedList') ? 'bg-gray-200' : ''
+                  editor.isActive("orderedList") ? "bg-gray-200" : ""
                 }`}
                 title="Numbered List"
               >
@@ -374,10 +372,10 @@ const RichTextEditor = ({ initialContent = '', onSave }: RichTextEditorProps) =>
               {/* Alignment */}
               <button
                 onClick={() =>
-                  editor.chain().focus().setTextAlign('left').run()
+                  editor.chain().focus().setTextAlign("left").run()
                 }
                 className={`p-2 rounded hover:bg-gray-200 ${
-                  editor.isActive({ textAlign: 'left' }) ? 'bg-gray-200' : ''
+                  editor.isActive({ textAlign: "left" }) ? "bg-gray-200" : ""
                 }`}
                 title="Align Left"
               >
@@ -385,10 +383,10 @@ const RichTextEditor = ({ initialContent = '', onSave }: RichTextEditorProps) =>
               </button>
               <button
                 onClick={() =>
-                  editor.chain().focus().setTextAlign('center').run()
+                  editor.chain().focus().setTextAlign("center").run()
                 }
                 className={`p-2 rounded hover:bg-gray-200 ${
-                  editor.isActive({ textAlign: 'center' }) ? 'bg-gray-200' : ''
+                  editor.isActive({ textAlign: "center" }) ? "bg-gray-200" : ""
                 }`}
                 title="Align Center"
               >
@@ -396,10 +394,10 @@ const RichTextEditor = ({ initialContent = '', onSave }: RichTextEditorProps) =>
               </button>
               <button
                 onClick={() =>
-                  editor.chain().focus().setTextAlign('right').run()
+                  editor.chain().focus().setTextAlign("right").run()
                 }
                 className={`p-2 rounded hover:bg-gray-200 ${
-                  editor.isActive({ textAlign: 'right' }) ? 'bg-gray-200' : ''
+                  editor.isActive({ textAlign: "right" }) ? "bg-gray-200" : ""
                 }`}
                 title="Align Right"
               >
@@ -447,7 +445,7 @@ const RichTextEditor = ({ initialContent = '', onSave }: RichTextEditorProps) =>
       )}
 
       {/* Markdown Mode */}
-      {mode === 'markdown' && (
+      {mode === "markdown" && (
         <div className="border border-gray-200 rounded-lg">
           <textarea
             className="w-full p-4 min-h-[300px] font-mono text-sm"
@@ -461,7 +459,7 @@ const RichTextEditor = ({ initialContent = '', onSave }: RichTextEditorProps) =>
       )}
 
       {/* Preview Mode */}
-      {mode === 'preview' && (
+      {mode === "preview" && (
         <div
           className="prose max-w-none p-4 border border-gray-200 rounded-lg"
           dangerouslySetInnerHTML={{
@@ -534,7 +532,7 @@ const RichTextEditor = ({ initialContent = '', onSave }: RichTextEditorProps) =>
       <div className="mt-4">
         <button
           onClick={handleSave}
-          className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
+          className="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700"
         >
           Save Content
         </button>

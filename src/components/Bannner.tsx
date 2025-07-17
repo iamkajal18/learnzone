@@ -1,406 +1,82 @@
 'use client';
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 
-function Banner() {
+export default function BlogHeroSection() {
   const [isLoaded, setIsLoaded] = useState(false);
   
   useEffect(() => {
-    const timer = setTimeout(() => setIsLoaded(true), 100);
+    const timer = setTimeout(() => setIsLoaded(true), 200);
     return () => clearTimeout(timer);
   }, []);
 
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-900 overflow-hidden transition-colors duration-300">
-      {/* Main content */}
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center min-h-[70vh]">
+    <div className="relative min-h-screen bg-white dark:bg-gray-50">
+      {/* Subtle background pattern */}
+      <div className="absolute inset-0 bg-gradient-to-b from-gray-50 to-white dark:from-gray-100 dark:to-gray-50 opacity-60"></div>
+      
+      {/* Grid pattern overlay */}
+      <div className="absolute inset-0 opacity-[0.02]" 
+           style={{
+             backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23000000' fill-opacity='1'%3E%3Ccircle cx='30' cy='30' r='1'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
+           }}>
+      </div>
+
+      {/* Main Content */}
+      <div className="relative z-10 container mx-auto px-6 lg:px-8 py-10">
+        <div className="max-w-6xl mx-auto">
           
-          {/* Text content */}
-          <div className={`flex flex-col justify-center max-w-2xl transition-all duration-700 ease-out ${
-            isLoaded ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-10'
+          {/* Header Badge */}
+          <div className={`text-center  transition-all duration-600 ${
+            isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
           }`}>
-            
-            {/* Large heading */}
-            <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 dark:text-white leading-tight mb-6">
-              Create a blog
-            </h1>
-            
-            {/* Description */}
-            <p className={`text-lg text-gray-600 dark:text-gray-300 leading-relaxed mb-8 transition-all duration-700 ease-out delay-300 ${
-              isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'
+            <div className="inline-flex items-center px-4 py-2 rounded-full bg-blue-50 border border-blue-100 text-blue-600 text-sm font-medium mb-8">
+              <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+              </svg>
+              Trusted by 50,000+ professionals
+            </div>
+          </div>
+
+          {/* Main Hero Content */}
+          <div className="text-center max-w-4xl mx-auto ">
+            <h1 className={`text-3xl lg:text-4xl font-extrabold text-gray-900 leading-tight mb-6 transition-all duration-800 delay-100 ${
+              isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'
             }`}>
-              Share your story with the world. Create a beautiful, personalized blog that fits your brand. 
-              Grow your audience with built-in marketing tools, or transform your passion into revenue by 
-              gating access with a paywall.
+              Professional
+              <span className="ml-2 text-blue-600">Blogging</span>
+              <span className=" text-3xl lg:text-4xl ml-2 font-bold text-gray-600">
+                Made Simple
+              </span>
+            </h1>
+
+            <p className={`text-xl md:text-2xl text-gray-600 max-w-3xl mx-auto leading-relaxed mb-12 transition-all duration-800 delay-200 ${
+              isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+            }`}>
+              Create, publish, and grow your professional blog with our enterprise-grade platform. 
+              Built for serious writers and businesses who value quality and performance.
             </p>
-            
-            {/* CTA Button */}
-            <div className={`transition-all duration-700 ease-out delay-500 ${
-              isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+
+            {/* CTA Buttons */}
+            <div className={`flex flex-col sm:flex-row gap-4 justify-center items-center mb-10 transition-all duration-800 delay-300 ${
+              isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
             }`}>
               <Link href="/create">
-                <button className="bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800 text-white px-8 py-3 text-lg font-semibold rounded transition-all duration-300 shadow-md hover:shadow-lg">
-                  GET STARTED
+                <button className="px-8 py-4 hover:bg-blue-600 bg-transparent text-blue-500 border-2 border-blue-500 hover:text-white font-semibold rounded-lg text-lg  transition-all duration-200 shadow-lg hover:shadow-xl">
+                  Start Writing Today
                 </button>
               </Link>
+              
+              <button className="px-8 py-4 bg-white text-gray-900 font-semibold rounded-lg text-lg border-2 border-gray-200 hover:border-gray-300 transition-all duration-200 hover:bg-gray-50">
+                Visit
+              </button>
             </div>
           </div>
+
+          {/* Trust Indicators */}
           
-          {/* Blog preview section */}
-          <div className={`relative mt-8 lg:mt-0 w-full max-w-2xl mx-auto lg:mx-0 lg:ml-auto transition-all duration-700 ease-out delay-200 ${
-            isLoaded ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-10'
-          }`}>
-            
-            {/* Blog grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              
-              {/* Featured blog */}
-              <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden border border-gray-200 dark:border-gray-700">
-                <div className="h-48 bg-gradient-to-r from-blue-500 to-blue-700 flex items-center justify-center">
-                  <span className="text-5xl text-white">📈</span>
-                </div>
-                <div className="p-6">
-                  <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">Career Growth</h3>
-                  <p className="text-gray-600 dark:text-gray-300 text-sm mb-4">
-                    Strategies to accelerate your professional development and achieve your goals.
-                  </p>
-                  <a
-                    href="/roadmap"
-                    className="text-blue-600  dark:text-blue-400 text-xl font-medium hover:underline"
-                  >
-                    roadmap →
-                  </a>
-                </div>
-              </div>
-              
-              {/* Secondary blogs */}
-              <div className="space-y-6">
-                <div className="flex items-start space-x-4 bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm border border-gray-100 dark:border-gray-700">
-                  <div className="w-16 h-16 bg-gradient-to-r from-purple-500 to-purple-700 rounded-lg flex items-center justify-center">
-                    <span className="text-2xl text-white">💎</span>
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-gray-900 dark:text-white mb-1">Professional Skills</h4>
-                    <p className="text-gray-600 dark:text-gray-300 text-xs">
-                      Master the essential skills that set you apart in today's competitive market.
-                    </p>
-                  </div>
-                </div>
-                
-                <div className="flex items-start space-x-4 bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm border border-gray-100 dark:border-gray-700">
-                  <div className="w-16 h-16 bg-gradient-to-r from-green-500 to-green-700 rounded-lg flex items-center justify-center">
-                    <span className="text-2xl text-white">⭐</span>
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-gray-900 dark:text-white mb-1">Success Stories</h4>
-                    <p className="text-gray-600 dark:text-gray-300 text-xs">
-                      Inspiring journeys from professionals who transformed their careers.
-                      <br></br>
-                      <a href="/studyplan" className="text-blue-600 text-xl dark:text-blue-400 hover:underline">
-                        Study Plan →
-                      </a>
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
-    </div>
-  );
-}
-
-const StudyPlan = () => {
-  const [isVisible, setIsVisible] = useState(false);
-  const [animatedCards, setAnimatedCards] = useState<number[]>([]);
-  const [hoveredCard, setHoveredCard] = useState<number | null>(null);
-  const [countingMetrics, setCountingMetrics] = useState<{ [key: number]: string }>({});
-
-  const strategies = [
-    {
-      title: 'Competition Blueprint',
-      items: [
-        'Decode syllabus & scoring matrix',
-        'Reverse-engineer past papers',
-        'Master time allocation strategies',
-      ],
-      icon: '🔍',
-      gradient: 'from-purple-100 to-blue-100 dark:from-purple-900/30 dark:to-blue-900/30',
-      borderColor: 'border-purple-400 dark:border-purple-300',
-    },
-    {
-      title: 'Strategic Roadmap',
-      items: [
-        'Micro-target knowledge gaps',
-        'Dynamic difficulty prioritization',
-        'Adaptive revision algorithm',
-      ],
-      icon: '🗺️',
-      gradient: 'from-green-100 to-teal-100 dark:from-green-900/30 dark:to-teal-900/30',
-      borderColor: 'border-green-400 dark:border-green-300',
-    },
-    {
-      title: 'Time Alchemy',
-      items: [
-        'Pomodoro 2.0 with active recall',
-        'ROI-based topic selection',
-        'Simulated exam conditions',
-      ],
-      icon: '⏳',
-      gradient: 'from-yellow-100 to-orange-100 dark:from-yellow-900/30 dark:to-orange-900/30',
-      borderColor: 'border-yellow-400 dark:border-yellow-300',
-    },
-    {
-      title: 'Concept Mastery',
-      items: [
-        'First-principles learning',
-        'Feynman technique integration',
-        'Pattern recognition drills',
-      ],
-      icon: '🧠',
-      gradient: 'from-blue-100 to-indigo-100 dark:from-blue-900/30 dark:to-indigo-900/30',
-      borderColor: 'border-blue-400 dark:border-blue-300',
-    },
-    {
-      title: 'Pressure Testing',
-      items: [
-        'Cognitive load simulations',
-        'Mistake forensics analysis',
-        'Question pattern hacking',
-      ],
-      icon: '🔥',
-      gradient: 'from-red-100 to-pink-100 dark:from-red-900/30 dark:to-pink-900/30',
-      borderColor: 'border-red-400 dark:border-red-300',
-    },
-    {
-      title: 'Peak Performance',
-      items: [
-        'Circadian rhythm optimization',
-        'Neuroplasticity exercises',
-        'Flow state protocols',
-      ],
-      icon: '⚡',
-      gradient: 'from-indigo-100 to-purple-100 dark:from-indigo-900/30 dark:to-purple-900/30',
-      borderColor: 'border-indigo-400 dark:border-indigo-300',
-    },
-    {
-      title: 'Elite Benchmarking',
-      items: [
-        'Topper workflow deconstruction',
-        'Mastermind groups',
-        'Personal advisory board',
-      ],
-      icon: '🏆',
-      gradient: 'from-teal-100 to-green-100 dark:from-teal-900/30 dark:to-green-900/30',
-      borderColor: 'border-teal-400 dark:border-teal-300',
-    },
-    {
-      title: 'Motivation Engineering',
-      items: [
-        'Gamified progress tracking',
-        'Future-self visualization',
-        'Dopamine reward scheduling',
-      ],
-      icon: '🚀',
-      gradient: 'from-orange-100 to-yellow-100 dark:from-orange-900/30 dark:to-yellow-900/30',
-      borderColor: 'border-orange-400 dark:border-orange-300',
-    },
-  ];
-
-  const successMetrics = [
-    { value: '87%', label: 'Success Rate', target: 87 },
-    { value: '5.2x', label: 'Efficiency Gain', target: 5.2 },
-    { value: '94%', label: 'Satisfaction', target: 94 },
-    { value: '3.1x', label: 'Faster Learning', target: 3.1 },
-  ];
-
-  const animateCards = useCallback(() => {
-    setIsVisible(true);
-    strategies.forEach((_, index) => {
-      setTimeout(() => {
-        setAnimatedCards((prev) => [...prev, index]);
-      }, index * 100);
-    });
-  }, [strategies]);
-
-  useEffect(() => {
-    const timer = setTimeout(animateCards, 300);
-    return () => clearTimeout(timer);
-  }, [animateCards]);
-
-  useEffect(() => {
-    if (isVisible) {
-      successMetrics.forEach((metric, index) => {
-        const duration = 1500;
-        const steps = 60;
-        const increment = metric.target / steps;
-        let current = 0;
-
-        const counter = setInterval(() => {
-          current += increment;
-          if (current >= metric.target) {
-            current = metric.target;
-            clearInterval(counter);
-          }
-
-          setCountingMetrics((prev) => ({
-            ...prev,
-            [index]: metric.value.includes('x') ? `${current.toFixed(1)}x` : `${Math.floor(current)}%`,
-          }));
-        }, duration / steps);
-      });
-    }
-  }, [isVisible, successMetrics]);
-
-  return (
-    <section className="min-h-screen bg-white dark:bg-gray-900 px-4 sm:px-6 lg:px-8 transition-colors duration-300 relative overflow-hidden">
-      {/* Improved background elements */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-20 left-10 w-64 h-64 bg-gradient-to-r from-[#0286a3]/5 to-[#7fd1e8]/5 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute bottom-20 right-10 w-80 h-80 bg-gradient-to-r from-purple-500/5 to-blue-500/5 rounded-full blur-3xl animate-pulse delay-1000" />
-      </div>
-
-      <div className="max-w-7xl mx-auto py-12 md:py-16 relative z-10">
-        {/* Enhanced Header Section */}
-        <div className={`text-center mb-12 transition-all duration-700 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-10'}`}>
-          <div className="inline-flex items-center px-4 py-2 rounded-full bg-[#0286a3]/10 dark:bg-[#7fd1e8]/10 mb-4">
-            <span className="text-[#0286a3] dark:text-[#7fd1e8] font-medium text-sm">PROVEN METHODOLOGY</span>
-          </div>
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-gray-900 dark:text-white mb-4">
-            <span className="text-[#0286a3] dark:text-[#7fd1e8]">Competition Domination</span> Framework
-          </h1>
-          <p className="text-lg md:text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
-            Evidence-based strategies used by top performers to systematically outperform competition
-          </p>
-        </div>
-
-        {/* Enhanced Strategy Grid */}
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {strategies.map((strategy, index) => (
-            <div
-              key={index}
-              className={`group bg-gradient-to-br ${strategy.gradient} p-6 rounded-xl shadow-sm border-t-4 ${strategy.borderColor} transform transition-all duration-500 hover:scale-[1.03] hover:shadow-lg hover:-translate-y-2 cursor-pointer relative overflow-hidden ${
-                animatedCards.includes(index) ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-              }`}
-              onMouseEnter={() => setHoveredCard(index)}
-              onMouseLeave={() => setHoveredCard(null)}
-            >
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 transform -translate-x-full group-hover:translate-x-full" />
-              <div className="flex flex-col items-center text-center mb-4 relative z-10">
-                <div className={`bg-white dark:bg-gray-800/50 rounded-xl w-14 h-14 flex items-center justify-center mb-3 transform transition-all duration-300 ${
-                  hoveredCard === index ? 'scale-110 rotate-6' : 'scale-100 rotate-0'
-                }`}>
-                  <span className="text-2xl">{strategy.icon}</span>
-                </div>
-                <h2 className="text-lg font-semibold text-gray-800 dark:text-gray-100">
-                  {strategy.title}
-                </h2>
-              </div>
-              <ul className="space-y-3 text-sm text-gray-700 dark:text-gray-300 relative z-10">
-                {strategy.items.map((item, itemIndex) => (
-                  <li
-                    key={itemIndex}
-                    className={`flex items-start transition-all duration-300 ${
-                      hoveredCard === index ? 'transform translate-x-2' : ''
-                    }`}
-                    style={{ transitionDelay: `${itemIndex * 50}ms` }}
-                  >
-                    <span className="text-[#0286a3] dark:text-[#7fd1e8] mr-2 mt-0.5">▹</span>
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
-              <div className="absolute top-3 right-3 w-2 h-2 bg-white/50 rounded-full animate-ping opacity-0 group-hover:opacity-100" />
-            </div>
-          ))}
-        </div>
-
-        {/* Enhanced CTA Section */}
-        <div className={`mt-16 bg-gradient-to-r from-[#0286a3] to-[#015a70] dark:from-[#015a70] dark:to-[#01485a] p-8 rounded-2xl text-center relative overflow-hidden transition-all duration-700 ease-out ${
-          isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-        }`}>
-          <div className="absolute inset-0 bg-gradient-to-r from-[#7fd1e8]/20 via-transparent to-[#7fd1e8]/20 animate-pulse" />
-          <div className="relative z-10">
-            <h3 className="text-2xl font-bold text-white mb-3">Ready for Competitive Excellence?</h3>
-            <p className="text-lg text-[#b3e5f5] dark:text-[#7fd1e8] mb-6 max-w-2xl mx-auto">
-              Join thousands of high-performers who transformed their results with our framework.
-            </p>
-            <div className="flex flex-col sm:flex-row justify-center gap-4">
-              <Link
-                href="/create"
-                className="group inline-flex items-center justify-center bg-white text-[#0286a3] dark:bg-gray-900 dark:text-[#7fd1e8] px-6 py-3 rounded-lg font-medium text-base hover:bg-gray-50 dark:hover:bg-gray-800 transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
-              >
-                <span>Write your Masterpiece</span>
-                <span className="ml-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">🎯</span>
-              </Link>
-              <Link
-                href="https://trackode.in/programming-quizzes"
-                className="group inline-flex items-center justify-center bg-white text-[#0286a3] dark:bg-gray-900 dark:text-[#7fd1e8] px-6 py-3 rounded-lg font-medium text-base hover:bg-gray-50 dark:hover:bg-gray-800 transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
-              >
-                <span>Start Dominating Quizzes</span>
-                <span className="ml-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">🚀</span>
-              </Link>
-            </div>
-          </div>
-        </div>
-
-        {/* Enhanced Competitive Edge Stack */}
-        <div className={`mt-16 transition-all duration-700 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-          <h2 className="text-2xl font-bold text-center text-gray-900 dark:text-white mb-8">
-            The Competitive Edge Stack
-          </h2>
-          <div className="grid md:grid-cols-3 gap-8">
-            {[
-              {
-                icon: 'M13 10V3L4 14h7v7l9-11h-7z',
-                title: 'Cognitive Acceleration',
-                description: 'Neuroscience-backed techniques to enhance learning speed and retention.',
-              },
-              {
-                icon: 'M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z',
-                title: 'Pattern Recognition',
-                description: 'Proprietary algorithms to identify recurring question patterns.',
-              },
-              {
-                icon: 'M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z',
-                title: 'Performance Analytics',
-                description: 'Real-time dashboards tracking key performance indicators.',
-              },
-            ].map((item, index) => (
-              <div
-                key={index}
-                className={`group bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-md hover:border-[#0286a3] dark:hover:border-[#7fd1e8] transition-all duration-300 transform hover:scale-105 hover:-translate-y-2 ${
-                  isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'
-                }`}
-                style={{ transitionDelay: `${600 + index * 200}ms` }}
-              >
-                <div className="text-[#0286a3] dark:text-[#7fd1e8] mb-4 transform transition-all duration-300 group-hover:scale-110 group-hover:rotate-6">
-                  <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={item.icon} />
-                  </svg>
-                </div>
-                <h3 className="font-bold text-lg text-gray-900 dark:text-white mb-3 group-hover:text-[#0286a8] dark:group-hover:text-[#7fd1e8]">
-                  {item.title}
-                </h3>
-                <p className="text-gray-600 dark:text-gray-300 group-hover:text-gray-700 dark:group-hover:text-gray-200">
-                  {item.description}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-};
-
-export default function HomePage() {
-  return (
-    <div className="min-h-screen bg-white dark:bg-gray-900 transition-colors duration-300">
-      <Banner />
-      
     </div>
   );
 }

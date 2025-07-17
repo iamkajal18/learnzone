@@ -7,9 +7,20 @@ import { redirect } from "next/navigation";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Link from "next/link";
-import { User, BookOpen, Eye, Calendar, Trash2, Edit, Plus, BarChart3, RefreshCw } from "lucide-react";
+import {
+  User,
+  BookOpen,
+  Eye,
+  Calendar,
+  Trash2,
+  Edit,
+  Plus,
+  BarChart3,
+  RefreshCw,
+} from "lucide-react";
 
-const DEFAULT_IMAGE_URL = "https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80";
+const DEFAULT_IMAGE_URL =
+  "https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80";
 
 function stripHtmlTags(str: string): string {
   return str.replace(/<[^>]*>?/gm, "");
@@ -34,18 +45,25 @@ interface BlogCardProps {
   showActions: boolean;
 }
 
-const BlogCard = ({ idea, onDelete, deletingId, showActions }: BlogCardProps) => {
+const BlogCard = ({
+  idea,
+  onDelete,
+  deletingId,
+  showActions,
+}: BlogCardProps) => {
   const { data: session } = useSession();
   const userEmail = session?.user?.email || "";
   const isAuthor = userEmail === idea.authorEmail;
   const shouldShowActions = showActions && isAuthor;
-  const authorName = idea.authorEmail ? stripHtmlTags(idea.authorEmail.split("@")[0]) : "Anonymous";
+  const authorName = idea.authorEmail
+    ? stripHtmlTags(idea.authorEmail.split("@")[0])
+    : "Anonymous";
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric'
+    return new Date(dateString).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
     });
   };
 
@@ -65,12 +83,14 @@ const BlogCard = ({ idea, onDelete, deletingId, showActions }: BlogCardProps) =>
         <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-2 line-clamp-1">
           {idea.title}
         </h3>
-        
+
         <div className="flex items-center gap-2 mb-3">
           <img
             src={
               idea.profilePhoto ||
-              `https://ui-avatars.com/api/?name=${encodeURIComponent(authorName)}&background=00CFD1&color=fff`
+              `https://ui-avatars.com/api/?name=${encodeURIComponent(
+                authorName
+              )}&background=00CFD1&color=fff`
             }
             className="w-6 h-6 rounded-full"
             alt={`${authorName}'s profile`}
@@ -97,7 +117,7 @@ const BlogCard = ({ idea, onDelete, deletingId, showActions }: BlogCardProps) =>
 
         <div className="flex justify-between items-center">
           <Link href={`/viewmore/${idea._id}`}>
-            <button className="text-sm bg-teal-500 hover:bg-teal-600 dark:bg-teal-600 dark:hover:bg-teal-700 text-white py-1.5 px-3 rounded">
+            <button className="text-sm bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 text-white py-1.5 px-3 rounded">
               View
             </button>
           </Link>
@@ -131,7 +151,7 @@ const BlogCard = ({ idea, onDelete, deletingId, showActions }: BlogCardProps) =>
 
 export default function Dashboard() {
   const { data: session, status } = useSession();
-  
+
   const [blogs, setBlogs] = useState<Blog[]>([]);
   const [analytics, setAnalytics] = useState({ totalBlogs: 0, totalViews: 0 });
   const [loading, setLoading] = useState(true);
@@ -152,7 +172,7 @@ export default function Dashboard() {
       setLoading(true);
       const response = await axios.get("/api/user-blogs");
       const { blogs: blogsData = [] } = response.data;
-      
+
       // Ensure views are properly handled as numbers
       const processedBlogs = blogsData.map((blog: Blog) => ({
         ...blog,
@@ -162,7 +182,10 @@ export default function Dashboard() {
       setBlogs(processedBlogs);
       setAnalytics({
         totalBlogs: processedBlogs.length,
-        totalViews: processedBlogs.reduce((sum: number, blog: Blog) => sum + (blog.views || 0), 0),
+        totalViews: processedBlogs.reduce(
+          (sum: number, blog: Blog) => sum + (blog.views || 0),
+          0
+        ),
       });
     } catch (err) {
       console.error("Fetch error:", err);
@@ -188,7 +211,9 @@ export default function Dashboard() {
         setAnalytics((prev) => ({
           ...prev,
           totalBlogs: prev.totalBlogs - 1,
-          totalViews: prev.totalViews - (blogs.find((blog) => blog._id === id)?.views || 0),
+          totalViews:
+            prev.totalViews -
+            (blogs.find((blog) => blog._id === id)?.views || 0),
         }));
         toast.success("Blog post deleted successfully!");
       }
@@ -213,11 +238,15 @@ export default function Dashboard() {
       {/* Left Sidebar - Analytics */}
       <div className="w-80 bg-white dark:bg-gray-800 shadow-lg p-6 overflow-y-auto">
         <div className="mb-8">
-          <h1 className="text-2xl font-bold text-gray-800 dark:text-white mb-2">Dashboard</h1>
-          <p className="text-gray-600 dark:text-gray-400">Welcome back! Here's your blog overview.</p>
+          <h1 className="text-2xl font-bold text-gray-800 dark:text-white mb-2">
+            Dashboard
+          </h1>
+          <p className="text-gray-600 dark:text-gray-400">
+            Welcome back! Here's your blog overview.
+          </p>
           <button
             onClick={handleRefresh}
-            className="mt-2 flex items-center gap-2 text-sm text-[#0286a3] hover:text-[#0286a3]/80 dark:text-teal-400 dark:hover:text-teal-300"
+            className="mt-2 flex items-center gap-2 text-sm text-[#0286a3] hover:text-[#0286a3]/80 dark:text-blue-400 dark:hover:text-blue-300"
           >
             <RefreshCw className="h-4 w-4" />
             Refresh Data
@@ -240,7 +269,9 @@ export default function Dashboard() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm opacity-90">Total Views</p>
-                <p className="text-2xl font-bold">{analytics.totalViews.toLocaleString()}</p>
+                <p className="text-2xl font-bold">
+                  {analytics.totalViews.toLocaleString()}
+                </p>
               </div>
               <Eye className="h-8 w-8 opacity-80" />
             </div>
@@ -251,7 +282,11 @@ export default function Dashboard() {
               <div>
                 <p className="text-sm opacity-90">Avg Views/Blog</p>
                 <p className="text-2xl font-bold">
-                  {analytics.totalBlogs > 0 ? Math.round(analytics.totalViews / analytics.totalBlogs).toLocaleString() : 0}
+                  {analytics.totalBlogs > 0
+                    ? Math.round(
+                        analytics.totalViews / analytics.totalBlogs
+                      ).toLocaleString()
+                    : 0}
                 </p>
               </div>
               <BarChart3 className="h-8 w-8 opacity-80" />
@@ -261,27 +296,43 @@ export default function Dashboard() {
 
         {/* Recent Activity */}
         <div className="mb-8">
-          <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">Recent Activity</h3>
+          <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">
+            Recent Activity
+          </h3>
           <div className="space-y-3">
             {blogs.slice(0, 3).map((blog) => (
-              <div key={blog._id} className="flex items-center space-x-3 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+              <div
+                key={blog._id}
+                className="flex items-center space-x-3 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg"
+              >
                 <div className="w-2 h-2 bg-[#0286a3] rounded-full"></div>
                 <div className="flex-1">
-                  <p className="text-sm font-medium text-gray-800 dark:text-white truncate">{blog.title}</p>
-                  <p className="text-xs text-gray-500 dark:text-gray-400">{(blog.views || 0).toLocaleString()} views</p>
+                  <p className="text-sm font-medium text-gray-800 dark:text-white truncate">
+                    {blog.title}
+                  </p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">
+                    {(blog.views || 0).toLocaleString()} views
+                  </p>
                 </div>
               </div>
             ))}
             {blogs.length === 0 && (
-              <p className="text-gray-500 dark:text-gray-400 text-sm">No recent activity</p>
+              <p className="text-gray-500 dark:text-gray-400 text-sm">
+                No recent activity
+              </p>
             )}
           </div>
         </div>
 
         {/* Quick Actions */}
         <div>
-          <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">Quick Actions</h3>
-          <Link href="/create" className="w-full bg-[#0286a3] hover:bg-[#0286a3]/90 text-white font-medium py-3 px-4 rounded-lg flex items-center justify-center space-x-2 transition-colors">
+          <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">
+            Quick Actions
+          </h3>
+          <Link
+            href="/create"
+            className="w-full bg-[#0286a3] hover:bg-[#0286a3]/90 text-white font-medium py-3 px-4 rounded-lg flex items-center justify-center space-x-2 transition-colors"
+          >
             <Plus className="h-4 w-4" />
             <span>Create New Blog</span>
           </Link>
@@ -291,8 +342,12 @@ export default function Dashboard() {
       {/* Right Content Area - Blog Posts */}
       <div className="flex-1 p-6 overflow-y-auto">
         <div className="mb-6">
-          <h2 className="text-3xl font-bold text-gray-800 dark:text-white mb-2">Your Blog Posts</h2>
-          <p className="text-gray-600 dark:text-gray-400">Manage and view all your published content</p>
+          <h2 className="text-3xl font-bold text-gray-800 dark:text-white mb-2">
+            Your Blog Posts
+          </h2>
+          <p className="text-gray-600 dark:text-gray-400">
+            Manage and view all your published content
+          </p>
         </div>
 
         {blogs.length === 0 ? (
@@ -301,7 +356,10 @@ export default function Dashboard() {
             <p className="text-gray-500 dark:text-gray-400 text-lg mb-4">
               No blogs found. Start creating your first blog!
             </p>
-            <Link href="/create" className="mt-4 inline-block bg-[#0286a3] hover:bg-[#0286a3]/90 text-white font-medium py-2 px-4 rounded-lg">
+            <Link
+              href="/create"
+              className="mt-4 inline-block bg-[#0286a3] hover:bg-[#0286a3]/90 text-white font-medium py-2 px-4 rounded-lg"
+            >
               Create Blog
             </Link>
           </div>

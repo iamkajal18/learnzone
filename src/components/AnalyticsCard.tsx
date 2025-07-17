@@ -7,22 +7,23 @@ import { redirect } from "next/navigation";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Link from "next/link";
-import { 
-  User, 
-  BookOpen, 
-  Eye, 
-  Calendar, 
-  Trash2, 
-  Edit, 
-  Plus, 
-  BarChart3, 
+import {
+  User,
+  BookOpen,
+  Eye,
+  Calendar,
+  Trash2,
+  Edit,
+  Plus,
+  BarChart3,
   TrendingUp,
   Clock,
   Heart,
-  MessageSquare
+  MessageSquare,
 } from "lucide-react";
 
-const DEFAULT_IMAGE_URL = "https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80";
+const DEFAULT_IMAGE_URL =
+  "https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80";
 
 function stripHtmlTags(str: string): string {
   return str.replace(/<[^>]*>?/gm, "");
@@ -57,18 +58,24 @@ interface AnalyticsCardProps {
   subtitle?: string;
 }
 
-const AnalyticsCard = ({ title, value, icon, gradient, subtitle }: AnalyticsCardProps) => {
+const AnalyticsCard = ({
+  title,
+  value,
+  icon,
+  gradient,
+  subtitle,
+}: AnalyticsCardProps) => {
   return (
-    <div className={`bg-gradient-to-r ${gradient} p-4 rounded-lg text-white shadow-md hover:shadow-lg transition-shadow`}>
+    <div
+      className={`bg-gradient-to-r ${gradient} p-4 rounded-lg text-white shadow-md hover:shadow-lg transition-shadow`}
+    >
       <div className="flex items-center justify-between">
         <div>
           <p className="text-sm opacity-90">{title}</p>
           <p className="text-2xl font-bold">{value}</p>
           {subtitle && <p className="text-xs opacity-80 mt-1">{subtitle}</p>}
         </div>
-        <div className="opacity-80">
-          {icon}
-        </div>
+        <div className="opacity-80">{icon}</div>
       </div>
     </div>
   );
@@ -81,24 +88,33 @@ interface BlogCardProps {
   showActions: boolean;
 }
 
-const BlogCard = ({ idea, onDelete, deletingId, showActions }: BlogCardProps) => {
+const BlogCard = ({
+  idea,
+  onDelete,
+  deletingId,
+  showActions,
+}: BlogCardProps) => {
   const { data: session } = useSession();
   const userEmail = session?.user?.email || "";
   const isAuthor = userEmail === idea.authorEmail;
   const shouldShowActions = showActions && isAuthor;
-  const authorName = idea.authorEmail ? stripHtmlTags(idea.authorEmail.split("@")[0]) : "Anonymous";
+  const authorName = idea.authorEmail
+    ? stripHtmlTags(idea.authorEmail.split("@")[0])
+    : "Anonymous";
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric'
+    return new Date(dateString).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
     });
   };
 
   const getContentPreview = (content: string) => {
     const stripped = stripHtmlTags(content);
-    return stripped.length > 120 ? stripped.substring(0, 120) + "..." : stripped;
+    return stripped.length > 120
+      ? stripped.substring(0, 120) + "..."
+      : stripped;
   };
 
   return (
@@ -117,21 +133,23 @@ const BlogCard = ({ idea, onDelete, deletingId, showActions }: BlogCardProps) =>
           {(idea.views || 0).toLocaleString()}
         </div>
       </div>
-      
+
       <div className="p-4">
-        <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-2 line-clamp-2 hover:text-teal-600 dark:hover:text-teal-400 transition-colors">
+        <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-2 line-clamp-2 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
           {idea.title}
         </h3>
-        
+
         <p className="text-sm text-gray-600 dark:text-gray-400 mb-3 line-clamp-2">
           {getContentPreview(idea.content)}
         </p>
-        
+
         <div className="flex items-center gap-2 mb-3">
           <img
             src={
               idea.profilePhoto ||
-              `https://ui-avatars.com/api/?name=${encodeURIComponent(authorName)}&background=00CFD1&color=fff`
+              `https://ui-avatars.com/api/?name=${encodeURIComponent(
+                authorName
+              )}&background=00CFD1&color=fff`
             }
             className="w-6 h-6 rounded-full"
             alt={`${authorName}'s profile`}
@@ -151,7 +169,10 @@ const BlogCard = ({ idea, onDelete, deletingId, showActions }: BlogCardProps) =>
           {idea.tags && idea.tags.length > 0 && (
             <div className="flex gap-1">
               {idea.tags.slice(0, 2).map((tag, index) => (
-                <span key={index} className="px-2 py-1 bg-teal-100 dark:bg-teal-900 text-teal-800 dark:text-teal-200 rounded-full text-xs">
+                <span
+                  key={index}
+                  className="px-2 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full text-xs"
+                >
                   {tag}
                 </span>
               ))}
@@ -161,7 +182,7 @@ const BlogCard = ({ idea, onDelete, deletingId, showActions }: BlogCardProps) =>
 
         <div className="flex justify-between items-center">
           <Link href={`/viewmore/${idea._id}`}>
-            <button className="text-sm bg-teal-500 hover:bg-teal-600 dark:bg-teal-600 dark:hover:bg-teal-700 text-white py-2 px-4 rounded-lg flex items-center gap-2 transition-colors">
+            <button className="text-sm bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 text-white py-2 px-4 rounded-lg flex items-center gap-2 transition-colors">
               <BookOpen className="h-4 w-4" />
               Read More
             </button>
@@ -200,7 +221,7 @@ const BlogCard = ({ idea, onDelete, deletingId, showActions }: BlogCardProps) =>
 
 export default function Dashboard() {
   const { data: session, status } = useSession();
-  
+
   const [blogs, setBlogs] = useState<Blog[]>([]);
   const [analytics, setAnalytics] = useState<Analytics>({
     totalBlogs: 0,
@@ -208,7 +229,7 @@ export default function Dashboard() {
     avgViewsPerBlog: 0,
     thisMonthViews: 0,
     topBlog: null,
-    recentBlogs: []
+    recentBlogs: [],
   });
   const [loading, setLoading] = useState(true);
   const [deletingId, setDeletingId] = useState<string | null>(null);
@@ -225,28 +246,40 @@ export default function Dashboard() {
 
   const calculateAnalytics = (blogsData: Blog[]): Analytics => {
     const totalBlogs = blogsData.length;
-    const totalViews = blogsData.reduce((sum, blog) => sum + (blog.views || 0), 0);
-    const avgViewsPerBlog = totalBlogs > 0 ? Math.round(totalViews / totalBlogs) : 0;
-    
+    const totalViews = blogsData.reduce(
+      (sum, blog) => sum + (blog.views || 0),
+      0
+    );
+    const avgViewsPerBlog =
+      totalBlogs > 0 ? Math.round(totalViews / totalBlogs) : 0;
+
     // Calculate this month's views (blogs created this month)
     const currentMonth = new Date().getMonth();
     const currentYear = new Date().getFullYear();
     const thisMonthViews = blogsData
-      .filter(blog => {
+      .filter((blog) => {
         if (!blog.createdAt) return false;
         const blogDate = new Date(blog.createdAt);
-        return blogDate.getMonth() === currentMonth && blogDate.getFullYear() === currentYear;
+        return (
+          blogDate.getMonth() === currentMonth &&
+          blogDate.getFullYear() === currentYear
+        );
       })
       .reduce((sum, blog) => sum + (blog.views || 0), 0);
-    
+
     // Find top blog by views
-    const topBlog = blogsData.reduce((top, blog) => 
-      (blog.views || 0) > (top?.views || 0) ? blog : top, null as Blog | null
+    const topBlog = blogsData.reduce(
+      (top, blog) => ((blog.views || 0) > (top?.views || 0) ? blog : top),
+      null as Blog | null
     );
-    
+
     // Get recent blogs (last 3)
     const recentBlogs = blogsData
-      .sort((a, b) => new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime())
+      .sort(
+        (a, b) =>
+          new Date(b.createdAt || 0).getTime() -
+          new Date(a.createdAt || 0).getTime()
+      )
       .slice(0, 3);
 
     return {
@@ -255,7 +288,7 @@ export default function Dashboard() {
       avgViewsPerBlog,
       thisMonthViews,
       topBlog,
-      recentBlogs
+      recentBlogs,
     };
   };
 
@@ -264,7 +297,7 @@ export default function Dashboard() {
       setLoading(true);
       const response = await axios.get("/api/user-blogs");
       const { blogs: blogsData = [] } = response.data;
-      
+
       setBlogs(blogsData);
       setAnalytics(calculateAnalytics(blogsData));
     } catch (err) {
@@ -300,7 +333,9 @@ export default function Dashboard() {
       <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
         <div className="flex flex-col items-center space-y-4">
           <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#0286a3]"></div>
-          <p className="text-gray-600 dark:text-gray-400">Loading your dashboard...</p>
+          <p className="text-gray-600 dark:text-gray-400">
+            Loading your dashboard...
+          </p>
         </div>
       </div>
     );
@@ -311,8 +346,12 @@ export default function Dashboard() {
       {/* Left Sidebar - Analytics */}
       <div className="w-80 bg-white dark:bg-gray-800 shadow-lg p-6 overflow-y-auto">
         <div className="mb-8">
-          <h1 className="text-2xl font-bold text-gray-800 dark:text-white mb-2">Dashboard</h1>
-          <p className="text-gray-600 dark:text-gray-400">Welcome back! Here's your blog overview.</p>
+          <h1 className="text-2xl font-bold text-gray-800 dark:text-white mb-2">
+            Dashboard
+          </h1>
+          <p className="text-gray-600 dark:text-gray-400">
+            Welcome back! Here's your blog overview.
+          </p>
         </div>
 
         {/* Analytics Cards */}
@@ -350,15 +389,21 @@ export default function Dashboard() {
         {/* Top Performing Blog */}
         {analytics.topBlog && (
           <div className="mb-8">
-            <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">Top Performing</h3>
+            <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">
+              Top Performing
+            </h3>
             <div className="p-4 bg-gradient-to-r from-yellow-400 to-yellow-500 rounded-lg text-white">
               <div className="flex items-center gap-3 mb-2">
                 <div className="w-8 h-8 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
                   <TrendingUp className="h-4 w-4" />
                 </div>
                 <div>
-                  <p className="font-medium text-sm truncate">{analytics.topBlog.title}</p>
-                  <p className="text-xs opacity-90">{(analytics.topBlog.views || 0).toLocaleString()} views</p>
+                  <p className="font-medium text-sm truncate">
+                    {analytics.topBlog.title}
+                  </p>
+                  <p className="text-xs opacity-90">
+                    {(analytics.topBlog.views || 0).toLocaleString()} views
+                  </p>
                 </div>
               </div>
             </div>
@@ -367,13 +412,20 @@ export default function Dashboard() {
 
         {/* Recent Activity */}
         <div className="mb-8">
-          <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">Recent Activity</h3>
+          <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">
+            Recent Activity
+          </h3>
           <div className="space-y-3">
             {analytics.recentBlogs.map((blog) => (
-              <div key={blog._id} className="flex items-center space-x-3 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
+              <div
+                key={blog._id}
+                className="flex items-center space-x-3 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors"
+              >
                 <div className="w-2 h-2 bg-[#0286a3] rounded-full"></div>
                 <div className="flex-1">
-                  <p className="text-sm font-medium text-gray-800 dark:text-white truncate">{blog.title}</p>
+                  <p className="text-sm font-medium text-gray-800 dark:text-white truncate">
+                    {blog.title}
+                  </p>
                   <div className="flex items-center gap-3 text-xs text-gray-500 dark:text-gray-400">
                     <span className="flex items-center gap-1">
                       <Eye className="h-3 w-3" />
@@ -390,20 +442,30 @@ export default function Dashboard() {
               </div>
             ))}
             {analytics.recentBlogs.length === 0 && (
-              <p className="text-gray-500 dark:text-gray-400 text-sm">No recent activity</p>
+              <p className="text-gray-500 dark:text-gray-400 text-sm">
+                No recent activity
+              </p>
             )}
           </div>
         </div>
 
         {/* Quick Actions */}
         <div>
-          <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">Quick Actions</h3>
+          <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">
+            Quick Actions
+          </h3>
           <div className="space-y-3">
-            <Link href="/create" className="w-full bg-[#0286a3] hover:bg-[#0286a3]/90 text-white font-medium py-3 px-4 rounded-lg flex items-center justify-center space-x-2 transition-colors">
+            <Link
+              href="/create"
+              className="w-full bg-[#0286a3] hover:bg-[#0286a3]/90 text-white font-medium py-3 px-4 rounded-lg flex items-center justify-center space-x-2 transition-colors"
+            >
               <Plus className="h-4 w-4" />
               <span>Create New Blog</span>
             </Link>
-            <Link href="/analytics" className="w-full bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-800 dark:text-white font-medium py-3 px-4 rounded-lg flex items-center justify-center space-x-2 transition-colors">
+            <Link
+              href="/analytics"
+              className="w-full bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-800 dark:text-white font-medium py-3 px-4 rounded-lg flex items-center justify-center space-x-2 transition-colors"
+            >
               <BarChart3 className="h-4 w-4" />
               <span>View Analytics</span>
             </Link>
@@ -416,13 +478,18 @@ export default function Dashboard() {
         <div className="mb-6">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-3xl font-bold text-gray-800 dark:text-white mb-2">Your Blog Posts</h2>
-              <p className="text-gray-600 dark:text-gray-400">Manage and view all your published content</p>
+              <h2 className="text-3xl font-bold text-gray-800 dark:text-white mb-2">
+                Your Blog Posts
+              </h2>
+              <p className="text-gray-600 dark:text-gray-400">
+                Manage and view all your published content
+              </p>
             </div>
             <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-400">
               <span className="flex items-center gap-2">
                 <BookOpen className="h-4 w-4" />
-                {analytics.totalBlogs} {analytics.totalBlogs === 1 ? 'Blog' : 'Blogs'}
+                {analytics.totalBlogs}{" "}
+                {analytics.totalBlogs === 1 ? "Blog" : "Blogs"}
               </span>
               <span className="flex items-center gap-2">
                 <Eye className="h-4 w-4" />
@@ -436,11 +503,16 @@ export default function Dashboard() {
           <div className="text-center py-12">
             <div className="bg-white dark:bg-gray-800 rounded-lg p-8 shadow-sm">
               <BookOpen className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-              <h3 className="text-xl font-semibold text-gray-800 dark:text-white mb-2">No blogs yet</h3>
+              <h3 className="text-xl font-semibold text-gray-800 dark:text-white mb-2">
+                No blogs yet
+              </h3>
               <p className="text-gray-500 dark:text-gray-400 text-lg mb-6">
                 Start creating your first blog post to see it here!
               </p>
-              <Link href="/create" className="inline-flex items-center gap-2 bg-[#0286a3] hover:bg-[#0286a3]/90 text-white font-medium py-3 px-6 rounded-lg transition-colors">
+              <Link
+                href="/create"
+                className="inline-flex items-center gap-2 bg-[#0286a3] hover:bg-[#0286a3]/90 text-white font-medium py-3 px-6 rounded-lg transition-colors"
+              >
                 <Plus className="h-4 w-4" />
                 Create Your First Blog
               </Link>

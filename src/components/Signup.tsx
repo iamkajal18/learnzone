@@ -3,10 +3,17 @@ import SignInButton from "./Signin";
 import axios from "axios";
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import toast, { Toaster } from 'react-hot-toast';;
+import toast, { Toaster } from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { useTheme } from "./ThemeContext";
-import { FiUser, FiMail, FiLock, FiCheck, FiEye, FiEyeOff } from "react-icons/fi";
+import {
+  FiUser,
+  FiMail,
+  FiLock,
+  FiCheck,
+  FiEye,
+  FiEyeOff,
+} from "react-icons/fi";
 import Head from "next/head";
 import { FcGoogle } from "react-icons/fc";
 
@@ -43,7 +50,9 @@ export default function SignUp() {
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
-    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+    return `${mins.toString().padStart(2, "0")}:${secs
+      .toString()
+      .padStart(2, "0")}`;
   };
 
   const sendOtp = async () => {
@@ -64,7 +73,9 @@ export default function SignUp() {
         toast.error(response.data.message || "Failed to send OTP");
       }
     } catch (error) {
-      toast.error("Email already exists or an error occurred while sending OTP");
+      toast.error(
+        "Email already exists or an error occurred while sending OTP"
+      );
     } finally {
       setOtpLoading(false);
     }
@@ -109,7 +120,11 @@ export default function SignUp() {
     setIsLoading(true);
 
     try {
-      const response = await axios.post("api/sign-up", { email, password, name });
+      const response = await axios.post("api/sign-up", {
+        email,
+        password,
+        name,
+      });
 
       if (response.data.success) {
         toast.success(response.data.message || "Registration successful!");
@@ -117,12 +132,11 @@ export default function SignUp() {
       } else if (response.data.message === "User is already registered") {
         toast.error(response.data.message || "User already exists");
         router.push("/signin");
-
-      }
-      else if (response.data.message === "OTP already sent ! Failed to send OTP") {
+      } else if (
+        response.data.message === "OTP already sent ! Failed to send OTP"
+      ) {
         toast.error("OTP already sent! Please check your email.");
-      }
-      else {
+      } else {
         toast.error(response.data.message || "Registration failed");
       }
     } catch (error) {
@@ -132,8 +146,9 @@ export default function SignUp() {
     }
   };
 
-
-  function handleGoogleSignUp(event: React.MouseEvent<HTMLButtonElement>): void {
+  function handleGoogleSignUp(
+    event: React.MouseEvent<HTMLButtonElement>
+  ): void {
     throw new Error("Function not implemented.");
   }
 
@@ -147,13 +162,29 @@ export default function SignUp() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        <div className={`min-h-screen flex items-center justify-center ${theme === "dark" ? "bg-gray-900" : "bg-gray-50"}`}>
-          <div className={`w-full max-w-md mt-2 mb-2 p-8 space-y-8 rounded-xl ${theme === "dark" ? "bg-gray-800" : "bg-white"} shadow-lg`}>
+        <div
+          className={`min-h-screen flex items-center justify-center ${
+            theme === "dark" ? "bg-gray-900" : "bg-gray-50"
+          }`}
+        >
+          <div
+            className={`w-full max-w-md mt-2 mb-2 p-8 space-y-8 rounded-xl ${
+              theme === "dark" ? "bg-gray-800" : "bg-white"
+            } shadow-lg`}
+          >
             <div className="text-center">
-              <h1 className={`text-xl font-semibold ${theme === "dark" ? "text-white" : "text-gray-900"}`}>
+              <h1
+                className={`text-xl font-semibold ${
+                  theme === "dark" ? "text-white" : "text-gray-900"
+                }`}
+              >
                 Create your account
               </h1>
-              <p className={`mt-2 text-sm ${theme === "dark" ? "text-gray-300" : "text-gray-600"}`}>
+              <p
+                className={`mt-2 text-sm ${
+                  theme === "dark" ? "text-gray-300" : "text-gray-600"
+                }`}
+              >
                 Join LearnLive to get started
               </p>
             </div>
@@ -171,10 +202,20 @@ export default function SignUp() {
 
               <div className="relative">
                 <div className="absolute inset-0 flex items-center">
-                  <div className={`w-full border-t ${theme === "dark" ? "border-gray-700" : "border-gray-300"}`} />
+                  <div
+                    className={`w-full border-t ${
+                      theme === "dark" ? "border-gray-700" : "border-gray-300"
+                    }`}
+                  />
                 </div>
                 <div className="relative flex justify-center text-sm">
-                  <span className={`px-2 ${theme === "dark" ? "bg-gray-800 text-gray-400" : "bg-white text-gray-500"}`}>
+                  <span
+                    className={`px-2 ${
+                      theme === "dark"
+                        ? "bg-gray-800 text-gray-400"
+                        : "bg-white text-gray-500"
+                    }`}
+                  >
                     Or sign up with email
                   </span>
                 </div>
@@ -183,12 +224,21 @@ export default function SignUp() {
               <form className="mt-8 space-y-6" onSubmit={submitHandler}>
                 <div className="rounded-md shadow-sm space-y-4">
                   <div>
-                    <label htmlFor="name" className={`block text-sm font-medium ${theme === "dark" ? "text-gray-300" : "text-gray-700"}`}>
+                    <label
+                      htmlFor="name"
+                      className={`block text-sm font-medium ${
+                        theme === "dark" ? "text-gray-300" : "text-gray-700"
+                      }`}
+                    >
                       Full Name
                     </label>
                     <div className="relative mt-1">
                       <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <FiUser className={`h-5 w-5 ${theme === "dark" ? "text-gray-400" : "text-gray-500"}`} />
+                        <FiUser
+                          className={`h-5 w-5 ${
+                            theme === "dark" ? "text-gray-400" : "text-gray-500"
+                          }`}
+                        />
                       </div>
                       <input
                         id="name"
@@ -196,10 +246,11 @@ export default function SignUp() {
                         type="text"
                         autoComplete="name"
                         required
-                        className={`block w-full pl-10 pr-3 py-2 rounded-md border text-sm ${theme === "dark"
+                        className={`block w-full pl-10 pr-3 py-2 rounded-md border text-sm ${
+                          theme === "dark"
                             ? "bg-gray-700 border-gray-600 text-white placeholder-gray-400"
                             : "bg-white border-gray-300 text-gray-900 placeholder-gray-500"
-                          } focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500`}
+                        } focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500`}
                         placeholder="John Doe"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
@@ -208,13 +259,24 @@ export default function SignUp() {
                   </div>
 
                   <div>
-                    <label htmlFor="email" className={`block text-sm font-medium ${theme === "dark" ? "text-gray-300" : "text-gray-700"}`}>
+                    <label
+                      htmlFor="email"
+                      className={`block text-sm font-medium ${
+                        theme === "dark" ? "text-gray-300" : "text-gray-700"
+                      }`}
+                    >
                       Email address
                     </label>
                     <div className="flex space-x-2">
                       <div className="relative flex-grow">
                         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                          <FiMail className={`h-5 w-5 ${theme === "dark" ? "text-gray-400" : "text-gray-500"}`} />
+                          <FiMail
+                            className={`h-5 w-5 ${
+                              theme === "dark"
+                                ? "text-gray-400"
+                                : "text-gray-500"
+                            }`}
+                          />
                         </div>
                         <input
                           id="email"
@@ -222,11 +284,13 @@ export default function SignUp() {
                           type="email"
                           autoComplete="email"
                           required
-                          className={`block w-full pl-10 pr-3 py-2 rounded-md border text-sm ${theme === "dark"
+                          className={`block w-full pl-10 pr-3 py-2 rounded-md border text-sm ${
+                            theme === "dark"
                               ? "bg-gray-700 border-gray-600 text-white placeholder-gray-400"
                               : "bg-white border-gray-300 text-gray-900 placeholder-gray-500"
-                            } focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${otpVerified ? "border-green-500" : ""
-                            }`}
+                          } focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
+                            otpVerified ? "border-indigo-500" : ""
+                          }`}
                           placeholder="you@example.com"
                           value={email}
                           onChange={(e) => setEmail(e.target.value)}
@@ -234,7 +298,7 @@ export default function SignUp() {
                         />
                         {otpVerified && (
                           <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-                            <FiCheck className="h-5 w-5 text-green-500" />
+                            <FiCheck className="h-5 w-5 text-indigo-500" />
                           </div>
                         )}
                       </div>
@@ -242,20 +306,37 @@ export default function SignUp() {
                         <button
                           type="button"
                           onClick={sendOtp}
-                          disabled={otpLoading || !email || !/^\S+@\S+\.\S+$/.test(email) || countdown > 0}
-                          className={`py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 ${otpLoading || countdown > 0 ? "opacity-75 cursor-not-allowed" : ""
-                            }`}
+                          disabled={
+                            otpLoading ||
+                            !email ||
+                            !/^\S+@\S+\.\S+$/.test(email) ||
+                            countdown > 0
+                          }
+                          className={`py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 ${
+                            otpLoading || countdown > 0
+                              ? "opacity-75 cursor-not-allowed"
+                              : ""
+                          }`}
                         >
-                          {otpLoading ? "Sending..." :
-                            countdown > 0 ? `⌛${formatTime(countdown)}` :
-                              otpSent ? "Resend" : "SendOTP"}
+                          {otpLoading
+                            ? "Sending..."
+                            : countdown > 0
+                            ? `⌛${formatTime(countdown)}`
+                            : otpSent
+                            ? "Resend"
+                            : "SendOTP"}
                         </button>
                       )}
                     </div>
 
                     {otpSent && !otpVerified && (
                       <div className="mt-2">
-                        <label htmlFor="otp" className={`block text-sm font-medium ${theme === "dark" ? "text-gray-300" : "text-gray-700"}`}>
+                        <label
+                          htmlFor="otp"
+                          className={`block text-sm font-medium ${
+                            theme === "dark" ? "text-gray-300" : "text-gray-700"
+                          }`}
+                        >
                           Enter 6-digit OTP
                         </label>
                         <div className="flex space-x-2 mt-1">
@@ -264,25 +345,33 @@ export default function SignUp() {
                             name="otp"
                             type="text"
                             maxLength={6}
-                            className={`block flex-grow pl-3 pr-3 py-2 rounded-md border text-sm ${theme === "dark"
+                            className={`block flex-grow pl-3 pr-3 py-2 rounded-md border text-sm ${
+                              theme === "dark"
                                 ? "bg-gray-700 border-gray-600 text-white placeholder-gray-400"
                                 : "bg-white border-gray-300 text-gray-900 placeholder-gray-500"
-                              } focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500`}
+                            } focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500`}
                             placeholder="123456"
                             value={otp}
-                            onChange={(e) => setOtp(e.target.value.replace(/[^0-9]/g, ''))}
+                            onChange={(e) =>
+                              setOtp(e.target.value.replace(/[^0-9]/g, ""))
+                            }
                           />
                           <button
                             type="button"
                             onClick={verifyOtp}
                             disabled={otpLoading || otp.length !== 6}
-                            className={`py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 ${otpLoading ? "opacity-75 cursor-not-allowed" : ""
-                              }`}
+                            className={`py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 ${
+                              otpLoading ? "opacity-75 cursor-not-allowed" : ""
+                            }`}
                           >
                             {otpLoading ? "Verifying..." : "Verify"}
                           </button>
                         </div>
-                        <p className={`mt-1 text-xs ${theme === "dark" ? "text-gray-400" : "text-gray-500"}`}>
+                        <p
+                          className={`mt-1 text-xs ${
+                            theme === "dark" ? "text-gray-400" : "text-gray-500"
+                          }`}
+                        >
                           Please enter the 6-digit code sent to your email
                         </p>
                       </div>
@@ -290,12 +379,21 @@ export default function SignUp() {
                   </div>
 
                   <div>
-                    <label htmlFor="password" className={`block text-sm font-medium ${theme === "dark" ? "text-gray-300" : "text-gray-700"}`}>
+                    <label
+                      htmlFor="password"
+                      className={`block text-sm font-medium ${
+                        theme === "dark" ? "text-gray-300" : "text-gray-700"
+                      }`}
+                    >
                       Password
                     </label>
                     <div className="relative mt-1">
                       <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <FiLock className={`h-5 w-5 ${theme === "dark" ? "text-gray-400" : "text-gray-500"}`} />
+                        <FiLock
+                          className={`h-5 w-5 ${
+                            theme === "dark" ? "text-gray-400" : "text-gray-500"
+                          }`}
+                        />
                       </div>
                       <input
                         id="password"
@@ -303,10 +401,11 @@ export default function SignUp() {
                         type={showPassword ? "text" : "password"}
                         autoComplete="new-password"
                         required
-                        className={`block w-full pl-10 pr-10 py-2 rounded-md border text-sm ${theme === "dark"
+                        className={`block w-full pl-10 pr-10 py-2 rounded-md border text-sm ${
+                          theme === "dark"
                             ? "bg-gray-700 border-gray-600 text-white placeholder-gray-400"
                             : "bg-white border-gray-300 text-gray-900 placeholder-gray-500"
-                          } focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500`}
+                        } focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500`}
                         placeholder="••••••••"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
@@ -317,14 +416,28 @@ export default function SignUp() {
                         onClick={() => setShowPassword(!showPassword)}
                       >
                         {showPassword ? (
-                          <FiEyeOff className={`h-5 w-5 ${theme === "dark" ? "text-gray-400" : "text-gray-500"}`} />
+                          <FiEyeOff
+                            className={`h-5 w-5 ${
+                              theme === "dark"
+                                ? "text-gray-400"
+                                : "text-gray-500"
+                            }`}
+                          />
                         ) : (
-                          <FiEye className={`h-5 w-5 ${theme === "dark" ? "text-gray-400" : "text-gray-500"}`} />
+                          <FiEye
+                            className={`h-5 w-5 ${
+                              theme === "dark"
+                                ? "text-gray-400"
+                                : "text-gray-500"
+                            }`}
+                          />
                         )}
                       </button>
                     </div>
                     {password && password.length < 8 && (
-                      <p className="mt-1 text-sm text-red-600">Password must be at least 8 characters</p>
+                      <p className="mt-1 text-sm text-red-600">
+                        Password must be at least 8 characters
+                      </p>
                     )}
                   </div>
                 </div>
@@ -335,21 +448,37 @@ export default function SignUp() {
                     name="terms"
                     type="checkbox"
                     required
-                    className={`h-4 w-4 rounded ${theme === "dark" ? "bg-gray-700 border-gray-600" : "bg-white border-gray-300"
-                      } focus:ring-blue-500`}
+                    className={`h-4 w-4 rounded ${
+                      theme === "dark"
+                        ? "bg-gray-700 border-gray-600"
+                        : "bg-white border-gray-300"
+                    } focus:ring-blue-500`}
                   />
-                  <label htmlFor="terms" className={`ml-2 block text-sm ${theme === "dark" ? "text-gray-300" : "text-gray-700"}`}>
+                  <label
+                    htmlFor="terms"
+                    className={`ml-2 block text-sm ${
+                      theme === "dark" ? "text-gray-300" : "text-gray-700"
+                    }`}
+                  >
                     I agree to the{" "}
                     <Link
                       href="/terms"
-                      className={`${theme === "dark" ? "text-blue-400 hover:text-blue-300" : "text-blue-600 hover:text-blue-500"}`}
+                      className={`${
+                        theme === "dark"
+                          ? "text-blue-400 hover:text-blue-300"
+                          : "text-blue-600 hover:text-blue-500"
+                      }`}
                     >
                       Terms of Service
                     </Link>{" "}
                     and{" "}
                     <Link
                       href="/privacy"
-                      className={`${theme === "dark" ? "text-blue-400 hover:text-blue-300" : "text-blue-600 hover:text-blue-500"}`}
+                      className={`${
+                        theme === "dark"
+                          ? "text-blue-400 hover:text-blue-300"
+                          : "text-blue-600 hover:text-blue-500"
+                      }`}
                     >
                       Privacy Policy
                     </Link>
@@ -360,8 +489,11 @@ export default function SignUp() {
                   <button
                     type="submit"
                     disabled={isLoading || !otpVerified}
-                    className={`group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 ${isLoading || !otpVerified ? "opacity-75 cursor-not-allowed" : ""
-                      }`}
+                    className={`group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 ${
+                      isLoading || !otpVerified
+                        ? "opacity-75 cursor-not-allowed"
+                        : ""
+                    }`}
                   >
                     {isLoading ? (
                       <>
@@ -394,11 +526,19 @@ export default function SignUp() {
                 </div>
               </form>
 
-              <div className={`text-sm text-center ${theme === "dark" ? "text-gray-400" : "text-gray-600"}`}>
+              <div
+                className={`text-sm text-center ${
+                  theme === "dark" ? "text-gray-400" : "text-gray-600"
+                }`}
+              >
                 Already have an account?{" "}
                 <Link
                   href="/signin"
-                  className={`font-medium ${theme === "dark" ? "text-blue-400 hover:text-blue-300" : "text-blue-600 hover:text-blue-500"}`}
+                  className={`font-medium ${
+                    theme === "dark"
+                      ? "text-blue-400 hover:text-blue-300"
+                      : "text-blue-600 hover:text-blue-500"
+                  }`}
                 >
                   Sign in
                 </Link>

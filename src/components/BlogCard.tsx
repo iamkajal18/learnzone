@@ -3,7 +3,8 @@
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 
-const DEFAULT_IMAGE_URL = "https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80";
+const DEFAULT_IMAGE_URL =
+  "https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80";
 
 function stripHtmlTags(str: string): string {
   return str.replace(/<[^>]*>?/gm, "");
@@ -27,12 +28,19 @@ interface BlogCardProps {
   showActions: boolean;
 }
 
-export default function BlogCard({ idea, onDelete, deletingId, showActions }: BlogCardProps) {
+export default function BlogCard({
+  idea,
+  onDelete,
+  deletingId,
+  showActions,
+}: BlogCardProps) {
   const { data: session } = useSession();
   const userEmail = session?.user?.email || "";
   const isAuthor = userEmail === idea.authorEmail;
   const shouldShowActions = showActions && isAuthor;
-  const authorName = idea.authorEmail ? stripHtmlTags(idea.authorEmail.split("@")[0]) : "Anonymous";
+  const authorName = idea.authorEmail
+    ? stripHtmlTags(idea.authorEmail.split("@")[0])
+    : "Anonymous";
 
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-100 dark:border-gray-700 hover:shadow-md transition-shadow">
@@ -51,7 +59,9 @@ export default function BlogCard({ idea, onDelete, deletingId, showActions }: Bl
           <img
             src={
               idea.profilePhoto ||
-              `https://ui-avatars.com/api/?name=${encodeURIComponent(authorName)}&background=00CFD1&color=fff`
+              `https://ui-avatars.com/api/?name=${encodeURIComponent(
+                authorName
+              )}&background=00CFD1&color=fff`
             }
             className="w-6 h-6 rounded-full"
             alt={`${authorName}'s profile`}
@@ -62,7 +72,7 @@ export default function BlogCard({ idea, onDelete, deletingId, showActions }: Bl
         </div>
         <div className="flex justify-between items-center">
           <Link href={`/viewmore/${idea._id}`}>
-            <button className="text-sm bg-teal-500 hover:bg-teal-600 dark:bg-teal-600 dark:hover:bg-teal-700 text-white py-1.5 px-3 rounded">
+            <button className="text-sm bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 text-white py-1.5 px-3 rounded">
               View
             </button>
           </Link>

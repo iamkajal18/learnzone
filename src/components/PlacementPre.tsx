@@ -16,7 +16,7 @@ const guidesData = [
     progress: 70,
     category: "Placement Prep",
     description: "Ace verbal tests with strong communication skills.",
-    featured: true
+    featured: true,
   },
   {
     id: 2,
@@ -27,7 +27,7 @@ const guidesData = [
     progress: 25,
     category: "Technical Skills",
     description: "Master data structures for coding interviews.",
-    featured: true
+    featured: true,
   },
   {
     id: 3,
@@ -37,7 +37,7 @@ const guidesData = [
     href: "/resume",
     progress: 80,
     category: "Career Development",
-    description: "Craft a resume that stands out."
+    description: "Craft a resume that stands out.",
   },
   {
     id: 4,
@@ -47,7 +47,7 @@ const guidesData = [
     href: "/communication",
     progress: 40,
     category: "Soft Skills",
-    description: "Excel in professional communication."
+    description: "Excel in professional communication.",
   },
   {
     id: 5,
@@ -57,7 +57,7 @@ const guidesData = [
     href: "/algorithm",
     progress: 10,
     category: "Coding",
-    description: "Optimize solutions with algorithms."
+    description: "Optimize solutions with algorithms.",
   },
   {
     id: 6,
@@ -67,7 +67,7 @@ const guidesData = [
     href: "/groupdiscussion",
     progress: 50,
     category: "Placement Prep",
-    description: "Lead effectively in group discussions."
+    description: "Lead effectively in group discussions.",
   },
   {
     id: 7,
@@ -77,7 +77,7 @@ const guidesData = [
     href: "/reasoning",
     progress: 30,
     category: "Placement Prep",
-    description: "Crush reasoning challenges with sharp logic!"
+    description: "Crush reasoning challenges with sharp logic!",
   },
   {
     id: 8,
@@ -87,14 +87,14 @@ const guidesData = [
     href: "/numerical",
     progress: 45,
     category: "Placement Prep",
-    description: "Master numbers with top analytical skills!"
+    description: "Master numbers with top analytical skills!",
   },
 ];
 
-const CategoryFilter = ({ 
-  categories, 
-  selectedCategory, 
-  onSelectCategory 
+const CategoryFilter = ({
+  categories,
+  selectedCategory,
+  onSelectCategory,
 }: {
   categories: string[];
   selectedCategory: string;
@@ -110,7 +110,7 @@ const CategoryFilter = ({
           onClick={() => onSelectCategory(category)}
           className={`px-3 py-1.5 text-xs font-medium rounded-full transition-all ${
             selectedCategory === category
-              ? "bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-md"
+              ? "bg-gradient-to-r from-indigo-500 to-blue-600 text-white shadow-md"
               : "bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 border border-gray-200 dark:border-gray-700"
           }`}
         >
@@ -121,14 +121,14 @@ const CategoryFilter = ({
   );
 };
 
-const CourseCard = ({ 
-  title, 
-  image, 
-  alt, 
-  href, 
-  progress, 
+const CourseCard = ({
+  title,
+  image,
+  alt,
+  href,
+  progress,
   category,
-  description
+  description,
 }: {
   title: string;
   image: string;
@@ -139,13 +139,14 @@ const CourseCard = ({
   description?: string;
 }) => {
   return (
-    <motion.div 
+    <motion.div
       initial={{ opacity: 0, y: 20, scale: 0.95 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
-      whileHover={{ 
-        y: -8, 
-        scale: 1.03, 
-        boxShadow: "0 10px 20px rgba(0,0,0,0.12), 0 0 6px rgba(59,130,246,0.15)" 
+      whileHover={{
+        y: -8,
+        scale: 1.03,
+        boxShadow:
+          "0 10px 20px rgba(0,0,0,0.12), 0 0 6px rgba(59,130,246,0.15)",
       }}
       transition={{ duration: 0.3, ease: "easeOut" }}
       className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 overflow-hidden flex flex-col h-full max-w-[280px] mx-auto shadow-md"
@@ -163,38 +164,44 @@ const CourseCard = ({
         </div>
       </Link>
       <div className="p-4 flex flex-col flex-grow">
-        <span className="text-xs font-medium px-2 py-0.5 bg-gradient-to-r from-blue-500 to-cyan-500 text-white rounded-full w-fit mb-2">
+        <span className="text-xs font-medium px-2 py-0.5 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-full w-fit mb-2">
           {category}
         </span>
-        
+
         <h3 className="text-sm font-bold text-gray-900 dark:text-white mb-2 line-clamp-2">
-          <Link href={href} className="hover:text-blue-500 dark:hover:text-cyan-400 transition-colors duration-200">
+          <Link
+            href={href}
+            className="hover:text-blue-500 dark:hover:text-indigo-400 transition-colors duration-200"
+          >
             {title}
           </Link>
         </h3>
-        
+
         <p className="text-xs text-gray-600 dark:text-gray-400 mb-4 line-clamp-2 leading-relaxed">
           {description}
         </p>
-        
+
         <div className="mt-auto">
           <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5 mb-3">
             <motion.div
               initial={{ width: 0 }}
               animate={{ width: `${progress}%` }}
               transition={{ duration: 1, ease: "easeOut" }}
-              className="bg-gradient-to-r from-blue-500 to-cyan-500 h-1.5 rounded-full"
+              className="bg-gradient-to-r from-blue-500 to-indigo-500 h-1.5 rounded-full"
             />
           </div>
-          
+
           <div className="flex justify-between items-center">
             <span className="text-xs text-gray-600 dark:text-gray-300">
               {progress}%
             </span>
             <motion.button
-              whileHover={{ scale: 1.05, boxShadow: "0 3px 6px rgba(0,0,0,0.1)" }}
+              whileHover={{
+                scale: 1.05,
+                boxShadow: "0 3px 6px rgba(0,0,0,0.1)",
+              }}
               whileTap={{ scale: 0.95 }}
-              className="text-xs font-medium bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-3 py-1 rounded-full hover:from-blue-600 hover:to-cyan-600 transition-all duration-200"
+              className="text-xs font-medium bg-gradient-to-r from-blue-500 to-indigo-500 text-white px-3 py-1 rounded-full hover:from-blue-600 hover:to-indigo-600 transition-all duration-200"
             >
               Start Learning
             </motion.button>
@@ -211,13 +218,22 @@ const LearningHub = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const { theme } = useTheme();
 
-  const categories = ["All", "Placement Prep", "Technical Skills", "Soft Skills", "Career Development", "Coding"];
+  const categories = [
+    "All",
+    "Placement Prep",
+    "Technical Skills",
+    "Soft Skills",
+    "Career Development",
+    "Coding",
+  ];
 
   const filteredAndSortedGuides = useMemo(() => {
-    let filtered = guidesData.filter(guide => {
-      const matchesCategory = selectedCategory === "All" || guide.category === selectedCategory;
-      const matchesSearch = guide.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                          guide.description.toLowerCase().includes(searchQuery.toLowerCase());
+    let filtered = guidesData.filter((guide) => {
+      const matchesCategory =
+        selectedCategory === "All" || guide.category === selectedCategory;
+      const matchesSearch =
+        guide.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        guide.description.toLowerCase().includes(searchQuery.toLowerCase());
       return matchesCategory && matchesSearch;
     });
 
@@ -230,23 +246,25 @@ const LearningHub = () => {
   return (
     <div className="min-h-screen py-8 px-4 sm:px-6">
       <div className="max-w-7xl mx-auto">
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-12"
         >
           <h3 className="text-3xl md:text-3xl font-bold tracking-tight">
-            <span className="bg-gradient-to-r from-cyan-600 to-teal-700 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-indigo-600 to-blue-700 bg-clip-text text-transparent">
               Placement Preparation
             </span>{" "}
             <span className="relative inline-block">
               & Tips
-              <span className={`absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-cyan-400 to-teal-500 rounded-full ${
-                theme === 'dark' ? 'opacity-90' : 'opacity-100'
-              }`}></span>
+              <span
+                className={`absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-indigo-400 to-blue-500 rounded-full ${
+                  theme === "dark" ? "opacity-90" : "opacity-100"
+                }`}
+              ></span>
             </span>
           </h3>
-          
+
           <p className="text-gray-600 dark:text-gray-300 max-w-lg mx-auto">
             Master essential skills with our curated learning paths
           </p>
@@ -254,7 +272,7 @@ const LearningHub = () => {
 
         <div className="mb-8">
           <div className="flex flex-col md:flex-row justify-between gap-4 mb-6">
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.1 }}
@@ -266,23 +284,25 @@ const LearningHub = () => {
               <input
                 type="text"
                 placeholder="Search guides..."
-                className="pl-10 w-full py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent dark:bg-gray-800 dark:text-white"
+                className="pl-10 w-full py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent dark:bg-gray-800 dark:text-white"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
             </motion.div>
-            
-            <motion.div 
+
+            <motion.div
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.1 }}
               className="flex items-center gap-2"
             >
-              <span className="text-sm text-gray-600 dark:text-gray-300">Sort by:</span>
+              <span className="text-sm text-gray-600 dark:text-gray-300">
+                Sort by:
+              </span>
               <select
                 value={sortOption}
                 onChange={(e) => setSortOption(e.target.value)}
-                className="text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                className="text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
               >
                 <option value="title">Title</option>
                 <option value="progress">Progress</option>
@@ -298,7 +318,7 @@ const LearningHub = () => {
         </div>
 
         {filteredAndSortedGuides.length === 0 ? (
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             className="text-center py-12 bg-white dark:bg-gray-800 rounded-xl shadow-sm"

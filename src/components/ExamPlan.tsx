@@ -1,12 +1,14 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import React, { useState } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 function ExamPlan() {
   const router = useRouter();
-  const [selectedNoteMethod, setSelectedNoteMethod] = useState<string | null>(null);
+  const [selectedNoteMethod, setSelectedNoteMethod] = useState<string | null>(
+    null
+  );
   const [downloadedTemplates, setDownloadedTemplates] = useState<string[]>([]);
   const [showDownloadModal, setShowDownloadModal] = useState(false);
 
@@ -28,23 +30,23 @@ function ExamPlan() {
     {
       name: "3-Day Plan Worksheet",
       desc: "Printable schedule with time blocks",
-      emoji: "🗓️"
+      emoji: "🗓️",
     },
     {
       name: "Exam Weight Calculator",
       desc: "Prioritize by topic importance",
-      emoji: "⚖️"
+      emoji: "⚖️",
     },
     {
       name: "Anki Flashcard Template",
       desc: "Pre-formatted deck for quick setup",
-      emoji: "🗂️"
+      emoji: "🗂️",
     },
     {
       name: "Professor Question Predictor",
       desc: "Worksheet to anticipate test questions",
-      emoji: "🔮"
-    }
+      emoji: "🔮",
+    },
   ];
 
   const dayPlans = [
@@ -53,25 +55,17 @@ function ExamPlan() {
       tasks: [
         "Identify 3-5 key topics",
         "Create summary sheets",
-        "Watch review videos"
-      ]
+        "Watch review videos",
+      ],
     },
     {
       day: "Day 2",
-      tasks: [
-        "Practice past exams",
-        "Join study group",
-        "Anki flashcards"
-      ]
+      tasks: ["Practice past exams", "Join study group", "Anki flashcards"],
     },
     {
       day: "Day 3",
-      tasks: [
-        "Final review (2-3 hours)",
-        "Light exercise",
-        "7+ hours sleep"
-      ]
-    }
+      tasks: ["Final review (2-3 hours)", "Light exercise", "7+ hours sleep"],
+    },
   ];
 
   return (
@@ -97,12 +91,21 @@ function ExamPlan() {
         <div className="p-6 bg-gradient-to-r from-indigo-700 to-purple-600 text-white">
           <div className="flex justify-between items-center">
             <h1 className="text-3xl font-bold">📝 Exam Prep Master Guide</h1>
-            <button 
+            <button
               onClick={() => router.back()}
               className="flex items-center text-indigo-100 hover:text-white transition"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
-                <path fillRule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clipRule="evenodd" />
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5 mr-1"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z"
+                  clipRule="evenodd"
+                />
               </svg>
               Back to Resources
             </button>
@@ -122,15 +125,20 @@ function ExamPlan() {
                 The 3-Day Study Plan
               </h3>
             </div>
-            
+
             <div className="grid md:grid-cols-3 gap-4 mb-6">
               {dayPlans.map((dayPlan) => (
-                <div key={dayPlan.day} className="border border-indigo-100 rounded-lg p-4 hover:shadow-md transition">
-                  <h4 className="font-bold text-indigo-600 mb-2">{dayPlan.day}</h4>
+                <div
+                  key={dayPlan.day}
+                  className="border border-indigo-100 rounded-lg p-4 hover:shadow-md transition"
+                >
+                  <h4 className="font-bold text-indigo-600 mb-2">
+                    {dayPlan.day}
+                  </h4>
                   <ul className="space-y-2">
                     {dayPlan.tasks.map((task, i) => (
                       <li key={i} className="flex items-start">
-                        <span className="text-green-500 mr-2">✓</span>
+                        <span className="text-indigo-500 mr-2">✓</span>
                         {task}
                       </li>
                     ))}
@@ -141,7 +149,10 @@ function ExamPlan() {
 
             <div className="bg-yellow-50 p-4 rounded-lg border-l-4 border-yellow-400">
               <p className="font-medium">Pro Tip:</p>
-              <p>"Label your notes by exam weight! Focus 70% effort on topics worth 50%+ of your grade."</p>
+              <p>
+                "Label your notes by exam weight! Focus 70% effort on topics
+                worth 50%+ of your grade."
+              </p>
             </div>
           </div>
 
@@ -153,13 +164,13 @@ function ExamPlan() {
             </h3>
             <div className="grid sm:grid-cols-2 gap-4">
               {templates.map((template) => (
-                <div 
+                <div
                   key={template.name}
                   onClick={() => handleTemplateClick(template.name)}
                   className={`border rounded-lg p-4 transition cursor-pointer ${
                     downloadedTemplates.includes(template.name)
-                      ? 'bg-green-50 border-green-200'
-                      : 'hover:bg-indigo-50 hover:border-indigo-200'
+                      ? "bg-indigo-50 border-indigo-200"
+                      : "hover:bg-indigo-50 hover:border-indigo-200"
                   }`}
                 >
                   <div className="flex items-start">
@@ -168,7 +179,7 @@ function ExamPlan() {
                       <h4 className="font-bold">{template.name}</h4>
                       <p className="text-sm text-gray-600">{template.desc}</p>
                       {downloadedTemplates.includes(template.name) && (
-                        <span className="inline-block mt-1 text-xs text-green-600">
+                        <span className="inline-block mt-1 text-xs text-indigo-600">
                           ✓ Downloaded
                         </span>
                       )}
@@ -187,7 +198,9 @@ function ExamPlan() {
             </h3>
             <div className="space-y-6">
               <div className="p-4 bg-gray-50 rounded-lg">
-                <h4 className="font-bold text-lg mb-2">Predicting Exam Questions</h4>
+                <h4 className="font-bold text-lg mb-2">
+                  Predicting Exam Questions
+                </h4>
                 <ol className="list-decimal pl-5 space-y-2">
                   <li>Analyze past 3 years' tests (pattern mapping)</li>
                   <li>Note professor's lecture emphasis points</li>
@@ -197,19 +210,28 @@ function ExamPlan() {
               </div>
 
               <div className="p-4 bg-gray-50 rounded-lg">
-                <h4 className="font-bold text-lg mb-2">Anki Flashcard System</h4>
+                <h4 className="font-bold text-lg mb-2">
+                  Anki Flashcard System
+                </h4>
                 <div className="grid md:grid-cols-2 gap-4">
                   <div>
                     <p className="font-medium mb-1">Card Front:</p>
                     <div className="bg-white p-3 rounded border">
-                      <p>What is the <u>second law of thermodynamics</u>?</p>
+                      <p>
+                        What is the <u>second law of thermodynamics</u>?
+                      </p>
                     </div>
                   </div>
                   <div>
                     <p className="font-medium mb-1">Card Back:</p>
                     <div className="bg-white p-3 rounded border">
-                      <p>In any cyclic process, entropy will either increase or remain the same.</p>
-                      <p className="mt-2 text-sm text-gray-500">#Physics #Thermo</p>
+                      <p>
+                        In any cyclic process, entropy will either increase or
+                        remain the same.
+                      </p>
+                      <p className="mt-2 text-sm text-gray-500">
+                        #Physics #Thermo
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -218,25 +240,30 @@ function ExamPlan() {
               <div className="p-4 bg-gray-50 rounded-lg">
                 <h4 className="font-bold text-lg mb-2">Note-Taking Method</h4>
                 <div className="mb-4">
-                  <h5 className="font-medium mb-2">Which style works for you?</h5>
+                  <h5 className="font-medium mb-2">
+                    Which style works for you?
+                  </h5>
                   <div className="space-y-2">
-                    {['Cornell', 'Mind Maps', 'Bullet Journal', 'Outline'].map((option) => (
-                      <label key={option} className="flex items-center">
-                        <input
-                          type="radio"
-                          name="note-taking"
-                          className="mr-2"
-                          checked={selectedNoteMethod === option}
-                          onChange={() => setSelectedNoteMethod(option)}
-                        />
-                        {option}
-                      </label>
-                    ))}
+                    {["Cornell", "Mind Maps", "Bullet Journal", "Outline"].map(
+                      (option) => (
+                        <label key={option} className="flex items-center">
+                          <input
+                            type="radio"
+                            name="note-taking"
+                            className="mr-2"
+                            checked={selectedNoteMethod === option}
+                            onChange={() => setSelectedNoteMethod(option)}
+                          />
+                          {option}
+                        </label>
+                      )
+                    )}
                   </div>
                 </div>
                 {selectedNoteMethod && (
                   <p className="text-sm text-indigo-600">
-                    Great choice! We'll prioritize {selectedNoteMethod} resources for you.
+                    Great choice! We'll prioritize {selectedNoteMethod}{" "}
+                    resources for you.
                   </p>
                 )}
               </div>
@@ -251,17 +278,24 @@ function ExamPlan() {
             onClick={handleDownloadAll}
             className="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition flex items-center justify-center mx-auto"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-              <path fillRule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clipRule="evenodd" />
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-5 w-5 mr-2"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fillRule="evenodd"
+                d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z"
+                clipRule="evenodd"
+              />
             </svg>
             Download Full Study Kit (PDF)
           </button>
           <p className="mt-2 text-sm text-gray-600">
-            {downloadedTemplates.length > 0 ? (
-              `You've downloaded ${downloadedTemplates.length}/${templates.length} templates`
-            ) : (
-              'Includes all templates and bonus materials'
-            )}
+            {downloadedTemplates.length > 0
+              ? `You've downloaded ${downloadedTemplates.length}/${templates.length} templates`
+              : "Includes all templates and bonus materials"}
           </p>
         </div>
       </div>

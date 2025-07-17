@@ -1,10 +1,24 @@
-'use client';
-import { useState, useEffect, useRef } from 'react';
-import { useSession, signOut } from 'next-auth/react';
-import Link from 'next/link';
-import { Toaster, toast } from 'react-hot-toast';
-import { useTheme } from './ThemeContext';
-import { Moon, Sun, Pencil, ChevronDown, Menu, X, User, LogOut, Home, BookOpen, Video, MessageSquare, BarChart } from 'lucide-react';
+"use client";
+import { useState, useEffect, useRef } from "react";
+import { useSession, signOut } from "next-auth/react";
+import Link from "next/link";
+import { Toaster, toast } from "react-hot-toast";
+import { useTheme } from "./ThemeContext";
+import {
+  Moon,
+  Sun,
+  Pencil,
+  ChevronDown,
+  Menu,
+  X,
+  User,
+  LogOut,
+  Home,
+  BookOpen,
+  Video,
+  MessageSquare,
+  BarChart,
+} from "lucide-react";
 
 interface NavItemProps {
   href: string;
@@ -15,16 +29,23 @@ interface NavItemProps {
   mobile?: boolean;
 }
 
-const NavItem: React.FC<NavItemProps> = ({ href, theme, icon, children, onClick, mobile = false }) => (
+const NavItem: React.FC<NavItemProps> = ({
+  href,
+  theme,
+  icon,
+  children,
+  onClick,
+  mobile = false,
+}) => (
   <li className="list-none">
     <Link
       href={href}
       onClick={onClick}
       className={`relative flex items-center py-2 px-3 rounded-lg text-sm font-medium transition-all duration-300 group gradient-hover ${
-        theme === 'light'
-          ? 'text-gray-700 hover:bg-cyan-50 hover:text-cyan-700'
-          : 'text-gray-200 hover:bg-cyan-900/20 hover:text-cyan-300'
-      } ${mobile ? 'w-full' : ''}`}
+        theme === "light"
+          ? "text-gray-700 hover:bg-indigo-50 hover:text-indigo-700"
+          : "text-gray-200 hover:bg-indigo-900/20 hover:text-indigo-300"
+      } ${mobile ? "w-full" : ""}`}
     >
       <span className="mr-2">{icon}</span>
       {children}
@@ -45,62 +66,73 @@ const Navbar: React.FC = () => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
     };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
         setDropdownOpen(false);
       }
       if (
         navRef.current &&
         !navRef.current.contains(event.target as Node) &&
-        !(event.target as Element).closest('.mobile-menu-toggle')
+        !(event.target as Element).closest(".mobile-menu-toggle")
       ) {
         setNavOpen(false);
       }
     };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   const handleSignOut = async () => {
-    toast.success('Signed out successfully', { duration: 2000 });
-    await signOut({ callbackUrl: '/' });
-    localStorage.setItem('isFirstVisit', 'true');
+    toast.success("Signed out successfully", { duration: 2000 });
+    await signOut({ callbackUrl: "/" });
+    localStorage.setItem("isFirstVisit", "true");
     setNavOpen(false);
   };
 
   const ThemeToggleButton = ({ mobile = false }: { mobile?: boolean }) => (
     <button
       onClick={toggleTheme}
-      className={`relative flex items-center justify-start ${mobile ? 'w-full' : 'w-auto'} px-3 py-2 rounded-lg transition-all duration-300 group text-sm font-medium ${
-        theme === 'light'
-          ? 'text-gray-700 hover:bg-cyan-50 hover:text-cyan-700'
-          : 'text-gray-200 hover:bg-cyan-900/20 hover:text-cyan-300'
+      className={`relative flex items-center justify-start ${
+        mobile ? "w-full" : "w-auto"
+      } px-3 py-2 rounded-lg transition-all duration-300 group text-sm font-medium ${
+        theme === "light"
+          ? "text-gray-700 hover:bg-indigo-50 hover:text-indigo-700"
+          : "text-gray-200 hover:bg-indigo-900/20 hover:text-indigo-300"
       }`}
-      aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
+      aria-label={`Switch to ${theme === "light" ? "dark" : "light"} mode`}
     >
       <span className="relative w-6 h-6 flex items-center justify-center mr-2">
         <Moon
           size={20}
-          className={`absolute transition-opacity duration-300 ${theme === 'light' ? 'opacity-100' : 'opacity-0'}`}
+          className={`absolute transition-opacity duration-300 ${
+            theme === "light" ? "opacity-100" : "opacity-0"
+          }`}
         />
         <Sun
           size={20}
-          className={`absolute transition-opacity duration-300 ${theme === 'light' ? 'opacity-0' : 'opacity-100'}`}
+          className={`absolute transition-opacity duration-300 ${
+            theme === "light" ? "opacity-0" : "opacity-100"
+          }`}
         />
       </span>
-      {mobile && <span>{theme === 'light' ? 'Dark Mode' : 'Light Mode'}</span>}
+      {mobile && <span>{theme === "light" ? "Dark Mode" : "Light Mode"}</span>}
       {!mobile && (
         <span
           className={`absolute top-full mt-2 left-1/2 transform -translate-x-1/2 px-2 py-1 text-xs font-medium rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 ${
-            theme === 'light' ? 'bg-gray-800 text-white' : 'bg-gray-200 text-gray-900'
+            theme === "light"
+              ? "bg-gray-800 text-white"
+              : "bg-gray-200 text-gray-900"
           }`}
         >
-          {theme === 'light' ? 'Dark Mode' : 'Light Mode'}
+          {theme === "light" ? "Dark Mode" : "Light Mode"}
         </span>
       )}
     </button>
@@ -111,15 +143,15 @@ const Navbar: React.FC = () => {
       <Toaster position="top-right" />
       <nav
         className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 border-b ${
-          theme === 'light'
-            ? 'bg-white/80 backdrop-blur-md border-gray-100'
-            : 'bg-gray-900/80 backdrop-blur-md border-gray-800'
-        } ${scrolled ? 'shadow-lg' : 'shadow-none'}`}
+          theme === "light"
+            ? "bg-white/80 backdrop-blur-md border-gray-100"
+            : "bg-gray-900/80 backdrop-blur-md border-gray-800"
+        } ${scrolled ? "shadow-lg" : "shadow-none"}`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
-            <Link 
-              href="/" 
+            <Link
+              href="/"
               className="flex items-center space-x-3 group"
               onClick={() => setNavOpen(false)}
             >
@@ -129,12 +161,13 @@ const Navbar: React.FC = () => {
                   alt="LearnLive Logo"
                   className="h-10 w-10 rounded-lg transform group-hover:scale-110 transition-transform duration-300"
                 />
-                <div className="absolute inset-0 bg-gradient-to-r from-cyan-500 to-cyan-600 opacity-0 group-hover:opacity-20 rounded-lg transition-opacity duration-300" />
+                <div className="absolute inset-0 bg-gradient-to-r from-indigo-500 to-indigo-600 opacity-0 group-hover:opacity-20 rounded-lg transition-opacity duration-300" />
               </div>
               <span
                 className="text-transparent bg-clip-text font-bold text-2xl"
                 style={{
-                  backgroundImage: 'linear-gradient(to right, #00bbc6, #0286a3)',
+                  backgroundImage:
+                    "linear-gradient(to right, #00bbc6, #0286a3)",
                 }}
               >
                 LearnLive
@@ -147,16 +180,32 @@ const Navbar: React.FC = () => {
                 <NavItem href="/" theme={theme} icon={<Home size={18} />}>
                   Home
                 </NavItem>
-                <NavItem href="/studyplan" theme={theme} icon={<BookOpen size={18} />}>
+                <NavItem
+                  href="/studyplan"
+                  theme={theme}
+                  icon={<BookOpen size={18} />}
+                >
                   Success Guide
                 </NavItem>
-                <NavItem href="/roadmap" theme={theme} icon={<BookOpen size={18} />}>
+                <NavItem
+                  href="/roadmap"
+                  theme={theme}
+                  icon={<BookOpen size={18} />}
+                >
                   Courses
                 </NavItem>
-                <NavItem href="/create" theme={theme} icon={<Pencil size={18} />}>
+                <NavItem
+                  href="/create"
+                  theme={theme}
+                  icon={<Pencil size={18} />}
+                >
                   Write Your Blog
                 </NavItem>
-                <NavItem href="/placementpre" theme={theme} icon={<MessageSquare size={18} />}>
+                <NavItem
+                  href="/placementpre"
+                  theme={theme}
+                  icon={<MessageSquare size={18} />}
+                >
                   Placement Prep
                 </NavItem>
                 <li className="list-none">
@@ -166,12 +215,12 @@ const Navbar: React.FC = () => {
             </div>
 
             <div className="flex items-center space-x-4">
-              {status === 'authenticated' ? (
+              {status === "authenticated" ? (
                 <div className="relative" ref={dropdownRef}>
                   <button
                     onClick={() => setDropdownOpen(!isDropdownOpen)}
-                    className={`flex items-center space-x-2 p-2 rounded-full transition-all duration-300 hover:bg-gradient-to-r hover:from-cyan-500 hover:to-cyan-600 ${
-                      theme === 'light' ? 'bg-gray-100' : 'bg-gray-800'
+                    className={`flex items-center space-x-2 p-2 rounded-full transition-all duration-300 hover:bg-gradient-to-r hover:from-indigo-500 hover:to-indigo-600 ${
+                      theme === "light" ? "bg-gray-100" : "bg-gray-800"
                     }`}
                     aria-expanded={isDropdownOpen}
                     aria-label="User menu"
@@ -185,40 +234,53 @@ const Navbar: React.FC = () => {
                     ) : (
                       <div
                         className={`w-9 h-9 rounded-full flex items-center justify-center ${
-                          theme === 'light' ? 'bg-cyan-100' : 'bg-cyan-900'
+                          theme === "light" ? "bg-indigo-100" : "bg-indigo-900"
                         }`}
                       >
-                        <User size={18} className={theme === 'light' ? 'text-cyan-600' : 'text-cyan-300'} />
+                        <User
+                          size={18}
+                          className={
+                            theme === "light"
+                              ? "text-indigo-600"
+                              : "text-indigo-300"
+                          }
+                        />
                       </div>
                     )}
                     <ChevronDown
                       size={16}
-                      className={`transform transition-transform duration-300 ${isDropdownOpen ? 'rotate-180' : ''}`}
+                      className={`transform transition-transform duration-300 ${
+                        isDropdownOpen ? "rotate-180" : ""
+                      }`}
                     />
                   </button>
 
                   {isDropdownOpen && (
                     <div
                       className={`absolute right-0 mt-2 w-64 rounded-xl shadow-2xl overflow-hidden transform origin-top-right transition-all duration-300 animate-slide-in ${
-                        theme === 'light' ? 'bg-white' : 'bg-gray-800'
+                        theme === "light" ? "bg-white" : "bg-gray-800"
                       }`}
                     >
                       <div className="p-4 border-b border-gray-200 dark:border-gray-700">
                         <p
                           className={`font-semibold text-base truncate ${
-                            theme === 'light' ? 'text-gray-900' : 'text-white'
+                            theme === "light" ? "text-gray-900" : "text-white"
                           }`}
                         >
                           {session.user?.name}
                         </p>
-                        <p className="text-sm text-gray-500 truncate">{session.user?.email}</p>
+                        <p className="text-sm text-gray-500 truncate">
+                          {session.user?.email}
+                        </p>
                       </div>
                       <ul className="py-2 list-none">
                         <li>
                           <Link
                             href="/dashboard"
-                            className={`flex items-center px-4 py-2 text-sm font-medium transition-all duration-200 hover:bg-gradient-to-r hover:from-cyan-500 hover:to-cyan-600 hover:text-white ${
-                              theme === 'light' ? 'text-gray-700' : 'text-gray-200'
+                            className={`flex items-center px-4 py-2 text-sm font-medium transition-all duration-200 hover:bg-gradient-to-r hover:from-indigo-500 hover:to-indigo-600 hover:text-white ${
+                              theme === "light"
+                                ? "text-gray-700"
+                                : "text-gray-200"
                             }`}
                             onClick={() => setDropdownOpen(false)}
                           >
@@ -229,8 +291,10 @@ const Navbar: React.FC = () => {
                         <li>
                           <Link
                             href={`/support`}
-                            className={`flex items-center px-4 py-2 text-sm font-medium transition-all duration-200 hover:bg-gradient-to-r hover:from-cyan-500 hover:to-cyan-600 hover:text-white ${
-                              theme === 'light' ? 'text-gray-700' : 'text-gray-200'
+                            className={`flex items-center px-4 py-2 text-sm font-medium transition-all duration-200 hover:bg-gradient-to-r hover:from-indigo-500 hover:to-indigo-600 hover:text-white ${
+                              theme === "light"
+                                ? "text-gray-700"
+                                : "text-gray-200"
                             }`}
                             onClick={() => setDropdownOpen(false)}
                           >
@@ -242,7 +306,9 @@ const Navbar: React.FC = () => {
                           <button
                             onClick={handleSignOut}
                             className={`w-full flex items-center px-4 py-2 text-sm font-medium transition-all duration-200 hover:bg-red-500 hover:text-white ${
-                              theme === 'light' ? 'text-gray-700' : 'text-gray-200'
+                              theme === "light"
+                                ? "text-gray-700"
+                                : "text-gray-200"
                             }`}
                           >
                             <LogOut size={16} className="mr-2" />
@@ -256,7 +322,7 @@ const Navbar: React.FC = () => {
               ) : (
                 <Link
                   href="/signin"
-                  className={`flex items-center px-4 py-2 text-sm font-medium rounded-full bg-gradient-to-r from-cyan-600 to-cyan-700 text-white hover:from-cyan-700 hover:to-cyan-800 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl`}
+                  className={`flex items-center px-4 py-2 text-sm font-medium rounded-full bg-gradient-to-r from-indigo-600 to-indigo-700 text-white hover:from-indigo-700 hover:to-indigo-800 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl`}
                   onClick={() => setNavOpen(false)}
                 >
                   <User size={16} className="mr-2" />
@@ -267,9 +333,11 @@ const Navbar: React.FC = () => {
               <button
                 onClick={() => setNavOpen(!isNavOpen)}
                 className={`lg:hidden p-2 rounded-lg transition-all duration-300 mobile-menu-toggle ${
-                  theme === 'light' ? 'text-gray-700 hover:bg-gray-100' : 'text-gray-300 hover:bg-gray-700'
+                  theme === "light"
+                    ? "text-gray-700 hover:bg-gray-100"
+                    : "text-gray-300 hover:bg-gray-700"
                 }`}
-                aria-label={isNavOpen ? 'Close menu' : 'Open menu'}
+                aria-label={isNavOpen ? "Close menu" : "Open menu"}
               >
                 {isNavOpen ? <X size={24} /> : <Menu size={24} />}
               </button>
@@ -280,53 +348,57 @@ const Navbar: React.FC = () => {
           <div
             ref={navRef}
             className={`lg:hidden transition-all duration-300 ease-in-out ${
-              isNavOpen ? 'max-h-screen opacity-100 py-4' : 'max-h-0 opacity-0 py-0'
+              isNavOpen
+                ? "max-h-screen opacity-100 py-4"
+                : "max-h-0 opacity-0 py-0"
             } overflow-hidden mobile-menu`}
           >
             <ul
               className={`flex flex-col space-y-2 p-4 rounded-xl list-none ${
-                theme === 'light' ? 'bg-white shadow-lg' : 'bg-gray-900 shadow-2xl'
+                theme === "light"
+                  ? "bg-white shadow-lg"
+                  : "bg-gray-900 shadow-2xl"
               }`}
             >
-              <NavItem 
-                href="/" 
-                theme={theme} 
+              <NavItem
+                href="/"
+                theme={theme}
                 icon={<Home size={18} />}
                 onClick={() => setNavOpen(false)}
                 mobile
               >
                 Home
               </NavItem>
-              <NavItem 
-                href="/studyplan" 
-                theme={theme} 
+              <NavItem
+                href="/studyplan"
+                theme={theme}
                 icon={<BookOpen size={18} />}
                 onClick={() => setNavOpen(false)}
                 mobile
               >
                 Success Guide
               </NavItem>
-              <NavItem 
-                href="/roadmap" 
-                theme={theme} 
+              <NavItem
+                href="/roadmap"
+                theme={theme}
                 icon={<BookOpen size={18} />}
                 onClick={() => setNavOpen(false)}
                 mobile
               >
                 Courses
               </NavItem>
-              <NavItem 
-                href="/create" 
-                theme={theme} 
+              <NavItem
+                href="/create"
+                theme={theme}
                 icon={<Pencil size={18} />}
                 onClick={() => setNavOpen(false)}
                 mobile
               >
                 Write Your Blog
               </NavItem>
-              <NavItem 
-                href="/placementpre" 
-                theme={theme} 
+              <NavItem
+                href="/placementpre"
+                theme={theme}
                 icon={<MessageSquare size={18} />}
                 onClick={() => setNavOpen(false)}
                 mobile
@@ -336,20 +408,20 @@ const Navbar: React.FC = () => {
               <li className="list-none">
                 <ThemeToggleButton mobile />
               </li>
-              {status === 'authenticated' && (
+              {status === "authenticated" && (
                 <>
-                  <NavItem 
-                    href="/dashboard" 
-                    theme={theme} 
+                  <NavItem
+                    href="/dashboard"
+                    theme={theme}
                     icon={<BarChart size={18} />}
                     onClick={() => setNavOpen(false)}
                     mobile
                   >
                     Dashboard
                   </NavItem>
-                  <NavItem 
-                    href={`/profilesection/${session.user?.email}`} 
-                    theme={theme} 
+                  <NavItem
+                    href={`/profilesection/${session.user?.email}`}
+                    theme={theme}
                     icon={<User size={18} />}
                     onClick={() => setNavOpen(false)}
                     mobile
@@ -360,12 +432,14 @@ const Navbar: React.FC = () => {
                     <button
                       onClick={handleSignOut}
                       className={`relative flex items-center w-full py-2 px-3 rounded-lg text-sm font-medium transition-all duration-300 ${
-                        theme === 'light'
-                          ? 'text-gray-700 hover:bg-red-50 hover:text-red-600'
-                          : 'text-gray-200 hover:bg-red-900/50 hover:text-red-400'
+                        theme === "light"
+                          ? "text-gray-700 hover:bg-red-50 hover:text-red-600"
+                          : "text-gray-200 hover:bg-red-900/50 hover:text-red-400"
                       }`}
                     >
-                      <span className="mr-2"><LogOut size={18} /></span>
+                      <span className="mr-2">
+                        <LogOut size={18} />
+                      </span>
                       Sign out
                     </button>
                   </li>
@@ -395,7 +469,7 @@ const Navbar: React.FC = () => {
           overflow: hidden;
         }
         .gradient-hover::after {
-          content: '';
+          content: "";
           position: absolute;
           bottom: 0;
           left: 0;
