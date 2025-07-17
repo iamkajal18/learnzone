@@ -24,6 +24,12 @@ import {
 const DEFAULT_IMAGE_URL =
   "https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80";
 
+// Primary color constants
+const PRIMARY_COLOR = "blue-600";
+const PRIMARY_HOVER = "blue-700";
+const SECONDARY_COLOR = "indigo-600";
+const SECONDARY_HOVER = "indigo-700";
+
 function stripHtmlTags(str: string): string {
   return str.replace(/<[^>]*>?/gm, "");
 }
@@ -92,7 +98,7 @@ const BlogCard = ({
               idea.profilePhoto ||
               `https://ui-avatars.com/api/?name=${encodeURIComponent(
                 authorName
-              )}&background=00CFD1&color=fff`
+              )}&background=4f46e5&color=fff`
             }
             className="w-5 h-5 sm:w-6 sm:h-6 rounded-full"
             alt={`${authorName}'s profile`}
@@ -120,14 +126,14 @@ const BlogCard = ({
 
         <div className="flex justify-between items-center gap-2">
           <Link href={`/viewmore/${idea._id}`} className="flex-1 sm:flex-none">
-            <button className="w-full sm:w-auto text-xs sm:text-sm bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 text-white py-1.5 px-3 rounded transition-colors">
+            <button className={`w-full sm:w-auto text-xs sm:text-sm bg-${PRIMARY_COLOR} hover:bg-${PRIMARY_HOVER} text-white py-1.5 px-3 rounded transition-colors`}>
               View
             </button>
           </Link>
           {shouldShowActions && (
             <div className="flex gap-1 sm:gap-2">
               <Link href={`/edit/${idea._id}`}>
-                <button className="text-xs sm:text-sm bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 text-white py-1.5 px-2 sm:px-3 rounded transition-colors">
+                <button className={`text-xs sm:text-sm bg-${PRIMARY_COLOR} hover:bg-${PRIMARY_HOVER} text-white py-1.5 px-2 sm:px-3 rounded transition-colors`}>
                   <Edit className="h-3 w-3 sm:hidden" />
                   <span className="hidden sm:inline">Edit</span>
                 </button>
@@ -136,7 +142,7 @@ const BlogCard = ({
                 <button
                   onClick={() => onDelete(idea._id)}
                   disabled={deletingId === idea._id}
-                  className="text-xs sm:text-sm bg-red-500 hover:bg-red-600 dark:bg-red-600 dark:hover:bg-red-700 text-white py-1.5 px-2 sm:px-3 rounded flex items-center gap-1 transition-colors"
+                  className={`text-xs sm:text-sm bg-${SECONDARY_COLOR} hover:bg-${SECONDARY_HOVER} text-white py-1.5 px-2 sm:px-3 rounded flex items-center gap-1 transition-colors`}
                 >
                   {deletingId === idea._id ? (
                     <span className="inline-block w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
@@ -234,7 +240,7 @@ export default function Dashboard() {
   if (status === "loading" || loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#0286a3]"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-600"></div>
       </div>
     );
   }
@@ -250,7 +256,7 @@ export default function Dashboard() {
         </p>
         <button
           onClick={handleRefresh}
-          className="mt-2 flex items-center gap-2 text-sm text-[#0286a3] hover:text-[#0286a3]/80 dark:text-blue-400 dark:hover:text-blue-300 transition-colors"
+          className="mt-2 flex items-center gap-2 text-sm text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 transition-colors"
         >
           <RefreshCw className="h-4 w-4" />
           Refresh Data
@@ -259,7 +265,7 @@ export default function Dashboard() {
 
       {/* Analytics Cards */}
       <div className="space-y-3 lg:space-y-4 mb-6 lg:mb-8">
-        <div className="bg-gradient-to-r from-[#0286a3] to-[#0286a3]/80 p-3 lg:p-4 rounded-lg text-white">
+        <div className={`bg-${PRIMARY_COLOR} p-3 lg:p-4 rounded-lg text-white`}>
           <div className="flex items-center justify-between">
             <div>
               <p className="text-xs lg:text-sm opacity-90">Total Blogs</p>
@@ -269,7 +275,7 @@ export default function Dashboard() {
           </div>
         </div>
 
-        <div className="bg-gradient-to-r from-emerald-500 to-emerald-600 p-3 lg:p-4 rounded-lg text-white">
+        <div className={`bg-${SECONDARY_COLOR} p-3 lg:p-4 rounded-lg text-white`}>
           <div className="flex items-center justify-between">
             <div>
               <p className="text-xs lg:text-sm opacity-90">Total Views</p>
@@ -281,7 +287,7 @@ export default function Dashboard() {
           </div>
         </div>
 
-        <div className="bg-gradient-to-r from-purple-500 to-purple-600 p-3 lg:p-4 rounded-lg text-white">
+        <div className="bg-gradient-to-r from-blue-600 to-indigo-600 p-3 lg:p-4 rounded-lg text-white">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-xs lg:text-sm opacity-90">Avg Views/Blog</p>
@@ -309,7 +315,7 @@ export default function Dashboard() {
               key={blog._id}
               className="flex items-center space-x-3 p-2 lg:p-3 bg-gray-50 dark:bg-gray-700 rounded-lg"
             >
-              <div className="w-2 h-2 bg-[#0286a3] rounded-full flex-shrink-0"></div>
+              <div className={`w-2 h-2 bg-${PRIMARY_COLOR} rounded-full flex-shrink-0`}></div>
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium text-gray-800 dark:text-white truncate">
                   {blog.title}
@@ -335,7 +341,7 @@ export default function Dashboard() {
         </h3>
         <Link
           href="/create"
-          className="w-full bg-[#0286a3] hover:bg-[#0286a3]/90 text-white font-medium py-2.5 lg:py-3 px-4 rounded-lg flex items-center justify-center space-x-2 transition-colors"
+          className={`w-full bg-${PRIMARY_COLOR} hover:bg-${PRIMARY_HOVER} text-white font-medium py-2.5 lg:py-3 px-4 rounded-lg flex items-center justify-center space-x-2 transition-colors`}
           onClick={() => setSidebarOpen(false)}
         >
           <Plus className="h-4 w-4" />
@@ -416,7 +422,7 @@ export default function Dashboard() {
                 </p>
                 <Link
                   href="/create"
-                  className="inline-block bg-[#0286a3] hover:bg-[#0286a3]/90 text-white font-medium py-2 px-4 rounded-lg transition-colors"
+                  className={`inline-block bg-${PRIMARY_COLOR} hover:bg-${PRIMARY_HOVER} text-white font-medium py-2 px-4 rounded-lg transition-colors`}
                 >
                   Create Blog
                 </Link>
