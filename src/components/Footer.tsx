@@ -88,7 +88,7 @@ function Footer() {
               <div className="relative">
                 <div className="absolute inset-0 bg-gradient-to-r from-indigo-600 to-blue-700 rounded-full blur-md opacity-50 group-hover:opacity-75 transition-opacity duration-300"></div>
                 <img
-                  src="/blog.png"
+                  src="/Blog.png"
                   className={`relative h-14 w-14 rounded-full p-2 transition-all duration-300 group-hover:scale-110 ${
                     theme === "dark"
                       ? "bg-gray-800/80 border-2 border-gray-700 group-hover:border-indigo-600"

@@ -157,7 +157,7 @@ const Navbar: React.FC = () => {
             >
               <div className="relative">
                 <img
-                  src="/blog.png"
+                  src="/Blog.png"
                   alt="LearnLive Logo"
                   className="h-10 w-12 rounded-lg transform group-hover:scale-110 transition-transform duration-300"
                 />
