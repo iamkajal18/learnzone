@@ -61,8 +61,8 @@ function Footer() {
     >
       {/* Background Effects */}
       <div className="absolute inset-0 opacity-5">
-        <div className="absolute top-0 left-0 w-96 h-96 bg-gradient-to-br from-[#00cfd1] to-[#0286a3] rounded-full blur-3xl transform -translate-x-1/2 -translate-y-1/2"></div>
-        <div className="absolute bottom-0 right-0 w-96 h-96 bg-gradient-to-tl from-[#0286a3] to-[#00cfd1] rounded-full blur-3xl transform translate-x-1/2 translate-y-1/2"></div>
+        <div className="absolute top-0 left-0 w-96 h-96 bg-gradient-to-br from-indigo-600 to-blue-700 rounded-full blur-3xl transform -translate-x-1/2 -translate-y-1/2"></div>
+        <div className="absolute bottom-0 right-0 w-96 h-96 bg-gradient-to-tl from-blue-700 to-indigo-600 rounded-full blur-3xl transform translate-x-1/2 translate-y-1/2"></div>
       </div>
 
       {/* Animated Grid Pattern */}
@@ -74,7 +74,7 @@ function Footer() {
         <div
           className="absolute inset-0"
           style={{
-            backgroundImage: `linear-gradient(rgba(0, 207, 209, 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 207, 209, 0.1) 1px, transparent 1px)`,
+            backgroundImage: `linear-gradient(rgba(99, 102, 241, 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(99, 102, 241, 0.1) 1px, transparent 1px)`,
             backgroundSize: "50px 50px",
           }}
         ></div>
@@ -86,21 +86,22 @@ function Footer() {
           <div className="space-y-8 lg:col-span-1">
             <Link href="/" className="flex items-center space-x-4 group">
               <div className="relative">
-                <div className="absolute inset-0 bg-gradient-to-r from-[#00cfd1] to-[#0286a3] rounded-full blur-md opacity-50 group-hover:opacity-75 transition-opacity duration-300"></div>
+                <div className="absolute inset-0 bg-gradient-to-r from-indigo-600 to-blue-700 rounded-full blur-md opacity-50 group-hover:opacity-75 transition-opacity duration-300"></div>
                 <img
-                  src="/logo.png"
+                  src="/blog.png"
                   className={`relative h-14 w-14 rounded-full p-2 transition-all duration-300 group-hover:scale-110 ${
                     theme === "dark"
-                      ? "bg-gray-800/80 border-2 border-gray-700 group-hover:border-[#00cfd1]"
-                      : "bg-white/80 border-2 border-gray-200 group-hover:border-[#0286a3]"
+                      ? "bg-gray-800/80 border-2 border-gray-700 group-hover:border-indigo-600"
+                      : "bg-white/80 border-2 border-gray-200 group-hover:border-blue-700"
                   }`}
                   alt="LearnLive Logo"
                 />
               </div>
               <div className="flex flex-col">
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00cfd1] to-[#0286a3] text-2xl lg:text-3xl font-bold tracking-tight">
-                  LearnLive
-                </span>
+                 <span className="text-2xl font-bold">
+  <span className="text-indigo-600">Learn</span>
+  <span className="text-black">Live</span>
+</span>
                 <span
                   className={`text-xs font-medium tracking-widest ${
                     theme === "dark" ? "text-gray-400" : "text-gray-500"
@@ -128,7 +129,7 @@ function Footer() {
                 { number: "50+", label: "Countries" },
               ].map((stat, index) => (
                 <div key={index} className="text-center">
-                  <div className="text-lg font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#00cfd1] to-[#0286a3]">
+                  <div className="text-lg font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-blue-700">
                     {stat.number}
                   </div>
                   <div
@@ -151,7 +152,7 @@ function Footer() {
               }`}
             >
               Explore
-              <div className="absolute bottom-0 left-0 h-0.5 w-8 bg-gradient-to-r from-[#00cfd1] to-[#0286a3] rounded-full"></div>
+              <div className="absolute bottom-0 left-0 h-0.5 w-8 bg-gradient-to-r from-indigo-600 to-blue-700 rounded-full"></div>
             </h3>
             <ul className="space-y-4">
               {[
@@ -174,7 +175,7 @@ function Footer() {
                     </span>
                     <span className="relative">
                       {link.label}
-                      <span className="absolute bottom-0 left-0 h-0.5 w-0 bg-gradient-to-r from-[#00cfd1] to-[#0286a3] transition-all duration-300 group-hover:w-full"></span>
+                      <span className="absolute bottom-0 left-0 h-0.5 w-0 bg-gradient-to-r from-indigo-600 to-blue-700 transition-all duration-300 group-hover:w-full"></span>
                     </span>
                   </Link>
                 </li>
@@ -190,7 +191,7 @@ function Footer() {
               }`}
             >
               Get in Touch
-              <div className="absolute bottom-0 left-0 h-0.5 w-8 bg-gradient-to-r from-[#00cfd1] to-[#0286a3] rounded-full"></div>
+              <div className="absolute bottom-0 left-0 h-0.5 w-8 bg-gradient-to-r from-indigo-600 to-blue-700 rounded-full"></div>
             </h3>
             <div className="space-y-4">
               <div
@@ -198,14 +199,14 @@ function Footer() {
                   theme === "dark" ? "text-gray-300" : "text-gray-600"
                 }`}
               >
-                <div className="flex-shrink-0 w-8 h-8 bg-gradient-to-r from-[#00cfd1] to-[#0286a3] rounded-full flex items-center justify-center">
+                <div className="flex-shrink-0 w-8 h-8 bg-gradient-to-r from-indigo-600 to-blue-700 rounded-full flex items-center justify-center">
                   <span className="text-white text-xs">📧</span>
                 </div>
                 <div>
                   <div className="font-medium">Email</div>
                   <Link
                     href="mailto:kasaudhankajal51@gmail.com"
-                    className={`hover:text-[#00cfd1] transition-colors duration-300`}
+                    className={`hover:text-indigo-600 transition-colors duration-300`}
                   >
                     kasaudhankajal51@gmail.com
                   </Link>
@@ -217,14 +218,14 @@ function Footer() {
                   theme === "dark" ? "text-gray-300" : "text-gray-600"
                 }`}
               >
-                <div className="flex-shrink-0 w-8 h-8 bg-gradient-to-r from-[#00cfd1] to-[#0286a3] rounded-full flex items-center justify-center">
+                <div className="flex-shrink-0 w-8 h-8 bg-gradient-to-r from-indigo-600 to-blue-700 rounded-full flex items-center justify-center">
                   <span className="text-white text-xs">📱</span>
                 </div>
                 <div>
                   <div className="font-medium">Phone</div>
                   <Link
                     href="tel:6387486751"
-                    className={`hover:text-[#00cfd1] transition-colors duration-300`}
+                    className={`hover:text-indigo-600 transition-colors duration-300`}
                   >
                     6387486751
                   </Link>
@@ -236,7 +237,7 @@ function Footer() {
                   theme === "dark" ? "text-gray-300" : "text-gray-600"
                 }`}
               >
-                <div className="flex-shrink-0 w-8 h-8 bg-gradient-to-r from-[#00cfd1] to-[#0286a3] rounded-full flex items-center justify-center">
+                <div className="flex-shrink-0 w-8 h-8 bg-gradient-to-r from-indigo-600 to-blue-700 rounded-full flex items-center justify-center">
                   <span className="text-white text-xs">📍</span>
                 </div>
                 <div>
@@ -255,7 +256,7 @@ function Footer() {
               }`}
             >
               Stay Connected
-              <div className="absolute bottom-0 left-0 h-0.5 w-8 bg-gradient-to-r from-[#00cfd1] to-[#0286a3] rounded-full"></div>
+              <div className="absolute bottom-0 left-0 h-0.5 w-8 bg-gradient-to-r from-indigo-600 to-blue-700 rounded-full"></div>
             </h3>
 
             {/* Social Media Icons */}
@@ -313,7 +314,7 @@ function Footer() {
                   }`}
                   title={social.label}
                 >
-                  <div className="absolute inset-0 bg-gradient-to-r from-[#00cfd1] to-[#0286a3] rounded-xl opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
+                  <div className="absolute inset-0 bg-gradient-to-r from-indigo-600 to-blue-700 rounded-xl opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
                   <div className="relative z-10">{social.icon}</div>
                 </Link>
               ))}
@@ -335,17 +336,17 @@ function Footer() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="Enter your email"
-                    className={`w-full px-4 py-3 rounded-xl border-2 focus:outline-none focus:ring-2 focus:ring-[#00cfd1] focus:border-transparent transition-all duration-300 ${
+                    className={`w-full px-4 py-3 rounded-xl border-2 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-transparent transition-all duration-300 ${
                       theme === "dark"
                         ? "bg-gray-800/50 text-gray-200 border-gray-700 placeholder-gray-500"
                         : "bg-white/80 text-gray-900 border-gray-200 placeholder-gray-400"
                     }`}
                   />
-                  <div className="absolute inset-0 bg-gradient-to-r from-[#00cfd1]/10 to-[#0286a3]/10 rounded-xl opacity-0 hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+                  <div className="absolute inset-0 bg-gradient-to-r from-indigo-600/10 to-blue-700/10 rounded-xl opacity-0 hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
                 </div>
                 <button
                   type="submit"
-                  className="w-full px-6 py-3 bg-gradient-to-r from-[#00cfd1] to-[#0286a3] text-white rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 hover:shadow-lg hover:shadow-[#00cfd1]/25 active:scale-95 focus:outline-none focus:ring-2 focus:ring-[#00cfd1] focus:ring-offset-2"
+                  className="w-full px-6 py-3 bg-gradient-to-r from-indigo-600 to-blue-700 text-white rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 hover:shadow-lg hover:shadow-indigo-600/25 active:scale-95 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2"
                 >
                   Subscribe Now ✨
                 </button>
@@ -372,7 +373,7 @@ function Footer() {
               theme === "dark" ? "opacity-20" : "opacity-30"
             }`}
           >
-            <div className="w-full h-px bg-gradient-to-r from-transparent via-[#00cfd1] to-transparent"></div>
+            <div className="w-full h-px bg-gradient-to-r from-transparent via-indigo-600 to-transparent"></div>
           </div>
           <div className="relative flex justify-center">
             <div
@@ -380,7 +381,7 @@ function Footer() {
                 theme === "dark" ? "bg-gray-900" : "bg-white"
               }`}
             >
-              <div className="w-8 h-8 bg-gradient-to-r from-[#00cfd1] to-[#0286a3] rounded-full flex items-center justify-center">
+              <div className="w-8 h-8 bg-gradient-to-r from-indigo-600 to-blue-700 rounded-full flex items-center justify-center">
                 <span className="text-white text-xs">⭐</span>
               </div>
             </div>
@@ -398,7 +399,7 @@ function Footer() {
               <span>© {currentYear}</span>
               <Link
                 href="/"
-                className="font-semibold text-transparent bg-clip-text bg-gradient-to-r from-[#00cfd1] to-[#0286a3] hover:from-[#0286a3] hover:to-[#00cfd1] transition-all duration-300"
+                className="font-semibold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-blue-700 hover:from-blue-700 hover:to-indigo-600 transition-all duration-300"
               >
                 LearnLive
               </Link>
@@ -408,7 +409,7 @@ function Footer() {
               <span>Designed with</span>
               <span className="text-red-500 animate-pulse">❤️</span>
               <span>by</span>
-              <span className="font-semibold text-transparent bg-clip-text bg-gradient-to-r from-[#00cfd1] to-[#0286a3]">
+              <span className="font-semibold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-blue-700">
                 Kajal Kasaudhan
               </span>
             </div>
@@ -422,12 +423,12 @@ function Footer() {
               <Link
                 key={link.href}
                 href={link.href}
-                className={`relative text-sm transition-all duration-300 hover:text-[#00cfd1] ${
+                className={`relative text-sm transition-all duration-300 hover:text-indigo-600 ${
                   theme === "dark" ? "text-gray-400" : "text-gray-600"
                 }`}
               >
                 {link.label}
-                <span className="absolute bottom-0 left-0 h-0.5 w-0 bg-gradient-to-r from-[#00cfd1] to-[#0286a3] transition-all duration-300 hover:w-full"></span>
+                <span className="absolute bottom-0 left-0 h-0.5 w-0 bg-gradient-to-r from-indigo-600 to-blue-700 transition-all duration-300 hover:w-full"></span>
               </Link>
             ))}
 

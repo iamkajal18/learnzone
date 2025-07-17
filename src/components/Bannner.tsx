@@ -66,10 +66,11 @@ export default function BlogHeroSection() {
                   Start Writing Today
                 </button>
               </Link>
-              
+              <Link href="/allblog">
               <button className="px-8 py-4 bg-white text-gray-900 font-semibold rounded-lg text-lg border-2 border-gray-200 hover:border-gray-300 transition-all duration-200 hover:bg-gray-50">
                 Visit
               </button>
+              </Link>
             </div>
           </div>
 

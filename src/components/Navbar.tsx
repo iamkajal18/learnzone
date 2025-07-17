@@ -157,21 +157,17 @@ const Navbar: React.FC = () => {
             >
               <div className="relative">
                 <img
-                  src="/logo.png"
+                  src="/blog.png"
                   alt="LearnLive Logo"
-                  className="h-10 w-10 rounded-lg transform group-hover:scale-110 transition-transform duration-300"
+                  className="h-10 w-12 rounded-lg transform group-hover:scale-110 transition-transform duration-300"
                 />
                 <div className="absolute inset-0 bg-gradient-to-r from-indigo-500 to-indigo-600 opacity-0 group-hover:opacity-20 rounded-lg transition-opacity duration-300" />
               </div>
-              <span
-                className="text-transparent bg-clip-text font-bold text-2xl"
-                style={{
-                  backgroundImage:
-                    "linear-gradient(to right, #00bbc6, #0286a3)",
-                }}
-              >
-                LearnLive
-              </span>
+              <span className="text-2xl font-bold">
+  <span className="text-indigo-600">Learn</span>
+  <span className="text-black">Live</span>
+</span>
+
             </Link>
 
             {/* Desktop Navigation */}
