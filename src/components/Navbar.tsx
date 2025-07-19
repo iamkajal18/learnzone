@@ -156,20 +156,17 @@ const Navbar: React.FC = () => {
               onClick={() => setNavOpen(false)}
             >
               <div className="relative">
-               <img
-  src="/Blog.png"
-  alt="LearnLive Logo"
-  className="h-12 w-14 bg-white p-1 rounded-lg transform group-hover:scale-110 transition-transform duration-300"
-/>
-
+                <img
+                  src="/Blog.png"
+                  alt="LearnLive Logo"
+                  className="h-10 w-12 bg-white p-1 rounded-lg transform group-hover:scale-110 transition-transform duration-300"
+                />
                 <div className="absolute inset-0 bg-gradient-to-r from-indigo-500 to-indigo-600 opacity-0 group-hover:opacity-20 rounded-lg transition-opacity duration-300" />
               </div>
-             <span className="text-2xl font-bold">
-  <span className="text-indigo-600 dark:text-indigo-400">Learn</span>
-  <span className="text-black dark:text-white">Live</span>
-</span>
-
-
+              <span className="text-xl font-bold">
+                <span className="text-indigo-600 dark:text-indigo-400">Learn</span>
+                <span className="text-black dark:text-white">Live</span>
+              </span>
             </Link>
 
             {/* Desktop Navigation */}
@@ -212,12 +209,12 @@ const Navbar: React.FC = () => {
               </ul>
             </div>
 
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-2 md:space-x-4">
               {status === "authenticated" ? (
                 <div className="relative" ref={dropdownRef}>
                   <button
                     onClick={() => setDropdownOpen(!isDropdownOpen)}
-                    className={`flex items-center space-x-2 p-2 rounded-full transition-all duration-300 hover:bg-gradient-to-r hover:from-indigo-500 hover:to-indigo-600 ${
+                    className={`flex items-center space-x-2 p-1 md:p-2 rounded-full transition-all duration-300 hover:bg-gradient-to-r hover:from-indigo-500 hover:to-indigo-600 ${
                       theme === "light" ? "bg-gray-100" : "bg-gray-800"
                     }`}
                     aria-expanded={isDropdownOpen}
@@ -227,16 +224,16 @@ const Navbar: React.FC = () => {
                       <img
                         src={session.user?.image}
                         alt="User photo"
-                        className="w-9 h-9 rounded-full border-2 border-transparent group-hover:border-white transition-all"
+                        className="w-8 h-8 md:w-9 md:h-9 rounded-full border-2 border-transparent group-hover:border-white transition-all"
                       />
                     ) : (
                       <div
-                        className={`w-9 h-9 rounded-full flex items-center justify-center ${
+                        className={`w-8 h-8 md:w-9 md:h-9 rounded-full flex items-center justify-center ${
                           theme === "light" ? "bg-indigo-100" : "bg-indigo-900"
                         }`}
                       >
                         <User
-                          size={18}
+                          size={16}
                           className={
                             theme === "light"
                               ? "text-indigo-600"
@@ -247,7 +244,7 @@ const Navbar: React.FC = () => {
                     )}
                     <ChevronDown
                       size={16}
-                      className={`transform transition-transform duration-300 ${
+                      className={`hidden md:block transform transition-transform duration-300 ${
                         isDropdownOpen ? "rotate-180" : ""
                       }`}
                     />
@@ -255,19 +252,19 @@ const Navbar: React.FC = () => {
 
                   {isDropdownOpen && (
                     <div
-                      className={`absolute right-0 mt-2 w-64 rounded-xl shadow-2xl overflow-hidden transform origin-top-right transition-all duration-300 animate-slide-in ${
+                      className={`absolute right-0 mt-2 w-56 md:w-64 rounded-xl shadow-2xl overflow-hidden transform origin-top-right transition-all duration-300 animate-slide-in ${
                         theme === "light" ? "bg-white" : "bg-gray-800"
                       }`}
                     >
                       <div className="p-4 border-b border-gray-200 dark:border-gray-700">
                         <p
-                          className={`font-semibold text-base truncate ${
+                          className={`font-semibold text-sm md:text-base truncate ${
                             theme === "light" ? "text-gray-900" : "text-white"
                           }`}
                         >
                           {session.user?.name}
                         </p>
-                        <p className="text-sm text-gray-500 truncate">
+                        <p className="text-xs md:text-sm text-gray-500 truncate">
                           {session.user?.email}
                         </p>
                       </div>
@@ -320,11 +317,12 @@ const Navbar: React.FC = () => {
               ) : (
                 <Link
                   href="/signin"
-                  className={`flex items-center px-4 py-2 text-sm font-medium rounded-full bg-gradient-to-r from-indigo-600 to-indigo-700 text-white hover:from-indigo-700 hover:to-indigo-800 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl`}
+                  className={`flex items-center px-3 py-1.5 md:px-4 md:py-2 text-xs md:text-sm font-medium rounded-full bg-gradient-to-r from-indigo-600 to-indigo-700 text-white hover:from-indigo-700 hover:to-indigo-800 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl`}
                   onClick={() => setNavOpen(false)}
                 >
-                  <User size={16} className="mr-2" />
-                  Sign In
+                  <User size={14} className="mr-1 md:mr-2" />
+                  <span className="hidden sm:inline">Sign In</span>
+                  <span className="sm:hidden">Login</span>
                 </Link>
               )}
 
@@ -337,7 +335,7 @@ const Navbar: React.FC = () => {
                 }`}
                 aria-label={isNavOpen ? "Close menu" : "Open menu"}
               >
-                {isNavOpen ? <X size={24} /> : <Menu size={24} />}
+                {isNavOpen ? <X size={20} /> : <Menu size={20} />}
               </button>
             </div>
           </div>
@@ -347,12 +345,12 @@ const Navbar: React.FC = () => {
             ref={navRef}
             className={`lg:hidden transition-all duration-300 ease-in-out ${
               isNavOpen
-                ? "max-h-screen opacity-100 py-4"
+                ? "max-h-screen opacity-100 py-2"
                 : "max-h-0 opacity-0 py-0"
             } overflow-hidden mobile-menu`}
           >
             <ul
-              className={`flex flex-col space-y-2 p-4 rounded-xl list-none ${
+              className={`flex flex-col space-y-1 p-2 md:p-4 rounded-xl list-none ${
                 theme === "light"
                   ? "bg-white shadow-lg"
                   : "bg-gray-900 shadow-2xl"
