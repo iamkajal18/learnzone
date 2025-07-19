@@ -67,7 +67,7 @@ export default function BlogHeroSection() {
             </p>
 
             {/* CTA Buttons */}
-            <div className={`flex flex-col sm:flex-row gap-4 justify-center items-center mb-1 transition-all duration-800 delay-300 ${
+           <div className={`flex flex-col sm:flex-row gap-4 justify-center items-center mb-1 transition-all duration-800 delay-300 ${
               isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
             }`}>
               <Link href="/create">
@@ -76,12 +76,12 @@ export default function BlogHeroSection() {
                 </button>
               </Link>
               <Link href="/chat">
-                <button className="px-8 py-4 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 font-semibold rounded-lg text-lg border-2 border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 transition-all duration-200 hover:bg-gray-50 dark:hover:bg-gray-700">
+                <button className="px-8 py-4 hover:bg-blue-600 dark:hover:bg-blue-500 bg-transparent text-blue-500 dark:text-blue-400 border-2 border-blue-500 dark:border-blue-400 hover:text-white font-semibold rounded-lg text-lg transition-all duration-200 shadow-lg hover:shadow-xl">
                   Ai ChatBox
                 </button>
-                </Link>
+              </Link>
               <Link href="/allblog">
-                <button className="px-8 py-4 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 font-semibold rounded-lg text-lg border-2 border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 transition-all duration-200 hover:bg-gray-50 dark:hover:bg-gray-700">
+                <button className="px-8 py-4 hover:bg-blue-600 dark:hover:bg-blue-500 bg-transparent text-blue-500 dark:text-blue-400 border-2 border-blue-500 dark:border-blue-400 hover:text-white font-semibold rounded-lg text-lg transition-all duration-200 shadow-lg hover:shadow-xl">
                   Visit
                 </button>
               </Link>
