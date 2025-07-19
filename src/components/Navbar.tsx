@@ -156,17 +156,19 @@ const Navbar: React.FC = () => {
               onClick={() => setNavOpen(false)}
             >
               <div className="relative">
-                <img
-                  src="/Blog.png"
-                  alt="LearnLive Logo"
-                  className="h-10 w-12 rounded-lg transform group-hover:scale-110 transition-transform duration-300"
-                />
+               <img
+  src="/Blog.png"
+  alt="LearnLive Logo"
+  className="h-12 w-14 bg-white p-1 rounded-lg transform group-hover:scale-110 transition-transform duration-300"
+/>
+
                 <div className="absolute inset-0 bg-gradient-to-r from-indigo-500 to-indigo-600 opacity-0 group-hover:opacity-20 rounded-lg transition-opacity duration-300" />
               </div>
-              <span className="text-2xl font-bold">
-  <span className="text-indigo-600">Learn</span>
-  <span className="text-black">Live</span>
+             <span className="text-2xl font-bold">
+  <span className="text-indigo-600 dark:text-indigo-400">Learn</span>
+  <span className="text-black dark:text-white">Live</span>
 </span>
+
 
             </Link>
 

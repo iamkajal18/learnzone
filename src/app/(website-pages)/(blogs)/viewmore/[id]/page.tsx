@@ -1,13 +1,13 @@
+// components/BlogDisplay.tsx
 "use client";
 import React, { useEffect, useState } from "react";
-
 import DOMPurify from "dompurify";
 import { useParams } from "next/navigation";
 import axios from "axios";
 import { format } from "date-fns";
-import MarkdownRenderer from "../../../../../components/MarkdownRenderer";
-import { Skeleton } from "@/components/skeleton"
-
+import MarkdownRenderer from "@/components/MarkdownRenderer";
+import { Skeleton } from "@/components/skeleton";
+import { Eye } from "lucide-react";
 
 interface BlogDisplayProps {
   blog: {
@@ -25,6 +25,7 @@ interface BlogDisplayProps {
     category: string;
     tags: string[];
     authorEmail?: string;
+    views?: number;
   };
 }
 
@@ -39,6 +40,9 @@ const BlogDisplay = () => {
       setLoading(true);
       const response = await axios.get(`/api/view-more/${id}`);
       setBlog(response.data.idea);
+      
+      // Track view after loading the blog
+      await trackView();
     } catch (err) {
       setError("Failed to load blog post");
       console.error(err);
@@ -47,9 +51,18 @@ const BlogDisplay = () => {
     }
   };
 
-  useEffect(() => {
-    fetchDetails();
-  }, [id]);
+  const trackView = async () => {
+    try {
+      await fetch(`/api/view-counter/${id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+    } catch (error) {
+      console.error('Error tracking view:', error);
+    }
+  };
 
   const processHtmlContent = (html: string) => {
     if (!html) return "";
@@ -93,21 +106,7 @@ const BlogDisplay = () => {
       ],
     });
 
-    const tempDiv = document.createElement("div");
-    tempDiv.innerHTML = sanitized;
-    tempDiv.querySelectorAll("iframe").forEach((iframe) => {
-      const src = iframe.getAttribute("src") || "";
-      try {
-        const url = new URL(src);
-        if (!(url.hostname === "www.youtube.com" && url.pathname.startsWith("/embed/"))) {
-          iframe.remove();
-        }
-      } catch {
-        iframe.remove();
-      }
-    });
-
-    return tempDiv.innerHTML;
+    return sanitized;
   };
 
   if (loading) {
@@ -160,6 +159,13 @@ const BlogDisplay = () => {
           </span>
         </div>
 
+        <div className="flex items-center gap-2 mb-2">
+          <Eye className="h-5 w-5 text-gray-600 dark:text-gray-300" />
+          <span className="text-gray-600 dark:text-gray-300">
+            {blog.views?.toLocaleString() || 0} views
+          </span>
+        </div>
+
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center mb-4 sm:mb-0">
             {blog.author?.avatar && (
@@ -207,18 +213,15 @@ const BlogDisplay = () => {
         )}
       </header>
 
-      {/* ✅ Featured Image - updated */}
-   {blog.imageUrl && (
-  <div className="mb-8 overflow-hidden rounded-xl shadow-lg">
-    <img
-      src={blog.imageUrl}
-      alt={`Featured image for ${blog.title}`}
-      className="w-full max-h-64 object-contain rounded-xl transition-transform duration-300 ease-in-out hover:scale-105"
-    />
-  </div>
-)}
-
-
+      {blog.imageUrl && (
+        <div className="mb-8 overflow-hidden rounded-xl shadow-lg">
+          <img
+            src={blog.imageUrl}
+            alt={`Featured image for ${blog.title}`}
+            className="w-full max-h-64 object-contain rounded-xl transition-transform duration-300 ease-in-out hover:scale-105"
+          />
+        </div>
+      )}
 
       <div className="prose prose-lg max-w-none dark:prose-invert bg-white dark:bg-gray-800 p-8 rounded-xl shadow-lg">
         {blog.contentType === "markdown" ? (
