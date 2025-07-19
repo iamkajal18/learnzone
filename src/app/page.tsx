@@ -12,6 +12,7 @@ import PlacementPre from "@/components/PlacementPre";
 
 import AllBlogs from "@/components/AllBlogs";
 
+
 export default function Page() {
   const router = useRouter();
 

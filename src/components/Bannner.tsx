@@ -75,6 +75,11 @@ export default function BlogHeroSection() {
                   Start Writing Today
                 </button>
               </Link>
+              <Link href="/chat">
+                <button className="px-8 py-4 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 font-semibold rounded-lg text-lg border-2 border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 transition-all duration-200 hover:bg-gray-50 dark:hover:bg-gray-700">
+                  Ai ChatBox
+                </button>
+                </Link>
               <Link href="/allblog">
                 <button className="px-8 py-4 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 font-semibold rounded-lg text-lg border-2 border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 transition-all duration-200 hover:bg-gray-50 dark:hover:bg-gray-700">
                   Visit
