@@ -3,13 +3,10 @@ import { NextRequest, NextResponse } from "next/server";
 import connectDB from "@/lib/util";
 import Idea from "@/model/Idea";
 
-export async function PATCH(
-  req: NextRequest,
-  context: { params: { id: string } }
-) {
-  await connectDB();
+export async function PATCH(request: NextRequest, context: any) {
+  const id = context?.params?.id;
 
-  const { id } = context.params;
+  await connectDB();
 
   try {
     const updated = await Idea.findByIdAndUpdate(
@@ -19,7 +16,10 @@ export async function PATCH(
     );
 
     if (!updated) {
-      return NextResponse.json({ success: false, message: "Blog not found" }, { status: 404 });
+      return NextResponse.json(
+        { success: false, message: "Blog not found" },
+        { status: 404 }
+      );
     }
 
     return NextResponse.json({
