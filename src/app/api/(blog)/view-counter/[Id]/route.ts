@@ -1,3 +1,4 @@
+// app/api/view-counter/[id]/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import connectDB from "@/lib/util";
 import Idea from "@/model/Idea";
@@ -28,10 +29,7 @@ export async function PATCH(
   } catch (error) {
     console.error("Error incrementing views:", error);
     return NextResponse.json(
-      {
-        success: false,
-        message: "Failed to update views",
-      },
+      { success: false, message: "Failed to update views" },
       { status: 500 }
     );
   }
