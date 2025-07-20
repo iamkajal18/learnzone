@@ -4,13 +4,12 @@ import connectDB from "@/lib/util";
 import Idea from "@/model/Idea";
 import rateLimit from "@/lib/rateLimit"; 
 
-
 const limiter = rateLimit({
   interval: 60 * 1000,
   uniqueTokenPerInterval: 500,
 });
 
-export async function PATCH(request: NextRequest, context: { params: { id: string } }) {
+export async function PATCH(request: NextRequest, context: any) {
   const id = context.params?.id;
 
   // Rate limiting
@@ -33,11 +32,10 @@ export async function PATCH(request: NextRequest, context: { params: { id: strin
   try {
     await connectDB();
 
-    
     const updated = await Idea.findOneAndUpdate(
       { _id: id },
       { $inc: { views: 1 } },
-      { new: true, upsert: false } 
+      { new: true, upsert: false }
     );
 
     if (!updated) {
@@ -74,7 +72,7 @@ export async function PATCH(request: NextRequest, context: { params: { id: strin
   }
 }
 
-// Add OPTIONS for CORS preflight
+// CORS Preflight
 export async function OPTIONS() {
   return NextResponse.json(
     {},
