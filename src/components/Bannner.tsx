@@ -80,11 +80,7 @@ export default function BlogHeroSection() {
                   Ai ChatBox
                 </button>
               </Link>
-              <Link href="/allblog">
-                <button className="px-8 py-4 hover:bg-blue-600 dark:hover:bg-blue-500 bg-transparent text-blue-500 dark:text-blue-400 border-2 border-blue-500 dark:border-blue-400 hover:text-white font-semibold rounded-lg text-lg transition-all duration-200 shadow-lg hover:shadow-xl">
-                  Visit
-                </button>
-              </Link>
+              
             </div>
           </div>
         </div>

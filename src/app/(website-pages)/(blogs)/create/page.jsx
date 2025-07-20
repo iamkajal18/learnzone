@@ -428,18 +428,6 @@ function Page() {
               </button>
               <button
                 type="button"
-                onClick={() => debouncedSetMode("markdown")}
-                className={`px-4 py-2 font-medium text-sm ${
-                  mode === "markdown" 
-                    ? "text-[#0286a3] border-b-2 border-[#0286a3]" 
-                    : "text-gray-500 hover:text-[#0286a3]"
-                }`}
-                aria-label="Switch to Markdown mode"
-              >
-                Markdown
-              </button>
-              <button
-                type="button"
                 onClick={() => debouncedSetMode("preview")}
                 className={`px-4 py-2 font-medium text-sm ${
                   mode === "preview" 
