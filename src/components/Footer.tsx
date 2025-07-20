@@ -89,7 +89,7 @@ function Footer() {
                 <div className="absolute inset-0 bg-gradient-to-r from-indigo-600 to-blue-700 rounded-full blur-md opacity-50 group-hover:opacity-75 transition-opacity duration-300"></div>
                 <img
                   src="/Blog.png"
-                  className={`relative h-14 w-14 rounded-full p-2 transition-all duration-300 group-hover:scale-110 ${
+                  className={`relative h-13 w-14 rounded-full p-2 transition-all duration-300 group-hover:scale-110 ${
                     theme === "dark"
                       ? "bg-gray-800/80 border-2 border-gray-700 group-hover:border-indigo-600"
                       : "bg-white/80 border-2 border-gray-200 group-hover:border-blue-700"
@@ -99,9 +99,9 @@ function Footer() {
               </div>
               <div className="flex flex-col">
                  <span className="text-2xl font-bold">
-  <span className="text-indigo-600">Learn</span>
-  <span className="text-black">Live</span>
-</span>
+                <span className="text-blue-700 dark:text-indigo-600">Learn</span>
+                <span className="text-black dark:text-white">Live</span>
+              </span>
                 <span
                   className={`text-xs font-medium tracking-widest ${
                     theme === "dark" ? "text-gray-400" : "text-gray-500"

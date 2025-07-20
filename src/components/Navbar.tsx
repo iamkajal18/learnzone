@@ -150,24 +150,54 @@ const Navbar: React.FC = () => {
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
-            <Link
-              href="/"
-              className="flex items-center space-x-3 group"
-              onClick={() => setNavOpen(false)}
-            >
-              <div className="relative">
-                <img
-                  src="/Blog.png"
-                  alt="LearnLive Logo"
-                  className="h-14 w-14 bg-white p-1 rounded-lg transform group-hover:scale-110 transition-transform duration-300"
-                />
-                <div className="absolute inset-0 bg-gradient-to-r from-indigo-500 to-indigo-600 opacity-0 group-hover:opacity-20 rounded-lg transition-opacity duration-300" />
-              </div>
-              <span className="text-2xl font-bold">
-                <span className="text-indigo-600 dark:text-indigo-400">Learn</span>
-                <span className="text-black dark:text-white">Live</span>
-              </span>
-            </Link>
+            <Link 
+  href="/" 
+  className="flex items-center space-x-3 group transition-all duration-300 hover:scale-105" 
+  onClick={() => setNavOpen(false)}
+>
+  <div className="relative">
+    {/* Glow effect */}
+    <div className="absolute inset-0 bg-gradient-to-r from-indigo-600 via-blue-600 to-purple-600 rounded-full blur-lg opacity-40 group-hover:opacity-70 transition-all duration-500 animate-pulse group-hover:animate-none"></div>
+    
+    {/* Logo container */}
+    <div className="relative">
+      {/* Inner decorative circle */}
+      <div className={`absolute inset-1 rounded-full transition-all duration-500 group-hover:scale-95 ${
+        theme === "dark"
+          ? "bg-gradient-to-br from-indigo-500/20 to-blue-500/20 border border-indigo-400/30"
+          : "bg-gradient-to-br from-blue-500/15 to-indigo-500/15 border border-blue-400/30"
+      }`}></div>
+      
+      <img
+        src="/Blog.png"
+        className={`relative h-12 w-12 rounded-full p-2 transition-all duration-500 group-hover:scale-110 group-hover:rotate-3 ${
+          theme === "dark"
+            ? "bg-gray-900/90 border-2 border-gray-600 group-hover:border-indigo-400 shadow-lg"
+            : "bg-white/95 border-2 border-gray-300 group-hover:border-blue-500 shadow-lg"
+        }`}
+        alt="LearnLive Logo"
+      />
+      
+      {/* Subtle overlay effect */}
+      <div className="absolute inset-0 bg-gradient-to-br from-transparent via-white/10 to-transparent rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+    </div>
+  </div>
+
+  {/* Brand text */}
+  <div className="relative overflow-hidden">
+    <span className="text-2xl font-bold tracking-tight">
+      <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent dark:from-indigo-400 dark:to-blue-400 transition-all duration-300">
+        Learn
+      </span>
+      <span className="text-gray-800 dark:text-white ml-0.5 transition-colors duration-300">
+        Live
+      </span>
+    </span>
+    
+    {/* Subtle underline animation */}
+    <div className="absolute bottom-0 left-0 h-0.5 w-0 bg-gradient-to-r from-blue-600 to-indigo-600 group-hover:w-full transition-all duration-500 ease-out"></div>
+  </div>
+</Link>
 
             {/* Desktop Navigation */}
             <div className="hidden lg:flex items-center space-x-1">
