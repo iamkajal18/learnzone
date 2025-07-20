@@ -43,9 +43,7 @@ const EditBlog = () => {
   const editor = useEditor({
     extensions: [
       StarterKit,
-      Link.configure({
-        openOnClick: false,
-      }),
+      Link.configure({ openOnClick: false }),
       Image,
     ],
     content: formData.content,
@@ -157,7 +155,7 @@ const EditBlog = () => {
         <div className="text-red-500 text-xl">{error}</div>
         <button
           onClick={fetchBlog}
-          className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+          className="mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
         >
           Retry
         </button>
@@ -175,7 +173,7 @@ const EditBlog = () => {
 
   return (
     <div className="w-full max-w-4xl mx-auto my-8 px-4">
-      <h1 className="text-3xl md:text-4xl font-bold mb-8">Edit Blog Post</h1>
+      <h1 className="text-3xl md:text-4xl font-bold mb-8 text-blue-700">Edit Blog Post</h1>
       <form onSubmit={handleSubmit} className="space-y-6">
         <div>
           <label htmlFor="title" className="block text-sm font-medium text-gray-700">
@@ -188,7 +186,7 @@ const EditBlog = () => {
             value={formData.title}
             onChange={handleInputChange}
             required
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2"
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-600 focus:ring-blue-600 p-2"
           />
         </div>
 
@@ -196,11 +194,11 @@ const EditBlog = () => {
           <label htmlFor="content" className="block text-sm font-medium text-gray-700">
             Content
           </label>
-          <div className="mt-1 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+          <div className="mt-1 rounded-md border border-gray-300 shadow-sm focus-within:border-blue-600 focus-within:ring-blue-600">
             <Toolbar editor={editor} />
             <EditorContent
               editor={editor}
-              className="min-h-[300px] border rounded-b-md p-4 focus:outline-none"
+              className="min-h-[300px] border-t rounded-b-md p-4 focus:outline-none"
             />
           </div>
         </div>
@@ -215,7 +213,7 @@ const EditBlog = () => {
             id="imageUrl"
             value={formData.imageUrl}
             onChange={handleInputChange}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2"
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-600 focus:ring-blue-600 p-2"
             placeholder="https://example.com/image.jpg"
           />
         </div>
@@ -230,7 +228,7 @@ const EditBlog = () => {
             value={formData.category}
             onChange={handleInputChange}
             required
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2"
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-600 focus:ring-blue-600 p-2"
           >
             <option value="">Select a category</option>
             {categories.map((category) => (
@@ -251,7 +249,7 @@ const EditBlog = () => {
             id="tags"
             value={formData.tags}
             onChange={handleInputChange}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2"
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-600 focus:ring-blue-600 p-2"
             placeholder="technology, web development, nextjs"
           />
         </div>
@@ -265,7 +263,7 @@ const EditBlog = () => {
             id="contentType"
             value={formData.contentType}
             onChange={handleInputChange}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2"
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-600 focus:ring-blue-600 p-2"
           >
             <option value="html">HTML</option>
             <option value="markdown">Markdown</option>

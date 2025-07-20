@@ -1,4 +1,3 @@
-// components/BlogDisplay.tsx
 "use client";
 import React, { useEffect, useState } from "react";
 import DOMPurify from "dompurify";
@@ -34,33 +33,55 @@ const BlogDisplay = () => {
   const [blog, setBlog] = useState<BlogDisplayProps["blog"] | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [viewError, setViewError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!id || typeof id !== "string") {
+      setError("Invalid blog ID");
+      setLoading(false);
+      return;
+    }
+    fetchDetails();
+  }, [id]);
 
   const fetchDetails = async () => {
     try {
       setLoading(true);
       const response = await axios.get(`/api/view-more/${id}`);
-      setBlog(response.data.idea);
-      
-      // Track view after loading the blog
-      await trackView();
+      if (response.data.success && response.data.idea) {
+        setBlog(response.data.idea);
+        await trackView();
+      } else {
+        setError(response.data.message || "Blog post not found");
+      }
     } catch (err) {
       setError("Failed to load blog post");
-      console.error(err);
+      console.error("Fetch error:", err);
     } finally {
       setLoading(false);
     }
   };
 
   const trackView = async () => {
+    if (!blog || localStorage.getItem(`viewed_${blog.id}`)) return;
+
     try {
-      await fetch(`/api/view-counter/${id}`, {
-        method: 'PATCH',
+      const response = await fetch(`/api/view-counter/${blog.id}`, {
+        method: "PATCH",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
       });
+      const data = await response.json();
+      if (response.ok && data.success) {
+        localStorage.setItem(`viewed_${blog.id}`, "true");
+        setBlog((prev) => (prev ? { ...prev, views: data.views } : prev));
+      } else {
+        setViewError(data.message || "Failed to update view count");
+      }
     } catch (error) {
-      console.error('Error tracking view:', error);
+      setViewError("Error tracking view");
+      console.error("Error tracking view:", error);
     }
   };
 
@@ -72,19 +93,25 @@ const BlogDisplay = () => {
 
     const images = doc.querySelectorAll("img");
     images.forEach((img) => {
-      img.classList.add("my-4", "rounded-lg", "shadow-md", "mx-auto", "transition-transform", "hover:scale-105");
+      img.classList.add("my-4", "rounded-lg", "shadow-md", "mx-auto", "max-h-64", "object-contain");
       img.setAttribute("loading", "lazy");
-      if (!img.alt) {
-        img.alt = "Blog content image";
-      }
+      if (!img.alt) img.alt = "Blog content image";
     });
 
     const iframes = doc.querySelectorAll("iframe");
     iframes.forEach((iframe) => {
-      const src = iframe.getAttribute("src") || "";
-      if (src.startsWith("https://www.youtube.com/embed/")) {
+      if (iframe.getAttribute("src")?.startsWith("https://www.youtube.com/embed/")) {
         const wrapper = doc.createElement("div");
-        wrapper.classList.add("relative", "w-full", "h-0", "pb-[56.25%]", "my-4", "rounded-lg", "overflow-hidden", "shadow-md");
+        wrapper.classList.add(
+          "relative",
+          "w-full",
+          "h-0",
+          "pb-[56.25%]", // 16:9 aspect ratio
+          "my-4",
+          "rounded-lg",
+          "overflow-hidden",
+          "shadow-md"
+        );
         iframe.classList.add("absolute", "top-0", "left-0", "w-full", "h-full");
         iframe.setAttribute("allowfullscreen", "true");
         iframe.setAttribute("allow", "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture");
@@ -94,7 +121,7 @@ const BlogDisplay = () => {
       }
     });
 
-    const sanitized = DOMPurify.sanitize(doc.body.innerHTML, {
+    return DOMPurify.sanitize(doc.body.innerHTML, {
       ALLOWED_TAGS: [
         "p", "br", "strong", "em", "u", "s", "a", "img", "h1", "h2", "h3", "h4", "h5", "h6",
         "ul", "ol", "li", "blockquote", "code", "pre", "table", "thead", "tbody", "tr", "th", "td",
@@ -105,8 +132,6 @@ const BlogDisplay = () => {
         "loading", "allowfullscreen", "allow", "width", "height",
       ],
     });
-
-    return sanitized;
   };
 
   if (loading) {
@@ -164,6 +189,11 @@ const BlogDisplay = () => {
           <span className="text-gray-600 dark:text-gray-300">
             {blog.views?.toLocaleString() || 0} views
           </span>
+          {viewError && (
+            <span className="text-red-600 dark:text-red-400 text-sm ml-2">
+              {viewError}
+            </span>
+          )}
         </div>
 
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
