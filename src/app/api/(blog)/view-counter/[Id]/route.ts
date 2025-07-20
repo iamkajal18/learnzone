@@ -3,13 +3,13 @@ import connectDB from "@/lib/util";
 import Idea from "@/model/Idea";
 import mongoose from "mongoose";
 
+// The context type is inferred correctly from App Router
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
-): Promise<NextResponse> {
-  const id = params.id;
+  context: { params: { id: string } }
+) {
+  const id = context.params.id;
 
-  // Validate MongoDB ObjectId
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return NextResponse.json(
       { success: false, message: "Invalid blog ID format" },
@@ -23,10 +23,10 @@ export async function PATCH(
     const updated = await Idea.findByIdAndUpdate(
       id,
       { $inc: { views: 1 } },
-      { new: true, lean: true } // Return updated document as plain JS object
-    ) as { views: number } | null;
+      { new: true, lean: true }
+    );
 
-    if (!updated) {
+    if (!updated || Array.isArray(updated)) {
       return NextResponse.json(
         { success: false, message: "Blog not found" },
         { status: 404 }
@@ -35,7 +35,7 @@ export async function PATCH(
 
     return NextResponse.json({
       success: true,
-      views: updated.views,
+      views: (updated && typeof updated === "object" && "views" in updated) ? (updated as any).views : 0,
     });
   } catch (error) {
     console.error("Error incrementing views:", error);
