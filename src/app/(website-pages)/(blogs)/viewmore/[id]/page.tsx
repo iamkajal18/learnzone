@@ -4,12 +4,12 @@ import DOMPurify from "dompurify";
 import { useParams } from "next/navigation";
 import axios from "axios";
 import { format } from "date-fns";
-import MarkdownRenderer from "@/components/MarkdownRenderer";
-import { Skeleton } from "@/components/skeleton";
 import { Eye } from "lucide-react";
+import { Skeleton } from "@/components/skeleton";
 
 interface Blog {
   id: string;
+  _id?: string;
   title: string;
   content: string;
   imageUrl?: string;
@@ -23,7 +23,8 @@ interface Blog {
   category: string;
   tags: string[];
   authorEmail?: string;
-  views?: number;
+  views: number;
+  profilePhoto?: string;
 }
 
 const BlogDisplay = () => {
@@ -31,58 +32,27 @@ const BlogDisplay = () => {
   const [blog, setBlog] = useState<Blog | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [viewError, setViewError] = useState<string | null>(null);
+  const [viewCount, setViewCount] = useState(0);
+  const [viewTracked, setViewTracked] = useState(false);
 
-  // Memoized view tracking function
   const trackView = useCallback(async (blogId: string) => {
-    const storageKey = `viewed_${blogId}`;
+    if (viewTracked) return;
     
-    // Skip if already viewed in this session
-    if (localStorage.getItem(storageKey) || sessionStorage.getItem(storageKey)) {
-      return;
-    }
-
     try {
-      const response = await fetch(`/api/view-counter/${blogId}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const data = await response.json();
-      
-      if (data.success) {
-        // Mark as viewed in both storage mechanisms
-        localStorage.setItem(storageKey, "true");
-        sessionStorage.setItem(storageKey, "true");
+      const response = await axios.patch(`/api/view-counter/${blogId}`);
+      if (response.data.success) {
+        setViewCount(prev => prev + 1);
+        setViewTracked(true);
         
-        // Update view count in state
-        setBlog(prev => prev ? { ...prev, views: data.views } : null);
-      } else {
-        throw new Error(data.message || "View count update failed");
+        // Store in session storage to prevent duplicate counts
+        sessionStorage.setItem(`viewed_${blogId}`, "true");
       }
     } catch (error) {
       console.error("Error tracking view:", error);
-      setViewError(
-        error instanceof Error 
-          ? error.message 
-          : "An unexpected error occurred while tracking view"
-      );
     }
-  }, []);
+  }, [viewTracked]);
 
-  const fetchDetails = useCallback(async () => {
-    if (!id || typeof id !== "string") {
-      setError("Invalid blog ID");
-      setLoading(false);
-      return;
-    }
-
+  const fetchBlogDetails = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
@@ -90,23 +60,33 @@ const BlogDisplay = () => {
       const response = await axios.get(`/api/view-more/${id}`);
       
       if (response.data.success && response.data.idea) {
-        setBlog(response.data.idea);
-        // Track view after successfully loading the blog
-        await trackView(response.data.idea.id);
+        const blogData = response.data.idea;
+        // Normalize ID
+        blogData.id = blogData.id || blogData._id;
+        
+        setBlog(blogData);
+        setViewCount(blogData.views || 0);
+        
+        // Track view after loading
+        if (!sessionStorage.getItem(`viewed_${blogData.id}`)) {
+          await trackView(blogData.id);
+        }
       } else {
         setError(response.data.message || "Blog post not found");
       }
     } catch (err) {
-      setError("Failed to load blog post");
       console.error("Fetch error:", err);
+      setError("Failed to load blog post");
     } finally {
       setLoading(false);
     }
   }, [id, trackView]);
 
   useEffect(() => {
-    fetchDetails();
-  }, [fetchDetails]);
+    if (id) {
+      fetchBlogDetails();
+    }
+  }, [id, fetchBlogDetails]);
 
   const processHtmlContent = (html: string) => {
     if (!html) return "";
@@ -122,7 +102,7 @@ const BlogDisplay = () => {
       if (!img.alt) img.alt = "Blog content image";
     });
 
-    // Process iframes (e.g., YouTube embeds)
+    // Process iframes
     const iframes = doc.querySelectorAll("iframe");
     iframes.forEach((iframe) => {
       if (iframe.getAttribute("src")?.startsWith("https://www.youtube.com/embed/")) {
@@ -131,7 +111,7 @@ const BlogDisplay = () => {
           "relative",
           "w-full",
           "h-0",
-          "pb-[56.25%]", // 16:9 aspect ratio
+          "pb-[56.25%]",
           "my-4",
           "rounded-lg",
           "overflow-hidden",
@@ -140,7 +120,6 @@ const BlogDisplay = () => {
         iframe.classList.add("absolute", "top-0", "left-0", "w-full", "h-full");
         iframe.setAttribute("allowfullscreen", "true");
         iframe.setAttribute("allow", "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture");
-        iframe.setAttribute("title", "YouTube video");
         iframe.parentNode?.insertBefore(wrapper, iframe);
         wrapper.appendChild(iframe);
       }
@@ -180,7 +159,7 @@ const BlogDisplay = () => {
       <div className="w-full max-w-5xl mx-auto my-12 px-4 sm:px-6 lg:px-8 text-center py-20 bg-red-50 dark:bg-red-900/20 rounded-xl shadow-lg">
         <div className="text-red-600 dark:text-red-400 text-2xl font-semibold mb-4">{error}</div>
         <button
-          onClick={fetchDetails}
+          onClick={fetchBlogDetails}
           className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-300"
         >
           Retry
@@ -210,30 +189,23 @@ const BlogDisplay = () => {
           </span>
         </div>
 
-        <div className="flex items-center gap-2 mb-2">
+        {/* <div className="flex items-center gap-2 mb-2">
           <Eye className="h-5 w-5 text-gray-600 dark:text-gray-300" />
           <span className="text-gray-600 dark:text-gray-300">
-            {blog.views?.toLocaleString() || 0} views
+            {viewCount.toLocaleString()} views
           </span>
-          {viewError && (
-            <span className="text-red-600 dark:text-red-400 text-sm ml-2">
-              {viewError}
-            </span>
-          )}
-        </div>
+        </div> */}
 
         {/* Author and date information */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center mb-4 sm:mb-0">
-            {blog.author?.avatar && (
-              <img
-                src={blog.author.avatar}
-                alt={`${blog.author.name}'s avatar`}
-                width={48}
-                height={48}
-                className="rounded-full mr-3 border-2 border-gray-200 dark:border-gray-700"
-              />
-            )}
+            <img
+              src={blog.profilePhoto || `https://ui-avatars.com/api/?name=${encodeURIComponent(blog.author?.name || "Anonymous")}&background=4f46e5&color=fff`}
+              alt={`${blog.author?.name}'s avatar`}
+              width={48}
+              height={48}
+              className="rounded-full mr-3 border-2 border-gray-200 dark:border-gray-700"
+            />
             <div>
               <div className="font-semibold text-gray-900 dark:text-gray-100">
                 {blog.author?.name || "Anonymous"}
@@ -257,7 +229,7 @@ const BlogDisplay = () => {
         </div>
 
         {/* Tags */}
-        {blog.tags.length > 0 && (
+        {blog.tags && blog.tags.length > 0 && (
           <div className="flex flex-wrap gap-2 mt-4">
             {blog.tags.map((tag, index) => (
               <span
@@ -278,6 +250,10 @@ const BlogDisplay = () => {
             src={blog.imageUrl}
             alt={`Featured image for ${blog.title}`}
             className="w-full max-h-64 object-contain rounded-xl transition-transform duration-300 ease-in-out hover:scale-105"
+            onError={(e) => {
+              const target = e.target as HTMLImageElement;
+              target.src = "https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80";
+            }}
           />
         </div>
       )}
@@ -285,7 +261,9 @@ const BlogDisplay = () => {
       {/* Blog content */}
       <div className="prose prose-lg max-w-none dark:prose-invert bg-white dark:bg-gray-800 p-8 rounded-xl shadow-lg">
         {blog.contentType === "markdown" ? (
-          <MarkdownRenderer content={blog.content} />
+          <div className="markdown-content">
+            {blog.content}
+          </div>
         ) : (
           <div
             dangerouslySetInnerHTML={{
@@ -299,36 +277,36 @@ const BlogDisplay = () => {
       {/* Footer with author info */}
       <footer className="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
-          {blog.author && (
-            <div className="flex items-center mb-4 sm:mb-0">
-              {blog.author.avatar && (
-                <img
-                  src={blog.author.avatar}
-                  alt={`${blog.author.name}'s avatar`}
-                  width={48}
-                  height={48}
-                  className="rounded-full mr-3 border-2 border-gray-200 dark:border-gray-700"
-                />
+          <div className="flex items-center mb-4 sm:mb-0">
+            <img
+              src={blog.profilePhoto || `https://ui-avatars.com/api/?name=${encodeURIComponent(blog.author?.name || "Anonymous")}&background=4f46e5&color=fff`}
+              alt={`${blog.author?.name}'s avatar`}
+              width={48}
+              height={48}
+              className="rounded-full mr-3 border-2 border-gray-200 dark:border-gray-700"
+            />
+            <div>
+              <h3 className="font-bold text-lg text-gray-900 dark:text-white">
+                Written by {blog.author?.name || "Anonymous"}
+              </h3>
+              <p className="text-gray-600 dark:text-gray-400">
+                Professional content creator
+              </p>
+              {blog.authorEmail && (
+                <a
+                  href={`mailto:${blog.authorEmail}`}
+                  className="text-sm text-blue-600 dark:text-blue-400 hover:underline"
+                >
+                  Contact Author
+                </a>
               )}
-              <div>
-                <h3 className="font-bold text-lg text-gray-900 dark:text-white">
-                  Written by {blog.author.name || "Anonymous"}
-                </h3>
-                <p className="text-gray-600 dark:text-gray-400">
-                  Professional content creator
-                </p>
-                {blog.authorEmail && (
-                  <a
-                    href={`mailto:${blog.authorEmail}`}
-                    className="text-sm text-blue-600 dark:text-blue-400 hover:underline"
-                  >
-                    Contact Author
-                  </a>
-                )}
-              </div>
             </div>
-          )}
+          </div>
           <div className="text-sm text-gray-600 dark:text-gray-400">
+            <div className="flex items-center gap-2">
+              <Eye className="h-4 w-4" />
+              <span>Total views: {viewCount.toLocaleString()}</span>
+            </div>
             <p>Published: {format(new Date(blog.createdAt), "MMMM dd, yyyy")}</p>
             {blog.createdAt !== blog.updatedAt && (
               <p>Updated: {format(new Date(blog.updatedAt), "MMMM dd, yyyy")}</p>
