@@ -3,19 +3,9 @@ import mongoose from "mongoose";
 import connectDB from "@/lib/util";
 import Idea from "@/model/Idea";
 
-interface Context {
-  params: {
-    id: string;
-  };
-}
+export async function PATCH(request: NextRequest, context: any) {
+  const id = context.params?.id;
 
-export async function PATCH(
-  request: NextRequest,
-  { params }: Context
-) {
-  const { id } = params;
-
-  // Validate MongoDB ObjectId
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return NextResponse.json(
       { success: false, message: "Invalid blog ID" },
