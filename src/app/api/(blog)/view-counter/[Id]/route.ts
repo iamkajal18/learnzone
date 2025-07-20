@@ -2,9 +2,26 @@ import { NextRequest, NextResponse } from "next/server";
 import mongoose from "mongoose";
 import connectDB from "@/lib/util";
 import Idea from "@/model/Idea";
+import rateLimit from "@/lib/rateLimit"; 
 
-export async function PATCH(request: NextRequest, context: any) {
+
+const limiter = rateLimit({
+  interval: 60 * 1000,
+  uniqueTokenPerInterval: 500,
+});
+
+export async function PATCH(request: NextRequest, context: { params: { id: string } }) {
   const id = context.params?.id;
+
+  // Rate limiting
+  try {
+    await limiter.check(NextResponse, 10, "VIEW_INCREMENT");
+  } catch (error) {
+    return NextResponse.json(
+      { success: false, message: "Too many requests" },
+      { status: 429 }
+    );
+  }
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return NextResponse.json(
@@ -16,10 +33,11 @@ export async function PATCH(request: NextRequest, context: any) {
   try {
     await connectDB();
 
-    const updated = await Idea.findByIdAndUpdate(
-      id,
+    
+    const updated = await Idea.findOneAndUpdate(
+      { _id: id },
       { $inc: { views: 1 } },
-      { new: true }
+      { new: true, upsert: false } 
     );
 
     if (!updated) {
@@ -29,11 +47,22 @@ export async function PATCH(request: NextRequest, context: any) {
       );
     }
 
-    return NextResponse.json({
-      success: true,
-      views: updated.views,
-    });
+    return NextResponse.json(
+      {
+        success: true,
+        views: updated.views,
+      },
+      {
+        status: 200,
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "CDN-Cache-Control": "max-age=60",
+          "Vercel-CDN-Cache-Control": "max-age=3600",
+        },
+      }
+    );
   } catch (error) {
+    console.error("View increment error:", error);
     return NextResponse.json(
       {
         success: false,
@@ -43,4 +72,19 @@ export async function PATCH(request: NextRequest, context: any) {
       { status: 500 }
     );
   }
+}
+
+// Add OPTIONS for CORS preflight
+export async function OPTIONS() {
+  return NextResponse.json(
+    {},
+    {
+      status: 200,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "PATCH, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type",
+      },
+    }
+  );
 }

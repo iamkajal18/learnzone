@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import DOMPurify from "dompurify";
 import { useParams } from "next/navigation";
 import axios from "axios";
@@ -8,49 +8,91 @@ import MarkdownRenderer from "@/components/MarkdownRenderer";
 import { Skeleton } from "@/components/skeleton";
 import { Eye } from "lucide-react";
 
-interface BlogDisplayProps {
-  blog: {
-    id: string;
-    title: string;
-    content: string;
-    imageUrl?: string;
-    contentType?: string;
-    createdAt: string;
-    updatedAt: string;
-    author?: {
-      name: string;
-      avatar?: string;
-    };
-    category: string;
-    tags: string[];
-    authorEmail?: string;
-    views?: number;
+interface Blog {
+  id: string;
+  title: string;
+  content: string;
+  imageUrl?: string;
+  contentType?: string;
+  createdAt: string;
+  updatedAt: string;
+  author?: {
+    name: string;
+    avatar?: string;
   };
+  category: string;
+  tags: string[];
+  authorEmail?: string;
+  views?: number;
 }
 
 const BlogDisplay = () => {
   const { id } = useParams();
-  const [blog, setBlog] = useState<BlogDisplayProps["blog"] | null>(null);
+  const [blog, setBlog] = useState<Blog | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [viewError, setViewError] = useState<string | null>(null);
 
-  useEffect(() => {
+  // Memoized view tracking function
+  const trackView = useCallback(async (blogId: string) => {
+    const storageKey = `viewed_${blogId}`;
+    
+    // Skip if already viewed in this session
+    if (localStorage.getItem(storageKey) || sessionStorage.getItem(storageKey)) {
+      return;
+    }
+
+    try {
+      const response = await fetch(`/api/view-counter/${blogId}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      
+      if (data.success) {
+        // Mark as viewed in both storage mechanisms
+        localStorage.setItem(storageKey, "true");
+        sessionStorage.setItem(storageKey, "true");
+        
+        // Update view count in state
+        setBlog(prev => prev ? { ...prev, views: data.views } : null);
+      } else {
+        throw new Error(data.message || "View count update failed");
+      }
+    } catch (error) {
+      console.error("Error tracking view:", error);
+      setViewError(
+        error instanceof Error 
+          ? error.message 
+          : "An unexpected error occurred while tracking view"
+      );
+    }
+  }, []);
+
+  const fetchDetails = useCallback(async () => {
     if (!id || typeof id !== "string") {
       setError("Invalid blog ID");
       setLoading(false);
       return;
     }
-    fetchDetails();
-  }, [id]);
 
-  const fetchDetails = async () => {
     try {
       setLoading(true);
+      setError(null);
+      
       const response = await axios.get(`/api/view-more/${id}`);
+      
       if (response.data.success && response.data.idea) {
         setBlog(response.data.idea);
-        await trackView();
+        // Track view after successfully loading the blog
+        await trackView(response.data.idea.id);
       } else {
         setError(response.data.message || "Blog post not found");
       }
@@ -60,30 +102,11 @@ const BlogDisplay = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [id, trackView]);
 
-  const trackView = async () => {
-    if (!blog || localStorage.getItem(`viewed_${blog.id}`)) return;
-
-    try {
-      const response = await fetch(`/api/view-counter/${blog.id}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      const data = await response.json();
-      if (response.ok && data.success) {
-        localStorage.setItem(`viewed_${blog.id}`, "true");
-        setBlog((prev) => (prev ? { ...prev, views: data.views } : prev));
-      } else {
-        setViewError(data.message || "Failed to update view count");
-      }
-    } catch (error) {
-      setViewError("Error tracking view");
-      console.error("Error tracking view:", error);
-    }
-  };
+  useEffect(() => {
+    fetchDetails();
+  }, [fetchDetails]);
 
   const processHtmlContent = (html: string) => {
     if (!html) return "";
@@ -91,6 +114,7 @@ const BlogDisplay = () => {
     const parser = new DOMParser();
     const doc = parser.parseFromString(html, "text/html");
 
+    // Process images
     const images = doc.querySelectorAll("img");
     images.forEach((img) => {
       img.classList.add("my-4", "rounded-lg", "shadow-md", "mx-auto", "max-h-64", "object-contain");
@@ -98,6 +122,7 @@ const BlogDisplay = () => {
       if (!img.alt) img.alt = "Blog content image";
     });
 
+    // Process iframes (e.g., YouTube embeds)
     const iframes = doc.querySelectorAll("iframe");
     iframes.forEach((iframe) => {
       if (iframe.getAttribute("src")?.startsWith("https://www.youtube.com/embed/")) {
@@ -174,6 +199,7 @@ const BlogDisplay = () => {
 
   return (
     <article className="w-full max-w-5xl mx-auto my-12 px-4 sm:px-6 lg:px-8">
+      {/* Header section */}
       <header className="mb-10 bg-gradient-to-r from-blue-100 via-indigo-100 to-purple-100 dark:from-blue-900 dark:via-indigo-900 dark:to-purple-900 rounded-xl p-8 shadow-lg">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
           <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 dark:text-white leading-tight">
@@ -196,6 +222,7 @@ const BlogDisplay = () => {
           )}
         </div>
 
+        {/* Author and date information */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center mb-4 sm:mb-0">
             {blog.author?.avatar && (
@@ -229,6 +256,7 @@ const BlogDisplay = () => {
           </div>
         </div>
 
+        {/* Tags */}
         {blog.tags.length > 0 && (
           <div className="flex flex-wrap gap-2 mt-4">
             {blog.tags.map((tag, index) => (
@@ -243,6 +271,7 @@ const BlogDisplay = () => {
         )}
       </header>
 
+      {/* Featured image */}
       {blog.imageUrl && (
         <div className="mb-8 overflow-hidden rounded-xl shadow-lg">
           <img
@@ -253,6 +282,7 @@ const BlogDisplay = () => {
         </div>
       )}
 
+      {/* Blog content */}
       <div className="prose prose-lg max-w-none dark:prose-invert bg-white dark:bg-gray-800 p-8 rounded-xl shadow-lg">
         {blog.contentType === "markdown" ? (
           <MarkdownRenderer content={blog.content} />
@@ -266,6 +296,7 @@ const BlogDisplay = () => {
         )}
       </div>
 
+      {/* Footer with author info */}
       <footer className="mt-12 pt-6 border-t border-gray-200 dark:border-gray-700">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
           {blog.author && (
