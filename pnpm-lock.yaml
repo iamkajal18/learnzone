@@ -197,6 +197,9 @@ importers:
       lowlight:
         specifier: ^2.9.0
         version: 2.9.0
+      lru-cache:
+        specifier: ^11.1.0
+        version: 11.1.0
       lucide-react:
         specifier: ^0.475.0
         version: 0.475.0(react@18.3.1)
@@ -330,6 +333,9 @@ importers:
       '@types/highlight.js':
         specifier: ^9.12.4
         version: 9.12.4
+      '@types/lru-cache':
+        specifier: ^7.10.10
+        version: 7.10.10
       '@types/mongodb':
         specifier: ^4.0.6
         version: 4.0.7
@@ -1991,6 +1997,10 @@ packages:
   '@types/linkify-it@5.0.0':
     resolution: {integrity: sha512-sVDA58zAw4eWAffKOaQH5/5j3XeayukzDk+ewSsnv3p4yJEZHCCzMDiZM8e0OUrRvmpGZ85jf4yDHkHsgBNr9Q==}
 
+  '@types/lru-cache@7.10.10':
+    resolution: {integrity: sha512-nEpVRPWW9EBmx2SCfNn3ClYxPL7IktPX12HhIoSc/H5mMjdeW3+YsXIpseLQ2xF35+OcpwKQbEUw5VtqE4PDNA==}
+    deprecated: This is a stub types definition. lru-cache provides its own type definitions, so you do not need this installed.
+
   '@types/markdown-it@13.0.9':
     resolution: {integrity: sha512-1XPwR0+MgXLWfTn9gCsZ55AHOKW1WN+P9vr0PaQh5aerR9LLQXUbjfEAFhjmEmyoYFWAyuN2Mqkn40MZ4ukjBw==}
 
@@ -3590,6 +3600,10 @@ packages:
 
   lru-cache@10.4.3:
     resolution: {integrity: sha512-JNAzZcXrCt42VGLuYz0zfAzDfAvJWW6AfYlDBQyDV5DClI2m5sAmK+OIO7s59XfsRsWHp02jAJrRadPRGTt6SQ==}
+
+  lru-cache@11.1.0:
+    resolution: {integrity: sha512-QIXZUBJUx+2zHUdQujWejBkcD9+cs94tLn0+YL8UrCh+D5sCXZ4c7LaEH48pNwRY3MLDgqUFyhlCyjJPf1WP0A==}
+    engines: {node: 20 || >=22}
 
   lucide-react@0.475.0:
     resolution: {integrity: sha512-NJzvVu1HwFVeZ+Gwq2q00KygM1aBhy/ZrhY9FsAgJtpB+E4R7uxRk9M2iKvHa6/vNxZydIB59htha4c2vvwvVg==}
@@ -6780,6 +6794,10 @@ snapshots:
 
   '@types/linkify-it@5.0.0': {}
 
+  '@types/lru-cache@7.10.10':
+    dependencies:
+      lru-cache: 11.1.0
+
   '@types/markdown-it@13.0.9':
     dependencies:
       '@types/linkify-it': 3.0.5
@@ -8669,6 +8687,8 @@ snapshots:
       highlight.js: 11.8.0
 
   lru-cache@10.4.3: {}
+
+  lru-cache@11.1.0: {}
 
   lucide-react@0.475.0(react@18.3.1):
     dependencies:
