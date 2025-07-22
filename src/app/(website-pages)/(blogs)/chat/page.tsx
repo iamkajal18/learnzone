@@ -1,6 +1,5 @@
-import ChatBox from '@/components/ChatBox'
 import React from 'react'
-
+import ChatBox from "@/components/ChatBox"
 function page() {
   return (
     <div>
