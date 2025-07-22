@@ -1,6 +1,7 @@
 'use client';
 import { useState, useEffect, useRef } from 'react';
 import { Send, Bot, User } from 'lucide-react';
+import MarkdownRenderer from './MarkdownRenderer'; // Adjust the import path as needed
 
 export default function Chatbot() {
   const [messages, setMessages] = useState([
@@ -10,9 +11,10 @@ export default function Chatbot() {
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
-  // Scroll to bottom of messages
+  // Prevent auto-scrolling
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    // Commented out to prevent auto-scrolling
+    // messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
   const handleSend = async () => {
@@ -77,46 +79,60 @@ export default function Chatbot() {
       {/* Messages Container */}
       <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4 bg-gray-50 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-blue-400">
         <div className="max-w-4xl mx-auto space-y-4">
-          {messages.map((msg, index) => (
-            <div
-              key={index}
-              className={`flex items-start gap-3 ${
-                msg.role === 'user' ? 'flex-row-reverse' : 'flex-row'
-              }`}
-            >
-              {/* Avatar */}
-              <div className={`flex-shrink-0 w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center ${
-                msg.role === 'user' 
-                  ? 'bg-gradient-to-r from-blue-500 to-blue-600' 
-                  : 'bg-gradient-to-r from-blue-600 to-blue-700'
-              }`}>
-                {msg.role === 'user' ? 
-                  <User className="w-4 h-4 sm:w-5 sm:h-5 text-white" /> : 
-                  <Bot className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
-                }
-              </div>
-
-              {/* Message Bubble */}
-              <div className={`flex flex-col max-w-xs sm:max-w-md md:max-w-lg lg:max-w-xl ${
-                msg.role === 'user' ? 'items-end' : 'items-start'
-              }`}>
-                <div className={`px-4 py-3 rounded-2xl shadow-lg border transition-all duration-200 hover:shadow-xl ${
-                  msg.role === 'user'
-                    ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white border-blue-400/30 rounded-br-md'
-                    : 'bg-white text-gray-800 border-gray-200 rounded-bl-md'
-                }`}>
-                  <p className="text-sm sm:text-base leading-relaxed whitespace-pre-wrap">
-                    {msg.text}
-                  </p>
+          {messages.map((msg, index) => {
+            if (index === 0 && msg.role === 'model') {
+              return (
+                <div key={index} className="flex items-start gap-3">
+                  <div className="flex-shrink-0 w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-gradient-to-r from-blue-600 to-blue-700 flex items-center justify-center">
+                    <Bot className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
+                  </div>
+                  <div className="flex flex-col max-w-xs sm:max-w-md md:max-w-lg lg:max-w-xl items-start">
+                    
+                    <span className="text-xs text-gray-500 mt-1 px-2">AI Assistant</span>
+                  </div>
                 </div>
-                <span className={`text-xs text-gray-500 mt-1 px-2 ${
-                  msg.role === 'user' ? 'text-right' : 'text-left'
+              );
+            }
+            return (
+              <div
+                key={index}
+                className={`flex items-start gap-3 ${msg.role === 'user' ? 'flex-row-reverse' : 'flex-row'}`}
+              >
+                {/* Avatar */}
+                <div className={`flex-shrink-0 w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center ${
+                  msg.role === 'user' 
+                    ? 'bg-gradient-to-r from-blue-500 to-blue-600' 
+                    : 'bg-gradient-to-r from-blue-600 to-blue-700'
                 }`}>
-                  {msg.role === 'user' ? 'You' : 'AI Assistant'}
-                </span>
+                  {msg.role === 'user' ? 
+                    <User className="w-4 h-4 sm:w-5 sm:h-5 text-white" /> : 
+                    <Bot className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
+                  }
+                </div>
+
+                {/* Message Bubble with Markdown */}
+                <div className={`flex flex-col max-w-xs sm:max-w-md md:max-w-lg lg:max-w-xl ${
+                  msg.role === 'user' ? 'items-end' : 'items-start'
+                }`}>
+                  <div className={`px-4 py-3 rounded-2xl shadow-lg border transition-all duration-200 hover:shadow-xl ${
+                    msg.role === 'user'
+                      ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white border-blue-400/30 rounded-br-md'
+                      : 'bg-white text-gray-800 border-gray-200 rounded-bl-md'
+                  }`}>
+                    <MarkdownRenderer 
+                      content={msg.text}
+                      className={`${msg.role === 'user' ? 'text-white' : 'text-gray-800'}`}
+                    />
+                  </div>
+                  <span className={`text-xs text-gray-500 mt-1 px-2 ${
+                    msg.role === 'user' ? 'text-right' : 'text-left'
+                  }`}>
+                    {msg.role === 'user' ? 'You' : 'AI Assistant'}
+                  </span>
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
 
           {/* Loading indicator */}
           {isLoading && (
