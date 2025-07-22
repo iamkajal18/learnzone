@@ -1,7 +1,8 @@
 'use client';
-import { useState, useEffect, useRef } from 'react';
-import { Send, Bot, User } from 'lucide-react';
-import MarkdownRenderer from './MarkdownRenderer'; // Adjust the import path as needed
+import { useState, useEffect } from 'react';
+import { Send, Bot, User, Pause } from 'lucide-react';
+import MarkdownRenderer from './MarkdownRenderer'; // Adjust if needed
+import { TypingAnimation } from "@/components/magicui/typing-animation";
 
 export default function Chatbot() {
   const [messages, setMessages] = useState([
@@ -9,25 +10,47 @@ export default function Chatbot() {
   ]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const messagesEndRef = useRef<HTMLDivElement | null>(null);
+  const [typedText, setTypedText] = useState('');
+  const [isTyping, setIsTyping] = useState(false);
+  const [lastInteraction, setLastInteraction] = useState(Date.now());
+  const [typingIndex, setTypingIndex] = useState(0);
 
-  // Prevent auto-scrolling
   useEffect(() => {
-    // Commented out to prevent auto-scrolling
-    // messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages]);
+    if (isTyping && messages.length > 0) {
+      const botMessage = messages[messages.length - 1];
+      if (botMessage.role === 'model') {
+        const interval = setInterval(() => {
+          if (Date.now() - lastInteraction > 30000) { // 30 seconds inactivity
+            clearInterval(interval);
+            setIsTyping(false);
+            setTypedText('');
+            setTypingIndex(0);
+            return;
+          }
+          setTypedText((prev) => prev + botMessage.text[typingIndex]);
+          setTypingIndex((prev) => prev + 1);
+          if (typingIndex + 1 === botMessage.text.length) {
+            clearInterval(interval);
+            setIsTyping(false);
+            setTypedText('');
+            setTypingIndex(0);
+          }
+        }, 50); // Adjust speed here (ms per character)
+        return () => clearInterval(interval);
+      }
+    }
+  }, [isTyping, messages, typingIndex, lastInteraction]);
 
   const handleSend = async () => {
     if (!input.trim() || isLoading) return;
 
-    // Add user message to the chat
+    setLastInteraction(Date.now());
     const userMessage = { role: 'user', text: input };
     setMessages((prev) => [...prev, userMessage]);
     setInput('');
     setIsLoading(true);
 
     try {
-      // Call the Next.js API route
       const response = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -39,6 +62,7 @@ export default function Chatbot() {
       const data = await response.json();
       const botMessage = { role: 'model', text: data.response };
       setMessages((prev) => [...prev, botMessage]);
+      setIsTyping(true);
     } catch (error) {
       console.error('Error:', error);
       setMessages((prev) => [
@@ -50,11 +74,27 @@ export default function Chatbot() {
     }
   };
 
-  const handleKeyPress = (e: React.KeyboardEvent) => {
+  const handleKeyPress = (e:any) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       handleSend();
     }
+    setLastInteraction(Date.now());
+  };
+
+  const handleStop = () => {
+    setIsTyping(false);
+    setTypedText('');
+    setTypingIndex(0);
+    setLastInteraction(Date.now());
+  };
+
+  const handleNewChat = () => {
+    setMessages([{ role: 'model', text: 'Welcome to the Chatbot! How can I assist you today?' }]);
+    setInput('');
+    setTypedText('');
+    setTypingIndex(0);
+    setLastInteraction(Date.now());
   };
 
   return (
@@ -76,84 +116,75 @@ export default function Chatbot() {
         </div>
       </div>
 
-      {/* Messages Container */}
+      {/* Messages */}
       <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4 bg-gray-50 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-blue-400">
         <div className="max-w-4xl mx-auto space-y-4">
-          {messages.map((msg, index) => {
-            if (index === 0 && msg.role === 'model') {
-              return (
-                <div key={index} className="flex items-start gap-3">
-                  <div className="flex-shrink-0 w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-gradient-to-r from-blue-600 to-blue-700 flex items-center justify-center">
-                    <Bot className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
-                  </div>
-                  <div className="flex flex-col max-w-xs sm:max-w-md md:max-w-lg lg:max-w-xl items-start">
-                    
-                    <span className="text-xs text-gray-500 mt-1 px-2">AI Assistant</span>
-                  </div>
-                </div>
-              );
-            }
-            return (
+          {messages.map((msg, index) => (
+            <div
+              key={index}
+              className={`flex items-start gap-3 ${msg.role === 'user' ? 'flex-row-reverse' : 'flex-row'}`}
+            >
+              {/* Avatar */}
               <div
-                key={index}
-                className={`flex items-start gap-3 ${msg.role === 'user' ? 'flex-row-reverse' : 'flex-row'}`}
-              >
-                {/* Avatar */}
-                <div className={`flex-shrink-0 w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center ${
-                  msg.role === 'user' 
-                    ? 'bg-gradient-to-r from-blue-500 to-blue-600' 
+                className={`flex-shrink-0 w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center ${
+                  msg.role === 'user'
+                    ? 'bg-gradient-to-r from-blue-500 to-blue-600'
                     : 'bg-gradient-to-r from-blue-600 to-blue-700'
-                }`}>
-                  {msg.role === 'user' ? 
-                    <User className="w-4 h-4 sm:w-5 sm:h-5 text-white" /> : 
-                    <Bot className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
-                  }
-                </div>
+                }`}
+              >
+                {msg.role === 'user' ? (
+                  <User className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
+                ) : (
+                  <Bot className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
+                )}
+              </div>
 
-                {/* Message Bubble with Markdown */}
-                <div className={`flex flex-col max-w-xs sm:max-w-md md:max-w-lg lg:max-w-xl ${
+              {/* Message bubble */}
+              <div
+                className={`flex flex-col max-w-xs sm:max-w-md md:max-w-lg lg:max-w-xl ${
                   msg.role === 'user' ? 'items-end' : 'items-start'
-                }`}>
-                  <div className={`px-4 py-3 rounded-2xl shadow-lg border transition-all duration-200 hover:shadow-xl ${
+                }`}
+              >
+                <div
+                  className={`px-4 py-3 rounded-2xl shadow-lg border transition-all duration-200 hover:shadow-xl ${
                     msg.role === 'user'
                       ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white border-blue-400/30 rounded-br-md'
                       : 'bg-white text-gray-800 border-gray-200 rounded-bl-md'
-                  }`}>
-                    <MarkdownRenderer 
-                      content={msg.text}
-                      className={`${msg.role === 'user' ? 'text-white' : 'text-gray-800'}`}
-                    />
-                  </div>
-                  <span className={`text-xs text-gray-500 mt-1 px-2 ${
-                    msg.role === 'user' ? 'text-right' : 'text-left'
-                  }`}>
-                    {msg.role === 'user' ? 'You' : 'AI Assistant'}
-                  </span>
+                  }`}
+                >
+                  <MarkdownRenderer
+                    content={
+                      msg.role === 'model' && isTyping && index === messages.length - 1
+                        ? typedText
+                        : msg.text
+                    }
+                    className={msg.role === 'user' ? 'text-white' : 'text-gray-800'}
+                  />
                 </div>
+                <span
+                  className={`text-xs text-gray-500 mt-1 px-2 ${
+                    msg.role === 'user' ? 'text-right' : 'text-left'
+                  }`}
+                >
+                  {msg.role === 'user' ? 'You' : 'AI Assistant'}
+                </span>
               </div>
-            );
-          })}
-
-          {/* Loading indicator */}
+            </div>
+          ))}
           {isLoading && (
             <div className="flex items-start gap-3">
               <div className="flex-shrink-0 w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-gradient-to-r from-blue-600 to-blue-700 flex items-center justify-center">
                 <Bot className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
               </div>
               <div className="bg-white border border-gray-200 rounded-2xl rounded-bl-md px-4 py-3 shadow-lg">
-                <div className="flex gap-1">
-                  <div className="w-2 h-2 bg-blue-400 rounded-full animate-bounce"></div>
-                  <div className="w-2 h-2 bg-blue-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
-                  <div className="w-2 h-2 bg-blue-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
-                </div>
+                <TypingAnimation>...</TypingAnimation>
               </div>
             </div>
           )}
         </div>
-        <div ref={messagesEndRef} />
       </div>
 
-      {/* Input Area */}
+      {/* Input Box */}
       <div className="p-4 sm:p-6 bg-white shadow-md border-t border-gray-200">
         <div className="max-w-4xl mx-auto">
           <div className="relative flex items-end gap-2 sm:gap-3">
@@ -166,10 +197,7 @@ export default function Chatbot() {
                 placeholder="Type your message... (Enter to send, Shift+Enter for new line)"
                 disabled={isLoading}
                 rows={1}
-                style={{ 
-                  height: 'auto',
-                  minHeight: '50px'
-                }}
+                style={{ height: 'auto', minHeight: '50px' }}
                 onInput={(e) => {
                   const target = e.target as HTMLTextAreaElement;
                   target.style.height = 'auto';
@@ -185,6 +213,22 @@ export default function Chatbot() {
                 </button>
               )}
             </div>
+            {isTyping && (
+              <div className="flex gap-2">
+                <button
+                  onClick={handleStop}
+                  className="p-2 rounded-xl bg-red-600 hover:bg-red-700 text-white transition-all duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  <Pause className="w-4 h-4" />
+                </button>
+              </div>
+            )}
+            <button
+              onClick={handleNewChat}
+              className="p-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white transition-all duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              New Chat
+            </button>
           </div>
           <div className="flex items-center justify-between mt-2 text-xs text-gray-500">
             <span>Press Enter to send • Shift+Enter for new line</span>

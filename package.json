@@ -78,6 +78,7 @@
     "marked": "^15.0.12",
     "mongodb": "^6.17.0",
     "mongoose": "^8.9.5",
+    "motion": "^12.23.6",
     "next": "^15.3.4",
     "next-auth": "5.0.0-beta.28",
     "next-cloudinary": "^6.16.0",
