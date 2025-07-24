@@ -209,7 +209,7 @@ export default function BlogCard({
             </Link>
             <button
               onClick={() => setIsSummaryOpen(true)}
-              className="flex-1 text-sm bg-green-500 hover:bg-green-600 dark:bg-green-600 dark:hover:bg-green-700 text-white py-2 px-3 rounded transition-colors"
+              className="flex-1 text-sm bg-black hover:bg-gray-800 dark:bg-white-600 dark:hover:bg-gray-700 text-white py-2 px-3 rounded transition-colors"
             >
               Read Summary
             </button>
@@ -251,7 +251,9 @@ export default function BlogCard({
 
 // Skeleton loader for the BlogCard
 export function BlogCardSkeleton() {
+
   return (
+    <div className="backdrop-blur-md bg-white/10 border border-white/30 shadow-lg rounded-2xl p-4">
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-100 dark:border-gray-700 h-full flex flex-col animate-pulse">
       <div className="relative h-40 overflow-hidden bg-gray-200 dark:bg-gray-700"></div>
       <div className="p-4 flex flex-col flex-grow">
@@ -270,6 +272,7 @@ export function BlogCardSkeleton() {
         
         <div className="h-10 bg-gray-200 dark:bg-gray-700 rounded"></div>
       </div>
+    </div>
     </div>
   );
 }

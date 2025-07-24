@@ -1,90 +1,179 @@
-"use client";
+'use client';
+
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useTheme } from "next-themes";
 
 export default function BlogHeroSection() {
   const [isLoaded, setIsLoaded] = useState(false);
+  const [displayedText, setDisplayedText] = useState('');
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [wordIndex, setWordIndex] = useState(0);
+  const [charIndex, setCharIndex] = useState(0);
   const { theme } = useTheme();
-  
+
+  const words = [
+    'Share Your Voice.',
+    'Inspire the World.',
+    'Write with Purpose.',
+    'Build Influence Through Words.',
+  ];
+
   useEffect(() => {
     const timer = setTimeout(() => setIsLoaded(true), 200);
     return () => clearTimeout(timer);
   }, []);
 
+  useEffect(() => {
+    const currentWord = words[wordIndex];
+    const speed = isDeleting ? 50 : 100;
+
+    const timeout = setTimeout(() => {
+      setCharIndex((prev) => (isDeleting ? prev - 1 : prev + 1));
+      setDisplayedText(currentWord.slice(0, charIndex));
+
+      if (!isDeleting && charIndex === currentWord.length) {
+        setTimeout(() => setIsDeleting(true), 1500);
+      } else if (isDeleting && charIndex === 0) {
+        setIsDeleting(false);
+        setWordIndex((prev) => (prev + 1) % words.length);
+      }
+    }, speed);
+
+    return () => clearTimeout(timeout);
+  }, [charIndex, isDeleting, wordIndex]);
+
   return (
     <div className="relative bg-white dark:bg-gray-900 mb-4 mx-auto max-w-7xl rounded-xl overflow-hidden">
-      {/* Subtle background pattern */}
-      <div className="absolute inset-0 bg-gradient-to-b from-gray-50 to-white dark:from-gray-800 dark:to-gray-900 opacity-60 dark:opacity-20"></div>
-      
-      {/* Grid pattern overlay */}
-      <div className="absolute inset-0 opacity-[0.02] dark:opacity-[0.03]" 
-           style={{
-             backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23000000' fill-opacity='1'%3E%3Ccircle cx='30' cy='30' r='1'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-             filter: theme === 'dark' ? 'invert(1)' : 'none'
-           }}>
+      {/* Enhanced background pattern */}
+      <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-white to-gray-50 dark:from-gray-800 dark:via-gray-900 dark:to-black opacity-80 dark:opacity-30"></div>
+
+      {/* Animated grid pattern overlay */}
+      <div className="absolute inset-0 opacity-[0.03] dark:opacity-[0.05]"
+        style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23000000' fill-opacity='1'%3E%3Ccircle cx='30' cy='30' r='1'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+          filter: theme === 'dark' ? 'invert(1)' : 'none',
+          animation: 'float 20s ease-in-out infinite'
+        }}>
       </div>
 
-      {/* Background Effects */}
-      <div className="absolute inset-0 opacity-5 dark:opacity-10">
-        <div className="absolute top-0 left-0 w-96 h-96 bg-gradient-to-br from-[#00cfd1] to-[#0286a3] rounded-full blur-3xl transform -translate-x-1/2 -translate-y-1/2 opacity-10 dark:opacity-20"></div>
-        <div className="absolute bottom-0 right-0 w-96 h-96 bg-gradient-to-tl from-[#0286a3] to-[#00cfd1] rounded-full blur-3xl transform translate-x-1/2 translate-y-1/2 opacity-10 dark:opacity-20"></div>
+      {/* Enhanced blurred gradient lights */}
+      <div className="absolute inset-0 opacity-10 dark:opacity-15">
+        <div className="absolute top-0 left-0 w-96 h-96 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full blur-3xl transform -translate-x-1/2 -translate-y-1/2 opacity-20 dark:opacity-30 animate-pulse"></div>
+        <div className="absolute bottom-0 right-0 w-96 h-96 bg-gradient-to-tl from-blue-600 to-blue-800 rounded-full blur-3xl transform translate-x-1/2 translate-y-1/2 opacity-20 dark:opacity-30 animate-pulse" style={{ animationDelay: '1s' }}></div>
+        <div className="absolute top-1/2 left-1/2 w-64 h-64 bg-gradient-to-r from-blue-300 to-blue-500 rounded-full blur-2xl transform -translate-x-1/2 -translate-y-1/2 opacity-15 dark:opacity-25 animate-pulse" style={{ animationDelay: '2s' }}></div>
       </div>
 
       {/* Main Content */}
-      <div className="relative z-10 px-6 lg:px-8 py-16">
-        <div className="max-w-6xl mx-auto">
-          
-          {/* Header Badge */}
-          <div className={`text-center transition-all duration-600 ${
-            isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-          }`}>
-            <div className="inline-flex items-center px-4 py-2 rounded-full bg-blue-50 dark:bg-blue-900/30 border border-blue-100 dark:border-blue-800 text-blue-600 dark:text-blue-400 text-sm font-medium mb-8">
-              <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+      <div className="relative z-10 px-6 lg:px-8 py-20">
+        <div className="max-w-6xl mx-auto text-center">
+
+          {/* Enhanced Badge */}
+          <div className={`transition-all duration-600 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+            <div className="inline-flex items-center px-6 py-3 rounded-full bg-blue-50 dark:bg-blue-900/40 border-2 border-blue-200 dark:border-blue-700 text-blue-700 dark:text-blue-300 text-sm font-semibold mb-10 shadow-lg backdrop-blur-sm">
+              <svg className="w-5 h-5 mr-3 text-blue-600 dark:text-blue-400" fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
               </svg>
-              Trusted by 50,000+ professionals
+              Trusted by 50,000+ professionals worldwide
             </div>
           </div>
 
-          {/* Main Hero Content */}
-          <div className="text-center max-w-4xl mx-auto">
-            <h1 className={`text-3xl lg:text-4xl font-extrabold text-gray-900 dark:text-gray-100 leading-tight mb-6 transition-all duration-800 delay-100 ${
-              isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'
-            }`}>
-              Professional
-              <span className="ml-2 text-blue-600 dark:text-blue-400">Blogging</span>
-              <span className="text-3xl lg:text-4xl ml-2 font-bold text-gray-600 dark:text-gray-300">
-                Made Simple
-              </span>
-            </h1>
+          {/* Enhanced Hero Heading with Blue and Black Styling */}
+          <h1 className={`text-4xl lg:text-6xl xl:text-7xl font-black leading-tight mb-6 transition-all duration-800 delay-100 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}>
+            <span className="bg-gradient-to-r from-blue-600 via-blue-700 to-blue-800 dark:from-blue-400 dark:via-blue-500 dark:to-blue-600 bg-clip-text text-transparent">
+              Your Professional
+            </span>
+            <br />
+            <span className="text-black dark:text-white drop-shadow-lg">
+              Blogging Journey
+            </span>
+          </h1>
 
-            <p className={`text-xl md:text-2xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed mb-12 transition-all duration-800 delay-200 ${
-              isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-            }`}>
-              Create, publish, and grow your professional blog with our enterprise-grade platform. 
-              Built for serious writers and businesses who value quality and performance.
-            </p>
+          {/* Enhanced Typing Animation with Blue Accent */}
+          <h2 className={`text-2xl md:text-3xl lg:text-4xl font-bold mb-6 transition-all duration-800 delay-200 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+            <span className="text-blue-600 dark:text-blue-400 border-r-4 border-blue-500 pr-2 animate-pulse">
+              {displayedText}
+            </span>
+          </h2>
 
-            {/* CTA Buttons */}
-           <div className={`flex flex-col sm:flex-row gap-4 justify-center items-center mb-1 transition-all duration-800 delay-300 ${
-              isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-            }`}>
-              <Link href="/create">
-                <button className="px-8 py-4 hover:bg-blue-600 dark:hover:bg-blue-500 bg-transparent text-blue-500 dark:text-blue-400 border-2 border-blue-500 dark:border-blue-400 hover:text-white font-semibold rounded-lg text-lg transition-all duration-200 shadow-lg hover:shadow-xl">
+          {/* Enhanced Description */}
+          <p className={`text-xl md:text-2xl text-gray-700 dark:text-gray-200 max-w-4xl mx-auto leading-relaxed mb-12 font-medium transition-all duration-800 delay-300 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+            Create, publish, and grow your blog with <span className="text-blue-600 dark:text-blue-400 font-semibold">AI-powered tools</span>, a beautiful editor, and enterprise-grade features.
+          </p>
+
+          {/* Enhanced Buttons */}
+          <div className={`flex flex-col sm:flex-row gap-6 justify-center items-center transition-all duration-800 delay-400 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+            <Link href="/create">
+              <button className="group px-8 py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-bold rounded-xl text-xl transition-all duration-300 shadow-2xl hover:shadow-blue-500/25 hover:scale-105 transform">
+                <span className="flex items-center">
                   Start Writing Today
-                </button>
-              </Link>
-              <Link href="/chat">
-                <button className="px-8 py-4 hover:bg-blue-600 dark:hover:bg-blue-500 bg-transparent text-blue-500 dark:text-blue-400 border-2 border-blue-500 dark:border-blue-400 hover:text-white font-semibold rounded-lg text-lg transition-all duration-200 shadow-lg hover:shadow-xl">
-                  Ai ChatBox
-                </button>
-              </Link>
-              
+                  <svg className="w-6 h-6 ml-3 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                  </svg>
+                </span>
+              </button>
+            </Link>
+            <Link href="/chat">
+              <button className="group px-8 py-3 bg-transparent hover:bg-black dark:hover:bg-white text-black dark:text-white border-3 border-black dark:border-white hover:text-white dark:hover:text-black font-bold rounded-xl text-xl transition-all duration-300 shadow-2xl hover:shadow-black/25 dark:hover:shadow-white/25 hover:scale-105 transform">
+                <span className="flex items-center">
+                  AI ChatBox
+                  <svg className="w-6 h-6 ml-3 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                  </svg>
+                </span>
+              </button>
+            </Link>
+          </div>
+
+          {/* Additional Features Section */}
+          <div className={`mt-16 grid grid-cols-1 md:grid-cols-3 gap-8 transition-all duration-800 delay-500 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+            <div className="text-center p-4">
+              <div className="w-16 h-16 bg-blue-100 dark:bg-blue-900/50 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg className="w-8 h-8 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+              </div>
+              <h3 className="text-xl font-bold text-black dark:text-white mb-2">Lightning Fast</h3>
+              <p className="text-gray-600 dark:text-gray-300">Publish in seconds with our optimized platform</p>
+            </div>
+            <div className="text-center p-4">
+              <div className="w-16 h-16 bg-blue-100 dark:bg-blue-900/50 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg className="w-8 h-8 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                </svg>
+              </div>
+              <h3 className="text-xl font-bold text-black dark:text-white mb-2">AI-Powered</h3>
+              <p className="text-gray-600 dark:text-gray-300">Get writing suggestions and content ideas</p>
+            </div>
+            <div className="text-center p-4">
+              <div className="w-16 h-16 bg-blue-100 dark:bg-blue-900/50 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg className="w-8 h-8 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                </svg>
+              </div>
+              <h3 className="text-xl font-bold text-black dark:text-white mb-2">Global Reach</h3>
+              <p className="text-gray-600 dark:text-gray-300">Connect with readers worldwide</p>
             </div>
           </div>
+
         </div>
       </div>
+
+      <style jsx>{`
+        @keyframes float {
+          0%, 100% { transform: translateY(0px) rotate(0deg); }
+          50% { transform: translateY(-10px) rotate(1deg); }
+        }
+        
+        .animate-blink {
+          animation: blink 1s infinite;
+        }
+        
+        @keyframes blink {
+          0%, 50% { opacity: 1; }
+          51%, 100% { opacity: 0; }
+        }
+      `}</style>
     </div>
   );
 }
