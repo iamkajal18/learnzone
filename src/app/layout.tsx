@@ -7,7 +7,6 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { SessionProvider } from "next-auth/react";
 import toast, { Toaster } from "react-hot-toast";
-import { ClerkProvider } from "@clerk/nextjs"; // Only if you were using Clerk
 import { ThemeProvider } from "@/components/ThemeContext";
 
 export default function Layout({ children }: { children: ReactNode }) {
