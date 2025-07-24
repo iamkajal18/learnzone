@@ -64,6 +64,7 @@
     "cors": "^2.8.5",
     "date-fns": "^4.1.0",
     "dompurify": "^3.2.6",
+    "dotenv": "^17.2.1",
     "drizzle-orm": "^0.44.2",
     "express": "^5.1.0",
     "flowbite": "^3.0.0",

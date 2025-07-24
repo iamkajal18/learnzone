@@ -2,6 +2,7 @@
 
 import { useSession } from "next-auth/react";
 import Link from "next/link";
+import { useState } from "react";
 import { Eye, Calendar, Edit, Trash2 } from "lucide-react";
 
 const DEFAULT_IMAGE_URL =
@@ -32,6 +33,89 @@ interface BlogCardProps {
   showActions: boolean;
 }
 
+interface SummaryModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  content: string;
+  title: string;
+}
+
+async function generateSummary(content: string, title: string): Promise<string> {
+  try {
+    const response = await fetch("/api/generate-summary", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ content, title }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to generate summary");
+    }
+
+    const data = await response.json();
+    return data.summary;
+  } catch (error) {
+    console.error("Error generating summary:", error);
+    return "Failed to generate summary. Please try again later.";
+  }
+}
+
+function SummaryModal({ isOpen, onClose, content, title }: SummaryModalProps) {
+  const [summary, setSummary] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleGenerateSummary = async () => {
+    setIsLoading(true);
+    const generatedSummary = await generateSummary(content, title);
+    setSummary(generatedSummary);
+    setIsLoading(false);
+  };
+
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div className="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-md w-full">
+        <h2 className="text-xl font-semibold mb-4 text-gray-800 dark:text-white">
+          Blog Summary
+        </h2>
+        {isLoading ? (
+          <div className="animate-pulse">
+            <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded mb-2"></div>
+            <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded mb-2"></div>
+            <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded mb-2"></div>
+          </div>
+        ) : summary ? (
+          <p className="text-gray-600 dark:text-gray-300 mb-4">{summary}</p>
+        ) : (
+          <p className="text-gray-600 dark:text-gray-300 mb-4">
+            Click the button below to generate a summary.
+          </p>
+        )}
+        <div className="flex justify-end gap-2">
+          {!summary && (
+            <button
+              onClick={handleGenerateSummary}
+              className="bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 text-white py-2 px-4 rounded transition-colors"
+              disabled={isLoading}
+            >
+              {isLoading ? "Generating..." : "Generate Summary"}
+            </button>
+          )}
+          <button
+            onClick={onClose}
+            className="bg-gray-300 hover:bg-gray-400 dark:bg-gray-600 dark:hover:bg-gray-700 text-gray-800 dark:text-white py-2 px-4 rounded transition-colors"
+          >
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function BlogCard({
   idea,
   onDelete,
@@ -39,6 +123,7 @@ export default function BlogCard({
   showActions,
 }: BlogCardProps) {
   const { data: session } = useSession();
+  const [isSummaryOpen, setIsSummaryOpen] = useState(false);
   const userEmail = session?.user?.email || "";
   const isAuthor = userEmail === idea.authorEmail;
   const shouldShowActions = showActions && isAuthor;
@@ -116,14 +201,19 @@ export default function BlogCard({
 
         {/* Actions */}
         <div className="flex justify-between items-center gap-2">
-          <Link 
-            href={`/viewmore/${idea._id}`} 
-            className="flex-1"
-          >
-            <button className="w-full text-sm bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 text-white py-2 px-3 rounded transition-colors">
-              View
+          <div className="flex gap-2 flex-1">
+            <Link href={`/viewmore/${idea._id}`} className="flex-1">
+              <button className="w-full text-sm bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 text-white py-2 px-3 rounded transition-colors">
+                View
+              </button>
+            </Link>
+            <button
+              onClick={() => setIsSummaryOpen(true)}
+              className="flex-1 text-sm bg-green-500 hover:bg-green-600 dark:bg-green-600 dark:hover:bg-green-700 text-white py-2 px-3 rounded transition-colors"
+            >
+              Read Summary
             </button>
-          </Link>
+          </div>
           {shouldShowActions && (
             <div className="flex gap-2">
               <Link href={`/edit/${idea._id}`}>
@@ -148,6 +238,13 @@ export default function BlogCard({
           )}
         </div>
       </div>
+
+      <SummaryModal
+        isOpen={isSummaryOpen}
+        onClose={() => setIsSummaryOpen(false)}
+        content={idea.content}
+        title={idea.title}
+      />
     </div>
   );
 }
