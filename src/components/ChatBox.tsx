@@ -37,7 +37,7 @@ export default function Chatbot() {
             setTypedText('');
             setTypingIndex(0);
           }
-        }, 50);
+        }, 20); // Reduced from 50ms to 20ms for faster typing
         return () => clearInterval(interval);
       }
     }
@@ -76,7 +76,7 @@ export default function Chatbot() {
     }
   };
 
-  const handleKeyPress = (e: any) => {
+  const handleKeyPress = (e:any) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       handleSend();
