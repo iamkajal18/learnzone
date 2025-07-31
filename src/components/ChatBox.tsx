@@ -1,9 +1,10 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Send, Bot, User, Pause } from 'lucide-react';
 import MarkdownRenderer from './MarkdownRenderer';
 import { TypingAnimation } from "@/components/magicui/typing-animation";
 import { useTheme } from "next-themes";
+import { debounce } from 'lodash'; // Ensure lodash is installed: npm install lodash
 
 export default function Chatbot() {
   const [messages, setMessages] = useState([
@@ -17,10 +18,21 @@ export default function Chatbot() {
   const [typingIndex, setTypingIndex] = useState(0);
   const { theme } = useTheme();
 
+  // Skip typing animation for short messages
+  const SKIP_ANIMATION_THRESHOLD = 50; // Characters
+
   useEffect(() => {
     if (isTyping && messages.length > 0) {
       const botMessage = messages[messages.length - 1];
       if (botMessage.role === 'model') {
+        // Skip animation for short messages
+        if (botMessage.text.length <= SKIP_ANIMATION_THRESHOLD) {
+          setTypedText(botMessage.text);
+          setIsTyping(false);
+          setTypingIndex(0);
+          return;
+        }
+
         const interval = setInterval(() => {
           if (Date.now() - lastInteraction > 30000) {
             clearInterval(interval);
@@ -37,7 +49,7 @@ export default function Chatbot() {
             setTypedText('');
             setTypingIndex(0);
           }
-        }, 20); // Reduced from 50ms to 20ms for faster typing
+        }, 10); // Faster typing: 10ms per character
         return () => clearInterval(interval);
       }
     }
@@ -74,6 +86,19 @@ export default function Chatbot() {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  // Debounced input handler to reduce re-renders
+  const debouncedSetInput = useCallback(
+    debounce((value: string) => {
+      setInput(value);
+    }, 100),
+    []
+  );
+
+  const handleInputChange = (e:any) => {
+    debouncedSetInput(e.target.value);
+    setLastInteraction(Date.now());
   };
 
   const handleKeyPress = (e:any) => {
@@ -157,7 +182,7 @@ export default function Chatbot() {
                   <MarkdownRenderer
                     content={
                       msg.role === 'model' && isTyping && index === messages.length - 1
-                        ? typedText
+                        ? typedText || msg.text // Show full text if animation is skipped
                         : msg.text
                     }
                     className={msg.role === 'user' ? 'text-white' : 'text-gray-800 dark:text-gray-100'}
@@ -193,7 +218,7 @@ export default function Chatbot() {
             <div className="flex-1 relative">
               <textarea
                 value={input}
-                onChange={(e) => setInput(e.target.value)}
+                onChange={handleInputChange}
                 onKeyPress={handleKeyPress}
                 className="w-full p-3 sm:p-4 pr-12 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 resize-none transition-all duration-200 hover:border-gray-400 min-h-[50px] max-h-32 scrollbar-thin scrollbar-thumb-blue-400 dark:scrollbar-thumb-blue-600"
                 placeholder="Type your message... (Enter to send, Shift+Enter for new line)"
