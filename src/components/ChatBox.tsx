@@ -1,10 +1,11 @@
+// components/Chatbot.tsx (fixed typing animation: clears previous interval before new send, slower typing speed for natural feel)
 'use client';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { Send, Bot, User, Pause } from 'lucide-react';
 import MarkdownRenderer from './MarkdownRenderer';
 import { TypingAnimation } from "@/components/magicui/typing-animation";
 import { useTheme } from "next-themes";
-import { debounce } from 'lodash'; // Ensure lodash is installed: npm install lodash
+import { debounce } from 'lodash';
 
 export default function Chatbot() {
   const [messages, setMessages] = useState([
@@ -15,51 +16,75 @@ export default function Chatbot() {
   const [typedText, setTypedText] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const [lastInteraction, setLastInteraction] = useState(Date.now());
-  const [typingIndex, setTypingIndex] = useState(0);
   const { theme } = useTheme();
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Skip typing animation for short messages
-  const SKIP_ANIMATION_THRESHOLD = 50; // Characters
+  const SKIP_ANIMATION_THRESHOLD = 50;
+  const TYPING_SPEED_MS = 30; // Slower for natural typing (adjust as needed)
+
+  // Cleanup function to stop typing
+  const stopTyping = useCallback(() => {
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
+    }
+    setIsTyping(false);
+    setTypedText('');
+  }, []);
 
   useEffect(() => {
-    if (isTyping && messages.length > 0) {
-      const botMessage = messages[messages.length - 1];
-      if (botMessage.role === 'model') {
-        // Skip animation for short messages
-        if (botMessage.text.length <= SKIP_ANIMATION_THRESHOLD) {
-          setTypedText(botMessage.text);
-          setIsTyping(false);
-          setTypingIndex(0);
-          return;
-        }
+    if (!isTyping || messages.length === 0) return;
 
-        const interval = setInterval(() => {
-          if (Date.now() - lastInteraction > 30000) {
-            clearInterval(interval);
-            setIsTyping(false);
-            setTypedText('');
-            setTypingIndex(0);
-            return;
-          }
-          setTypedText((prev) => prev + botMessage.text[typingIndex]);
-          setTypingIndex((prev) => prev + 1);
-          if (typingIndex + 1 === botMessage.text.length) {
-            clearInterval(interval);
-            setIsTyping(false);
-            setTypedText('');
-            setTypingIndex(0);
-          }
-        }, 10); // Faster typing: 10ms per character
-        return () => clearInterval(interval);
-      }
+    const botMessageIndex = messages.length - 1;
+    const botMessage = messages[botMessageIndex];
+    if (botMessage.role !== 'model') return;
+
+    // Skip for short messages
+    if (botMessage.text.length <= SKIP_ANIMATION_THRESHOLD) {
+      setTypedText(botMessage.text);
+      stopTyping();
+      return;
     }
-  }, [isTyping, messages, typingIndex, lastInteraction]);
+
+    let currentIndex = 0;
+    setTypedText('');
+
+    intervalRef.current = setInterval(() => {
+      if (Date.now() - lastInteraction > 30000) {
+        stopTyping();
+        return;
+      }
+
+      setTypedText((prev) => prev + botMessage.text[currentIndex]);
+      currentIndex++;
+      if (currentIndex === botMessage.text.length) {
+        stopTyping();
+      }
+    }, TYPING_SPEED_MS);
+
+    return () => {
+      stopTyping();
+    };
+  }, [isTyping, lastInteraction, messages.length, stopTyping]); // Add messages.length to re-run only on new bot message
 
   const handleSend = async () => {
     if (!input.trim() || isLoading) return;
 
+    // Stop any ongoing typing before new send
+    stopTyping();
+
     setLastInteraction(Date.now());
     const userMessage = { role: 'user', text: input };
+
+    // Prepare history from conversation (exclude initial welcome)
+    const chatHistory = messages
+      .slice(1)  // Skip welcome
+      .filter((msg) => msg.role !== 'model' || messages.indexOf(msg) < messages.length - 1)
+      .map((msg) => ({
+        role: msg.role === 'user' ? 'user' : 'model',
+        parts: [{ text: msg.text }],
+      }));
+
     setMessages((prev) => [...prev, userMessage]);
     setInput('');
     setIsLoading(true);
@@ -68,15 +93,19 @@ export default function Chatbot() {
       const response = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: input }),
+        body: JSON.stringify({ message: input, history: chatHistory }),
       });
 
-      if (!response.ok) throw new Error('Failed to fetch response');
-
+      // Always parse JSON, even on error status
       const data = await response.json();
-      const botMessage = { role: 'model', text: data.response };
-      setMessages((prev) => [...prev, botMessage]);
-      setIsTyping(true);
+
+      if (data.error) {
+        setMessages((prev) => [...prev, { role: 'model', text: data.error }]);
+      } else {
+        const botMessage = { role: 'model', text: data.response };
+        setMessages((prev) => [...prev, botMessage]);
+        setIsTyping(true);
+      }
     } catch (error) {
       console.error('Error:', error);
       setMessages((prev) => [
@@ -88,7 +117,6 @@ export default function Chatbot() {
     }
   };
 
-  // Debounced input handler to reduce re-renders
   const debouncedSetInput = useCallback(
     debounce((value: string) => {
       setInput(value);
@@ -96,12 +124,12 @@ export default function Chatbot() {
     []
   );
 
-  const handleInputChange = (e:any) => {
+  const handleInputChange = (e: any) => {
     debouncedSetInput(e.target.value);
     setLastInteraction(Date.now());
   };
 
-  const handleKeyPress = (e:any) => {
+  const handleKeyPress = (e: any) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       handleSend();
@@ -110,17 +138,15 @@ export default function Chatbot() {
   };
 
   const handleStop = () => {
-    setIsTyping(false);
-    setTypedText('');
-    setTypingIndex(0);
+    stopTyping();
     setLastInteraction(Date.now());
   };
 
   const handleNewChat = () => {
+    stopTyping();
     setMessages([{ role: 'model', text: 'Welcome to the Chatbot! How can I assist you today?' }]);
     setInput('');
-    setTypedText('');
-    setTypingIndex(0);
+    setIsLoading(false);
     setLastInteraction(Date.now());
   };
 
@@ -151,7 +177,6 @@ export default function Chatbot() {
               key={index}
               className={`flex items-start gap-3 ${msg.role === 'user' ? 'flex-row-reverse' : 'flex-row'}`}
             >
-              {/* Avatar */}
               <div
                 className={`flex-shrink-0 w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center ${
                   msg.role === 'user'
@@ -165,8 +190,6 @@ export default function Chatbot() {
                   <Bot className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
                 )}
               </div>
-
-              {/* Message bubble */}
               <div
                 className={`flex flex-col max-w-xs sm:max-w-md md:max-w-lg lg:max-w-xl ${
                   msg.role === 'user' ? 'items-end' : 'items-start'
@@ -182,7 +205,7 @@ export default function Chatbot() {
                   <MarkdownRenderer
                     content={
                       msg.role === 'model' && isTyping && index === messages.length - 1
-                        ? typedText || msg.text // Show full text if animation is skipped
+                        ? typedText || msg.text
                         : msg.text
                     }
                     className={msg.role === 'user' ? 'text-white' : 'text-gray-800 dark:text-gray-100'}
